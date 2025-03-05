@@ -5,6 +5,7 @@ import { Dropdown } from "../ui/dropdown/Dropdown";
 import axios from "axios";
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -15,10 +16,13 @@ export default function UserDropdown() {
   }
 
   const handleLogout = async () => {
+    setLoading(true);
     try {
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
+
+      const auth_token = localStorage.getItem("auth_token");
 
       const response = await axios.post(
         "http://localhost:8000/logout",
@@ -26,6 +30,7 @@ export default function UserDropdown() {
         {
           headers: {
             accept: "application/json",
+            Authorization: `Bearer ${auth_token}`
           },
           withCredentials: true,
 
@@ -40,6 +45,8 @@ export default function UserDropdown() {
       }
     } catch (error) {
       console.error("Logout error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -165,8 +172,8 @@ export default function UserDropdown() {
             </DropdownItem>
           </li>
         </ul>
-        <Link
-          to="/signin"
+        <button
+          // to="/signin"
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
           onClick={handleLogout}
         >
@@ -185,8 +192,10 @@ export default function UserDropdown() {
               fill=""
             />
           </svg>
-          Sign out
-        </Link>
+          {
+            loading ? "Signing out..." : "Sign out"
+          }
+        </button>
       </Dropdown>
     </div>
   );

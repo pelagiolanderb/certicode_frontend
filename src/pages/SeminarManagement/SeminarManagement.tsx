@@ -6,9 +6,9 @@ import {
   deleteSeminar,
 } from "../../api/seminarAPI";
 import { createParticipant } from "../../api/participantAPI";
-import ClipLoader from "react-spinners/ClipLoader";
 import SeminarModal from "./SeminarModal";
 import { Link } from "react-router";
+import BeatSpinner from "../../components/loading/loading";
 
 const ManageSeminarPage = () => {
   const [seminars, setSeminars] = useState([]);
@@ -108,14 +108,7 @@ const ManageSeminarPage = () => {
   };
 
   return loading ? (
-    <ClipLoader
-      cssOverride={{
-        display: "block",
-        margin: "1rem auto",
-        borderColor: "black",
-      }}
-      size={50}
-    />
+    <BeatSpinner />
   ) : (
     <div className="relative shadow-md sm:rounded-lg m-4">
       <div className="flex flex-column sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between">

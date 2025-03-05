@@ -1,6 +1,8 @@
 import React from "react";
 import img1 from "../../assets/images/house_3.jpg";
 import img2 from "../../assets/images/house_4.jpg";
+import hero from "../../assets/images/hero.jpg";
+import landing_page from "../../assets/images/landing_page.jpg";
 import { Link } from "react-router";
 
 const LandingMain = () => {
@@ -83,53 +85,191 @@ const LandingMain = () => {
   ];
 
   return (
-    <main className="pt-16">
-      <div className="z-1 relative w-full py-12 px-12 bg-[#37547C]">
+    // <main className="pt-16">
+    //   <div className="z-1 relative w-full py-12 px-12 bg-[#37547C]">
+    //     <div className="relative z-10 text-center py-24 md:py-48">
+    //       <h1 className="text-white text-4xl md:text-5xl font-bold mb-12">
+    //         Expand Your Knowledge with Expert-Led Seminars
+    //       </h1>
+    //       <a className="inline-block bg-[#B0C4DE] text-[#37547C] uppercase text-sm px-8 py-4 rounded-md">
+    //         Browse Seminars
+    //       </a>
+    //     </div>
+    //     <img
+    //       src={img1}
+    //       className="w-full h-full absolute inset-0 object-cover opacity-70"
+    //       alt="Background"
+    //     />
+    //   </div>
+
+    //   <div className="grid grid-cols-1 md:grid-cols-2">
+    //     <div className="bg-white p-12 md:p-24 flex justify-end items-center">
+    //       <a href="{{ post.url }}">
+    //         <img src={img1} className="w-full max-w-md rounded-2xl" />
+    //       </a>
+    //     </div>
+    //     <div className="bg-[#B0C4DE] p-12 md:p-24 flex justify-start items-center">
+    //       <div className="max-w-md">
+    //         <div className="w-24 h-2 bg-[#37547C] mb-4"></div>
+    //         <h2 className="font-display font-bold text-2xl md:text-3xl lg:text-4xl mb-6">
+    //           Join seminars anytime, anywhere!
+    //         </h2>
+    //         <p className="font-light text-[#677D9B] text-sm md:text-base mb-6 leading-relaxed">
+    //           Whether you're a guest or a registered user!
+    //         </p>
+    //         <a
+    //           href="{{ post.url }}"
+    //           className="inline-block border-2 border-[#37547C] font-light text-[#37547C] text-sm uppercase tracking-widest py-3 px-8 hover:bg-[#37547C] hover:text-white"
+    //         >
+    //           Read more
+    //         </a>
+    //       </div>
+    //     </div>
+    //   </div>
+
+    //   <div className="max-w-6xl mx-auto py-12 px-6">
+    //     <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
+    //       Available Seminars
+    //     </h2>
+    //     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    //       {seminars.map((seminar, index) => (
+    //         <div
+    //           key={index}
+    //           className="bg-white rounded-2xl overflow-hidden shadow-lg"
+    //         >
+    //           <Link to={`/seminar/${index}`}>
+    //             <img
+    //               src={img2}
+    //               alt="Seminar"
+    //               className="w-full h-48 object-cover"
+    //             />
+    //             <div className="p-4">
+    //               <h3 className="text-lg font-bold text-[#37547C]">
+    //                 {seminar.name_of_seminar}
+    //               </h3>
+    //               <p className="text-sm text-[#677D9B]">
+    //                 Organized by {seminar.organization_name}
+    //               </p>
+    //               <p className="text-xs text-[#677D9B]">
+    //                 📅 {new Date(seminar.date).toLocaleDateString()}
+    //               </p>
+    //               <p className="text-xs text-[#677D9B]">
+    //                 📍 {seminar.location}
+    //               </p>
+    //             </div>
+    //           </Link>
+    //         </div>
+    //       ))}
+    //     </div>
+    //     <div className="text-center mt-8">
+    //       <Link to="/seminars" className="text-[#37547C] font-bold text-lg">
+    //         View All Seminars →
+    //       </Link>
+    //     </div>
+    //   </div>
+
+    //   <img src={img2} className="w-full h-screen object-cover" />
+
+    //   <div className="max-w-xl mx-auto text-center py-24 md:py-32">
+    //     <div className="w-24 h-2 bg-[#37547C] mb-4 mx-auto"></div>
+    //     <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl mb-6">
+    //       Gain valuable insights
+    //     </h2>
+    //     <p className="font-light text-gray-600 mb-6 leading-relaxed">
+    //       Engage with top speakers, and earn a certification upon completion
+    //     </p>
+    //   </div>
+
+    //   <div className="relative w-full py-12 px-12">
+    //     <div className="relative z-10 text-center py-12 md:py-24">
+    //       <h1 className="text-white text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold mb-6">
+    //         Join, Learn, and Get Certified—For Free!
+    //       </h1>
+    //       <p className="text-white mb-10 text-base md:text-lg font-bold">
+    //         No account? No problem! Join as a guest.
+    //       </p>
+    //       <a
+    //         href="{{ home.footer_cta_button_link }}"
+    //         className="inline-block bg-[#B0C4DE] text-[#37547C] uppercase text-sm tracking-widest font-heading px-8 py-4"
+    //       >
+    //         asdfasdfasdf
+    //       </a>
+    //     </div>
+
+    //     <img
+    //       src={img1}
+    //       className="w-full h-full absolute inset-0 object-cover"
+    //     />
+    //   </div>
+
+    //   <div className="text-center py-24 bg-[#B0C4DE]">
+    //     <h2 className="text-3xl font-bold mb-4">asdfasdf</h2>
+    //     <p className="text-gray-600 mb-6">asdfasdf</p>
+    //   </div>
+
+    //   <div className="relative w-full py-12 px-12 bg-[#37547C] text-center text-white">
+    //     <h1 className="text-3xl font-bold mb-6">asdfasdf</h1>
+    //     <p className="mb-6">asdfas</p>
+    //     <a className="inline-block bg-[#37547C] text-white text-sm px-8 py-4 rounded-md">
+    //       asdfasdf
+    //     </a>
+    //   </div>
+    // </main>
+    <div className="relative">
+      {/* <HomeNav /> */}
+      {/* Hero Section */}
+      <div className="relative w-full py-12 px-12">
         <div className="relative z-10 text-center py-24 md:py-48">
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-12">
             Expand Your Knowledge with Expert-Led Seminars
           </h1>
-          <a className="inline-block bg-[#B0C4DE] text-[#37547C] uppercase text-sm px-8 py-4 rounded-md">
+          <Link
+            to="/seminar-list"
+            className="bg-[#B0C4DE] text-[#37547C] uppercase text-sm px-8 py-4 rounded-md"
+          >
             Browse Seminars
-          </a>
+          </Link>
         </div>
+
         <img
-          src={img1}
-          className="w-full h-full absolute inset-0 object-cover opacity-70"
+          src={hero}
+          className="w-full h-165 absolute inset-0 object-cover"
           alt="Background"
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2">
-        <div className="bg-white p-12 md:p-24 flex justify-end items-center">
-          <a href="{{ post.url }}">
-            <img src={img1} className="w-full max-w-md rounded-2xl" />
-          </a>
+      {/* Key Features */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 p-12 md:p-24 items-center">
+        <div>
+          <img
+            src={landing_page}
+            className="w-full max-w-md rounded-2xl shadow-lg"
+            alt="Seminar"
+          />
         </div>
-        <div className="bg-[#B0C4DE] p-12 md:p-24 flex justify-start items-center">
-          <div className="max-w-md">
-            <div className="w-24 h-2 bg-[#37547C] mb-4"></div>
-            <h2 className="font-display font-bold text-2xl md:text-3xl lg:text-4xl mb-6">
-              Join seminars anytime, anywhere!
-            </h2>
-            <p className="font-light text-[#677D9B] text-sm md:text-base mb-6 leading-relaxed">
-              Whether you're a guest or a registered user!
-            </p>
-            <a
-              href="{{ post.url }}"
-              className="inline-block border-2 border-[#37547C] font-light text-[#37547C] text-sm uppercase tracking-widest py-3 px-8 hover:bg-[#37547C] hover:text-white"
-            >
-              Read more
-            </a>
-          </div>
+        <div>
+          <h2 className="text-3xl font-bold text-[#37547C] mb-4">
+            Join seminars anytime, anywhere!
+          </h2>
+          <p className="text-gray-700 mb-6">
+            Whether you're a guest or a registered user, you can access valuable
+            content and get certified.
+          </p>
+          <Link
+            to="/seminar-list"
+            className="bg-[#37547C] text-white text-sm uppercase py-3 px-8 rounded-md font-bold"
+          >
+            Get Started
+          </Link>
         </div>
       </div>
 
+      {/* Seminar List */}
       <div className="max-w-6xl mx-auto py-12 px-6">
-        <h2 className="text-3xl font-bold text-gray-800 text-center mb-8">
-          Available Seminars
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Upcoming Seminars
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {seminars.map((seminar, index) => (
             <div
               key={index}
@@ -137,21 +277,23 @@ const LandingMain = () => {
             >
               <Link to={`/seminar/${index}`}>
                 <img
-                  src={img2}
+                  src={img1}
                   alt="Seminar"
                   className="w-full h-48 object-cover"
                 />
                 <div className="p-4">
-                  <h3 className="text-lg font-bold text-[#37547C]">
+                  <h3 className="text-lg font-bold text-[#37547C] pb-2">
                     {seminar.name_of_seminar}
                   </h3>
-                  <p className="text-sm text-[#677D9B]">
+                  <p className="text-sm text-gray-600 pb-3">
                     Organized by {seminar.organization_name}
                   </p>
-                  <p className="text-xs text-[#677D9B]">
+                  <p className="text-md text-[#37547C] pb-3">Topic Corvered</p>
+                  <p className="text-sm text-gray-600 pb-3">{seminar.topics}</p>
+                  <p className="text-xs text-gray-500 pb-3">
                     📅 {new Date(seminar.date).toLocaleDateString()}
                   </p>
-                  <p className="text-xs text-[#677D9B]">
+                  <p className="text-xs text-gray-500 pb-3">
                     📍 {seminar.location}
                   </p>
                 </div>
@@ -159,60 +301,67 @@ const LandingMain = () => {
             </div>
           ))}
         </div>
+        {/* {loading ? (
+          <p className="text-center">Loading...</p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {seminars.map((seminar) => (
+              <div
+                key={seminar.id}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg"
+              >
+                <Link to={`/seminar/${seminar.id}`}>
+                  <img
+                    src={`http://localhost:8000/storage/${seminar.seminar_image}`}
+                    alt="Seminar"
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold text-[#37547C] pb-2">
+                      {seminar.name_of_seminar}
+                    </h3>
+                    <p className="text-sm text-gray-600 pb-3">
+                      Organized by {seminar.organization_name}
+                    </p>
+                    <p className="text-md text-[#37547C] pb-3">
+                      Topic Corvered
+                    </p>
+                    <p className="text-sm text-gray-600 pb-3">
+                      {seminar.topics}
+                    </p>
+                    <p className="text-xs text-gray-500 pb-3">
+                      📅 {new Date(seminar.date).toLocaleDateString()}
+                    </p>
+                    <p className="text-xs text-gray-500 pb-3">
+                      📍 {seminar.location}
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
+        )} */}
         <div className="text-center mt-8">
-          <Link to="/seminars" className="text-[#37547C] font-bold text-lg">
+          <Link to="/seminar-list" className="text-[#37547C] font-bold text-lg">
             View All Seminars →
           </Link>
         </div>
       </div>
 
-      <img src={img2} className="w-full h-screen object-cover" />
-
-      <div className="max-w-xl mx-auto text-center py-24 md:py-32">
-        <div className="w-24 h-2 bg-[#37547C] mb-4 mx-auto"></div>
-        <h2 className="font-display font-bold text-3xl md:text-4xl lg:text-5xl mb-6">
-          Gain valuable insights
-        </h2>
-        <p className="font-light text-gray-600 mb-6 leading-relaxed">
-          Engage with top speakers, and earn a certification upon completion
+      {/* Call to Action */}
+      <div className="text-center py-24 bg-[#B0C4DE] text-[#37547C]">
+        <h2 className="text-3xl font-bold mb-4">Start Learning Today!</h2>
+        <p className="text-gray-800 mb-6">
+          Join our community of learners and get certified.
         </p>
+        <Link
+          to="/register"
+          className="bg-[#37547C] text-white px-8 py-4 rounded-md font-bold"
+        >
+          Sign Up Now
+        </Link>
       </div>
-
-      <div className="relative w-full py-12 px-12">
-        <div className="relative z-10 text-center py-12 md:py-24">
-          <h1 className="text-white text-center text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-display font-bold mb-6">
-            Join, Learn, and Get Certified—For Free!
-          </h1>
-          <p className="text-white mb-10 text-base md:text-lg font-bold">
-            No account? No problem! Join as a guest.
-          </p>
-          <a
-            href="{{ home.footer_cta_button_link }}"
-            className="inline-block bg-[#B0C4DE] text-[#37547C] uppercase text-sm tracking-widest font-heading px-8 py-4"
-          >
-            asdfasdfasdf
-          </a>
-        </div>
-
-        <img
-          src={img1}
-          className="w-full h-full absolute inset-0 object-cover"
-        />
-      </div>
-
-      <div className="text-center py-24 bg-[#B0C4DE]">
-        <h2 className="text-3xl font-bold mb-4">asdfasdf</h2>
-        <p className="text-gray-600 mb-6">asdfasdf</p>
-      </div>
-
-      <div className="relative w-full py-12 px-12 bg-[#37547C] text-center text-white">
-        <h1 className="text-3xl font-bold mb-6">asdfasdf</h1>
-        <p className="mb-6">asdfas</p>
-        <a className="inline-block bg-[#37547C] text-white text-sm px-8 py-4 rounded-md">
-          asdfasdf
-        </a>
-      </div>
-    </main>
+    </div>
   );
 };
 

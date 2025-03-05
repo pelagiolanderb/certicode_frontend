@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
+import Button from "../ui/button/Button";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
@@ -10,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+
   const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ export default function SignUpForm() {
     middle_name: "",
     age: "",
     gender: "",
-    address:"",
+    address: "",
     phone: "",
     email: "",
     password: "",
@@ -34,7 +36,7 @@ export default function SignUpForm() {
     middle_name: "",
     age: "",
     gender: "",
-    address:"",
+    address: "",
     phone: "",
     email: "",
     password: "",
@@ -107,7 +109,7 @@ export default function SignUpForm() {
       middle_name: "",
       age: "",
       gender: "",
-      address:"",
+      address: "",
       phone: "",
       email: "",
       password: "",
@@ -122,6 +124,7 @@ export default function SignUpForm() {
     }
 
     try {
+      setLoading(true);
       await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
         withCredentials: true,
       });
@@ -189,7 +192,6 @@ export default function SignUpForm() {
     }
   };
 
-  
   return (
     <div className="flex flex-col flex-1 w-full overflow-y-auto lg:w-1/2 no-scrollbar">
       <div className="w-full max-w-md mx-auto mb-5 sm:pt-10">
@@ -269,84 +271,84 @@ export default function SignUpForm() {
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {/* <!-- First Name --> */}
                   <div className="sm:col-span-1">
-                  <Label htmlFor="first_name">First Name</Label>
-                        <Input
-                          id="first_name"
-                          name="first_name"
-                          type="text"
-                          value={formData.first_name}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              first_name: e.target.value,
-                            })
-                          }
-                        />
+                    <Label htmlFor="first_name">First Name</Label>
+                    <Input
+                      id="first_name"
+                      name="first_name"
+                      type="text"
+                      value={formData.first_name}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          first_name: e.target.value,
+                        })
+                      }
+                    />
                   </div>
                   {/* <!-- Last Name --> */}
                   <div className="sm:col-span-1">
-                  <Label htmlFor="last_name">Last Name</Label>
-                        <Input
-                          id="last_name"
-                          name="last_name"
-                          type="text"
-                          value={formData.last_name}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              last_name: e.target.value,
-                            })
-                          }
-                        />
+                    <Label htmlFor="last_name">Last Name</Label>
+                    <Input
+                      id="last_name"
+                      name="last_name"
+                      type="text"
+                      value={formData.last_name}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          last_name: e.target.value,
+                        })
+                      }
+                    />
                   </div>
                   {/* <!-- Middle Name --> */}
                   <div className="sm:col-span-1">
-                  <Label htmlFor="middle_name">Middle Name</Label>
-                        <Input
-                          id="middle_name"
-                          name="middle_name"
-                          type="text"
-                          value={formData.middle_name}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              middle_name: e.target.value,
-                            })
-                          }
-                        />
+                    <Label htmlFor="middle_name">Middle Name</Label>
+                    <Input
+                      id="middle_name"
+                      name="middle_name"
+                      type="text"
+                      value={formData.middle_name}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          middle_name: e.target.value,
+                        })
+                      }
+                    />
                   </div>
                   <div className="sm:col-span-1">
-                  <Label htmlFor="phone">Phone</Label>
-                        <Input
-                          id="phone"
-                          name="phone"
-                          type="text"
-                          value={formData.phone}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              phone: e.target.value,
-                            })
-                          }
-                        />
+                    <Label htmlFor="phone">Phone</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="text"
+                      value={formData.phone}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          phone: e.target.value,
+                        })
+                      }
+                    />
                   </div>
                   <div className="sm:col-span-1">
-                  <Label htmlFor="address">Address</Label>
-                        <Input
-                          id="address"
-                          name="address"
-                          type="text"
-                          value={formData.address}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              address: e.target.value,
-                            })
-                          }
-                        />
+                    <Label htmlFor="address">Address</Label>
+                    <Input
+                      id="address"
+                      name="address"
+                      type="text"
+                      value={formData.address}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          address: e.target.value,
+                        })
+                      }
+                    />
                   </div>
                   <div className="sm:col-span-1">
-                  <Label htmlFor="gender">Gender</Label>
+                    <Label htmlFor="gender">Gender</Label>
                     <select
                       id="gender"
                       name="gender"
@@ -363,43 +365,45 @@ export default function SignUpForm() {
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
-                    {!formData.gender && <p className="text-red-500 text-sm">{errors.gender}</p>}
+                    {!formData.gender && (
+                      <p className="text-red-500 text-sm">{errors.gender}</p>
+                    )}
                   </div>
                   <div className="sm:col-span-1">
-                  <Label htmlFor="age">Age</Label>
-                        <Input
-                          id="age"
-                          name="age"
-                          type="number"
-                          min={0}
-                          value={formData.age}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (value.length <= 2) {
-                              setFormData({
-                                ...formData,
-                                age: value,
-                              });
-                            }
-                          }}
-                        />
+                    <Label htmlFor="age">Age</Label>
+                    <Input
+                      id="age"
+                      name="age"
+                      type="number"
+                      min={0}
+                      value={formData.age}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value.length <= 2) {
+                          setFormData({
+                            ...formData,
+                            age: value,
+                          });
+                        }
+                      }}
+                    />
                   </div>
                 </div>
                 <div>
-                <Label htmlFor="email">Email</Label>
-                        <Input
-                          id="email"
-                          type="text"
-                          name="email"
-                          placeholder="m@example.com"
-                          value={formData.email}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              email: e.target.value,
-                            })
-                          }
-                        />
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="text"
+                    name="email"
+                    placeholder="m@example.com"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        email: e.target.value,
+                      })
+                    }
+                  />
                 </div>
                 {/* <!-- Password --> */}
                 <div>
@@ -413,12 +417,12 @@ export default function SignUpForm() {
                       placeholder="Enter your password"
                       type={showPassword ? "text" : "password"}
                       value={formData.password}
-                          onChange={(e) =>
-                            setFormData({
-                              ...formData,
-                              password: e.target.value,
-                            })
-                          }
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          password: e.target.value,
+                        })
+                      }
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -452,7 +456,7 @@ export default function SignUpForm() {
                       }
                     />
 
-                      {/* <Label htmlFor="password_confirmation">
+                    {/* <Label htmlFor="password_confirmation">
                           Confirm Password
                         </Label>
                         <Input
@@ -499,13 +503,20 @@ export default function SignUpForm() {
                 </div>
                 {/* <!-- Button --> */}
                 <div>
-                  <button 
-                  className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
-                  
-                  onClick={handleSubmit}
+                  {/* <button
+                    className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600"
+                    onClick={handleSubmit}
                   >
-                    Sign Up
-                  </button>
+                    {loading ? "Signing up..." : "Sign up"}
+                  </button> */}
+                  <Button
+                    onClick={handleSubmit}
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? "Signing up..." : "Sign up"}
+                  </Button>
                 </div>
               </div>
             </form>

@@ -5,6 +5,7 @@ import {
   updateCertificateTemplate,
   deleteCertificateTemplate,
 } from "../../api/certificate_templateAPI";
+import BeatLoader from "../../components/loading/loading";
 
 const CertificateManagement = () => {
   const [templates, setTemplates] = useState([]);
@@ -12,17 +13,21 @@ const CertificateManagement = () => {
   const [file, setFile] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [fetchingLoading, setFetchingLoading] = useState(false);
 
   useEffect(() => {
     fetchTemplates();
   }, []);
 
   const fetchTemplates = async () => {
+    setFetchingLoading(true);
     try {
       const data = await fetchCertificateTemplates();
       setTemplates(data);
     } catch (error) {
       console.error("Error fetching templates:", error);
+    } finally {
+      setFetchingLoading(false);
     }
   };
 
@@ -30,7 +35,8 @@ const CertificateManagement = () => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !file) return alert("Please provide a name and select a PDF file.");
+    if (!name || !file)
+      return alert("Please provide a name and select a PDF file.");
 
     setLoading(true);
     const formData = new FormData();
@@ -57,7 +63,8 @@ const CertificateManagement = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this template?")) return;
+    if (!window.confirm("Are you sure you want to delete this template?"))
+      return;
 
     setLoading(true);
     try {
@@ -93,12 +100,14 @@ const CertificateManagement = () => {
           + Upload Template
         </button>
       </div>
-  
+
       {/* Upload / Edit Form */}
       <div className="p-4 bg-gray-50 rounded-lg mt-4">
         <form onSubmit={handleFormSubmit} className="space-y-4">
           <div>
-            <label className="block font-medium text-gray-700">Template Name:</label>
+            <label className="block font-medium text-gray-700">
+              Template Name:
+            </label>
             <input
               type="text"
               className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -107,9 +116,11 @@ const CertificateManagement = () => {
               required
             />
           </div>
-  
+
           <div>
-            <label className="block font-medium text-gray-700">Upload PDF:</label>
+            <label className="block font-medium text-gray-700">
+              Upload PDF:
+            </label>
             <input
               type="file"
               accept="application/pdf"
@@ -119,14 +130,20 @@ const CertificateManagement = () => {
             />
             {file && <p className="mt-2 text-sm text-gray-500">{file.name}</p>}
           </div>
-  
+
           <div className="flex gap-3">
             <button
               type="submit"
-              className={`px-4 py-2 rounded text-white transition ${loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-700"}`}
+              className={`px-4 py-2 rounded text-white transition ${
+                loading ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-700"
+              }`}
               disabled={loading}
             >
-              {loading ? "Processing..." : editingId ? "Update Template" : "Upload Template"}
+              {loading
+                ? "Processing..."
+                : editingId
+                ? "Update Template"
+                : "Upload Template"}
             </button>
             {editingId && (
               <button
@@ -140,7 +157,7 @@ const CertificateManagement = () => {
           </div>
         </form>
       </div>
-  
+
       {/* List of Templates */}
       <div className="overflow-x-auto p-2 mt-4">
         <table className="w-full text-sm text-left text-gray-500">
@@ -152,9 +169,18 @@ const CertificateManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {templates.length > 0 ? (
-              templates.map((template, index) => (
-                <tr key={template.id} className="bg-white border-b hover:bg-gray-50">
+            {fetchingLoading ? (
+              <tr>
+                <td colSpan="3" className="pt-2">
+                  <BeatLoader />
+                </td>
+              </tr>
+            ) : templates.length > 0 ? (
+              templates.map((template) => (
+                <tr
+                  key={template.id}
+                  className="bg-white border-b hover:bg-gray-50"
+                >
                   <td className="px-6 py-4">{template.name}</td>
                   <td className="px-6 py-4">
                     <a
@@ -193,7 +219,7 @@ const CertificateManagement = () => {
         </table>
       </div>
     </div>
-  );  
+  );
 };
 
 export default CertificateManagement;

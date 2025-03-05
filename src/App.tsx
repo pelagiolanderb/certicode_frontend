@@ -28,6 +28,7 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import SeminarManagement from "./pages/SeminarManagement/SeminarManagement";
 import Participants from "./pages/Participants/Participants";
 import CertificateManagement from "./pages/CertificateManagement/CertificateManagement";
+import Archived from "./pages/Archives/Archived";
 import ProtectedRoute from "../src/route/ProtectedRoute";
 
 export default function App() {
@@ -44,7 +45,7 @@ export default function App() {
             <Route path="/participants" element={<ProtectedRoute component={Participants} />} />
             <Route path="/certificate-management" element={<ProtectedRoute component={CertificateManagement} />} />
             <Route path="/user-management" element={<ProtectedRoute component={UserProfiles} />} />
-            <Route path="/achived" element={<ProtectedRoute component={UserProfiles} />} />
+            <Route path="/archived" element={<ProtectedRoute component={Archived} />} />
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />

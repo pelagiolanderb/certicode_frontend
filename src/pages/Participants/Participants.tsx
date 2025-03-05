@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchParticipants, sendCertificate } from "../../api/participantAPI";
+import BeatLoader from "../../components/loading/loading"
 
 const Participants = () => {
   const [participants, setParticipants] = useState([]);
@@ -65,10 +66,7 @@ const Participants = () => {
     }
   };
 
-  if (loading)
-    return (
-      <p className="text-center text-gray-600 mt-10">Loading participants...</p>
-    );
+  if (loading) return <BeatLoader />
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
 
   return (

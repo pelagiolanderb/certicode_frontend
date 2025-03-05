@@ -47,7 +47,7 @@ const navItems: NavItem[] = [
   {
     icon: <DocsIcon />,
     name: "Certificate Management",
-    path: "certificate-management",
+    path: "/certificate-management",
   },
   {
     icon: <UserCircleIcon />,
@@ -96,6 +96,21 @@ const navItems: NavItem[] = [
 //     ],
 //   },
 // ];
+
+const othersItems: NavItem[] = [
+  {
+    icon: <BoxCubeIcon />,
+    name: "Dropdown Template",
+    subItems: [
+      { name: "Sub Template", path: "/alerts", pro: false },
+      { name: "Sub Template", path: "/avatars", pro: false },
+      { name: "Sub Template", path: "/badge", pro: false },
+      { name: "Sub Template", path: "/buttons", pro: false },
+      { name: "Sub Template", path: "/images", pro: false },
+      { name: "Sub Template", path: "/videos", pro: false },
+    ],
+  },
+];
 
 // const othersItems: NavItem[] = [
 //   {
@@ -273,8 +288,8 @@ const AppSidebar: React.FC = () => {
               }}
             >
               <ul className="mt-2 space-y-1 ml-9">
-                {nav.subItems.map((subItem) => (
-                  <li key={subItem.name}>
+                {nav.subItems.map((subItem, index) => (
+                  <li key={index}>
                     <Link
                       to={subItem.path}
                       className={`menu-dropdown-item ${
@@ -387,7 +402,7 @@ const AppSidebar: React.FC = () => {
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
-            {/* <div className="">
+            <div className="">
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
@@ -402,7 +417,7 @@ const AppSidebar: React.FC = () => {
                 )}
               </h2>
               {renderMenuItems(othersItems, "others")}
-            </div> */}
+            </div>
           </div>
         </nav>
         {/* {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}
