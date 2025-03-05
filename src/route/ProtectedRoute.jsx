@@ -5,7 +5,9 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
   const token = localStorage.getItem("auth_token");
 
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/signin" replace />;
+  }else{
+    return <Component {...rest} />;
   }
 
   return <Component {...rest} />;

@@ -1,8 +1,14 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
 import UserProfiles from "./pages/UserProfiles";
+import VerifyEmail from "./pages/AuthPages/VerifyEmail";
 import Videos from "./pages/UiElements/Videos";
 import Images from "./pages/UiElements/Images";
 import Alerts from "./pages/UiElements/Alerts";
@@ -22,8 +28,10 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import SeminarManagement from "./pages/SeminarManagement/SeminarManagement";
 import Participants from "./pages/Participants/Participants";
 import CertificateManagement from "./pages/CertificateManagement/CertificateManagement";
+import ProtectedRoute from "../src/route/ProtectedRoute";
 
 export default function App() {
+  const token = localStorage.getItem("auth_token");
   return (
     <>
       <Router>
@@ -31,12 +39,12 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/dashboard" element={<Home />} />
-            <Route path="/seminar-management" element={<SeminarManagement />} />
-            <Route path="/participants" element={<Participants />} />
-            <Route path="/certificate-management" element={<CertificateManagement />} />
-            <Route path="/user-management" element={<UserProfiles />} />
-            <Route path="/achived" element={<UserProfiles />} />
+            <Route index path="/dashboard"  element={<ProtectedRoute component={Home} />} />
+            <Route path="/seminar-management" element={<ProtectedRoute component={SeminarManagement} />} />
+            <Route path="/participants" element={<ProtectedRoute component={Participants} />} />
+            <Route path="/certificate-management" element={<ProtectedRoute component={CertificateManagement} />} />
+            <Route path="/user-management" element={<ProtectedRoute component={UserProfiles} />} />
+            <Route path="/achived" element={<ProtectedRoute component={UserProfiles} />} />
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -85,12 +93,11 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="seminar/:id" element={<SeminarPage />} />
           </Route> */}
-
+          <Route path="/verify-email" element={token ? <Navigate to="/dashboard" replace /> : <VerifyEmail />} />
           <Route path="/" element={<LandingPage />} />
-
           {/* Auth Layout */}
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={token ? <Navigate to="/dashboard" replace /> : <SignIn />} />
+          <Route path="/signup" element={token ? <Navigate to="/dashboard" replace /> : <SignUp />} />
 
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

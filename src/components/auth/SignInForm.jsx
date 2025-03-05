@@ -1,14 +1,109 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "../../icons";
 import Label from "../form/Label";
 import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
-
+import axios from "axios";
 export default function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
+
+  // const GOOGLE_AUTH_URL = `${API_URL}/auth/redirection/google`;
+  const GOOGLE_AUTH_URL = `http://127.0.0.1:8000/auth/redirection/google`;
+  const Facebook_AUTH_URL =
+    "$https://94d1-136-158-78-104.ngrok-free.app/auth/redirection/facebook";
+
+  const handleGoogleLogin = (e) => {
+    e.preventDefault();
+    console.log("Redirecting to Google login");
+    window.location.href = GOOGLE_AUTH_URL;
+  };
+
+  const handleFacebookLogin = (e) => {
+    e.preventDefault();
+    console.log("Redirecting to Facebook login");
+    window.location.href = Facebook_AUTH_URL;
+  };
+
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("auth_token");
+    if (token) {
+      navigate("/");
+    }
+  }, [navigate]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    setErrors({
+      email: "",
+      password: "",
+    });
+
+    try {
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+        withCredentials: true,
+      });
+      const response = await axios.post(
+        "http://localhost:8000/login",
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+        {
+          headers: {
+            accept: "application/json",
+          },
+          withCredentials: true,
+          withXSRFToken: true,
+        }
+      );
+
+      if (response.status === 200) {
+        localStorage.setItem("auth_token", "authenticated");
+        localStorage.setItem("user", JSON.stringify(response.data.user)); // Store user info
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error during user login:", error);
+      if (error.response && error.response.status === 422) {
+        const backendErrors = error.response.data.errors;
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: backendErrors.email ? backendErrors.email[0] : "",
+          password: backendErrors.password ? backendErrors.password[0] : "",
+        }));
+      } else if (error.response && error.response.status === 401) {
+        const errorMessage =
+          error.response.data.message || "Invalid credentials";
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          email: errorMessage,
+          password: errorMessage,
+        }));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
@@ -32,7 +127,9 @@ export default function SignInForm() {
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button 
+              onClick={handleGoogleLogin}
+              className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="20"
                   height="20"
@@ -59,7 +156,9 @@ export default function SignInForm() {
                 </svg>
                 Sign in with Google
               </button>
-              <button className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button 
+              onClick={handleFacebookLogin}
+              className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
                 <svg
                   width="21"
                   className="fill-current"
@@ -70,7 +169,7 @@ export default function SignInForm() {
                 >
                   <path d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z" />
                 </svg>
-                Sign in with X
+                Sign in with Facebook
               </button>
             </div>
             <div className="relative py-3 sm:py-5">
@@ -86,10 +185,17 @@ export default function SignInForm() {
             <form>
               <div className="space-y-6">
                 <div>
-                  <Label>
-                    Email <span className="text-error-500">*</span>{" "}
-                  </Label>
-                  <Input placeholder="info@gmail.com" />
+                <Label htmlFor="email">Email</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="JohnDoe@gmail.com"
+                        value={formData.email}
+                        onChange={(e) =>
+                          setFormData({ ...formData, email: e.target.value })
+                        }
+                      />
                 </div>
                 <div>
                   <Label>
@@ -99,6 +205,12 @@ export default function SignInForm() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      id="password"
+                      name="password"
+                      value={formData.password}
+                      onChange={(e) =>
+                        setFormData({ ...formData, password: e.target.value })
+                      }
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -127,9 +239,14 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                  <Button className="w-full" size="sm">
-                    Sign in
-                  </Button>
+                   <Button
+                      onClick={handleSubmit}
+                      type="submit"
+                      className="w-full"
+                      disabled={loading}
+                    >
+                      {loading ? "Logging in..." : "Login"}
+                    </Button>
                 </div>
               </div>
             </form>
