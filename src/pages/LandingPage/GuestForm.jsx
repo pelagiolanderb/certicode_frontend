@@ -2,9 +2,9 @@ import { useState } from "react";
 import { addGuest } from "../../api/guestAPI";
 import { useParams } from "react-router-dom";
 
-const GuestForm = (isFormOpen) => {
+const GuestForm = ({isFormOpen, handleFormClose}) => {
   const { id } = useParams();
-  const [showForm, setShowForm] = useState(isFormOpen);
+  const showForm = isFormOpen;
 
   const [guest_name, setGuestName] = useState("");
   const [guest_address, setGuestAddress] = useState("");
@@ -48,7 +48,7 @@ const GuestForm = (isFormOpen) => {
               </h3>
               <button
                 className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex items-center justify-center"
-                onClick={() => setShowForm(false)}
+                onClick={() => handleFormClose()}
               >
                 <svg
                   className="w-3 h-3"

@@ -53,8 +53,13 @@ const SeminarPage = () => {
     } finally {
       setJoinLoading(false);
     }
+
   };
 
+  const handleFormClose = () => {
+    setShowForm(false);
+  }
+  
   if (loading) {
     return (
       <p className="text-center text-gray-500">Loading seminar details...</p>
@@ -69,9 +74,8 @@ const SeminarPage = () => {
     <>
       <div className="relative pt-20">
         <LandingHeader />
-        <div className="my-5 mx-7  h-[400px] rounded-xl overflow-hidden shadow-md">
-          <img className="w-full" src={`http://localhost:8000/storage/${seminar.seminar_image}`}  />
-          {/* <Carousel className="w-full" images={[seminar_image]} /> */}
+        <div className="my-5 mx-7  h-[400px] overflow-hidden shadow-md">
+          <img className="w-full" src={`http://localhost:8000/storage/${seminar.seminar_image}`}/>
         </div>
 
         <div className="flex flex-row gap-6 mx-7">
@@ -127,7 +131,7 @@ const SeminarPage = () => {
                 {joinLoading ? "Joining..." : "Join"}
               </button>
 
-              {showForm && <GuestForm isFormOpen={showForm} />}
+              {showForm && <GuestForm isFormOpen={showForm} handleFormClose={handleFormClose} />}
             </div>
           </div>
         </div>
