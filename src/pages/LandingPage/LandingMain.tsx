@@ -7,6 +7,9 @@ import landing_page from "../../assets/images/landing_page.jpg";
 import about_us from "../../assets/images/about_us.jpg";
 import hero from "../../assets/images/hero.jpg";
 import BeatLoader from "../../components/loading/loading";
+import LandingTestimonials from "./LandingTestimonials";
+import LandingPageBg from "../../assets/images/LandingPageBg.jpg";
+import { motion } from "framer-motion";
 
 const LandingMain = () => {
   const [seminars, setSeminars] = useState([]);
@@ -45,10 +48,22 @@ const LandingMain = () => {
     },
   ];
 
+  const fadeIn = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+  };
+
   return (
-    <div className="relative">
-      <div className="relative w-full py-12 px-12">
-        <div className="relative z-10 text-center py-24 md:py-48">
+    <div 
+    className="relative bg-black text-gray-300 bg-cover bg-fixed bg-center"
+    style={{ backgroundImage: `url(${LandingPageBg})` }} 
+    >
+
+      <div 
+        className="relative bg-black text-gray-300 bg-cover bg-fixed bg-center h-screen flex flex-col items-center justify-center"
+        style={{ backgroundImage: `url(${hero})` }} // Set hero as background
+      >
+        <div className="relative z-10 text-center px-6">
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-12">
             Expand Your Knowledge with Expert-Led Seminars
           </h1>
@@ -59,14 +74,9 @@ const LandingMain = () => {
             Browse Seminars
           </Link>
         </div>
-
-        <img
-          src={hero}
-          className="w-full h-165 absolute inset-0 object-cover"
-          alt="Background"
-        />
       </div>
 
+      {/* How it Works Section */}
       <section className="py-24 bg-white">
         <div className="container mx-auto max-w-screen-xl px-6">
           <div className="text-center mb-12">
@@ -103,8 +113,16 @@ const LandingMain = () => {
         </div>
       </section>
 
-      <div id="seminar-list" className="max-w-6xl mx-auto py-12 px-6">
-        <h2 className="text-3xl font-bold text-center text-[#37547C]  mb-8">
+      {/* Upcoming Seminars Section */}
+      <motion.div 
+      id="seminar-list" 
+      className="max-w-6xl mx-auto py-12 px-6"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={fadeIn}
+      >
+        <h2 className="text-3xl font-bold text-center text-white  mb-8">
           Upcoming Seminars
         </h2>
         {loading ? (
@@ -148,23 +166,15 @@ const LandingMain = () => {
           </div>
         )}
         <div className="text-center mt-8">
-          <Link to="/seminar-list" className="text-[#37547C] font-bold text-lg">
+          <Link to="/seminar-list" className="text-white font-bold text-lg">
             View All Seminars →
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       {/* About Us Section */}
-      <section id="about-us" className="py-24 bg-[#D6E4F0]">
+      <section id="about-us" className="py-24 bg-white">
         <div className="container mx-auto max-w-screen-xl px-6 grid grid-cols-1 md:grid-cols-2 items-center">
-          {/* Image Section */}
-          <div className="mr-20">
-            <img
-              src={about_us}
-              className="rounded-2xl shadow-lg"
-              alt="About Us"
-            />
-          </div>
 
           {/* Text Section */}
           <div>
@@ -185,12 +195,30 @@ const LandingMain = () => {
               content and recognized certifications.
             </p>
           </div>
+          {/* Image Section */}
+          <div className="ml-20">
+            <img
+              src={about_us}
+              className="rounded-2xl shadow-lg"
+              alt="About Us"
+            />
+          </div>
         </div>
       </section>
+      
+      {/* Testimonials */}
+      <LandingTestimonials />
+   
 
       {/* Call to Action */}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 p-12 md:p-24 items-center">
+      <motion.div 
+      className="grid grid-cols-1 md:grid-cols-2 gap-12 p-12 md:p-24 items-center bg-white"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={fadeIn}
+      >
         <div>
           <img
             src={landing_page}
@@ -203,18 +231,18 @@ const LandingMain = () => {
           <h2 className="text-3xl font-bold text-[#37547C] mb-4">
             Start Learning Today!
           </h2>
-          <p className="text-gray-700 mb-6">
+          <p className="text-[#37547C] mb-6">
             Join our community of learners and get certified.
           </p>
 
           <Link
             to="/signup"
-            className="bg-[#37547C] text-white px-8 py-4 rounded-md font-bold"
+            className="bg-[#B0C4DE] text-[#37547C] px-8 py-4 rounded-md font-bold"
           >
             Sign Up Now
           </Link>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

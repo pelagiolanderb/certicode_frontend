@@ -6,6 +6,7 @@ import { FaCalendarAlt, FaMapMarkerAlt, FaBuilding } from "react-icons/fa";
 import profile from "../../assets/images/house_4.jpg";
 import GuestForm from "./GuestForm";
 import { createParticipant } from "../../API/participantAPI";
+import LandingHeader from "./LandingHeader";
 
 const SeminarPage = () => {
   const { id } = useParams();
@@ -67,8 +68,10 @@ const SeminarPage = () => {
   return (
     <>
       <div className="relative pt-20">
-        <div className="my-5 mx-7">
-          <Carousel className="w-full" images={[seminar_image]} />
+        <LandingHeader />
+        <div className="my-5 mx-7  h-[400px] rounded-xl overflow-hidden shadow-md">
+          <img className="w-full" src={`http://localhost:8000/storage/${seminar.seminar_image}`}  />
+          {/* <Carousel className="w-full" images={[seminar_image]} /> */}
         </div>
 
         <div className="flex flex-row gap-6 mx-7">
