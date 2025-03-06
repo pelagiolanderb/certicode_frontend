@@ -188,30 +188,16 @@ const ManageSeminarPage = () => {
                 <td className="px-6 py-4">{seminar.organization_name}</td>
                 <td className="py-4 flex flex-col">
                   <Link
-                    to="#"
+                    to={`/seminar-management/${seminar.id}`}
                     className="font-medium text-green-600 hover:underline"
                   >
                     View Seminar
                   </Link>
                   <Link
                     to="#"
-                    onClick={() => handleUpdate(seminar)}
-                    className="font-medium text-blue-600 hover:underline"
-                  >
-                    Edit
-                  </Link>
-                  <Link
-                    to="#"
                     className="font-medium text-red-600 hover:underline"
                   >
                     Remove
-                  </Link>
-                  <Link
-                    to="#"
-                    onClick={() => handleParticipant(seminar.id, user.id)} // Pass user.id
-                    className="font-medium text-yellow-600 hover:underline"
-                  >
-                    Join
                   </Link>
                 </td>
               </tr>

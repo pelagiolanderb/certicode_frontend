@@ -1,13 +1,5 @@
+import api from "./api";
 import axios from "axios";
-
-const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-  headers: {
-    accept: "application/json",
-  },
-  withCredentials: true,
-  withXSRFToken: true,
-});
 
 const getCSRFToken = async () => {
   await axios.get("http://localhost:8000/sanctum/csrf-cookie", {

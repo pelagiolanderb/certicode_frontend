@@ -32,12 +32,15 @@ const Participants = () => {
       : titleB.localeCompare(titleA);
   });
 
+  console.log(sortedParticipants)
+
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
   const handleSendCertificate = async (participantId) => {
     try {
+      console.log(participantId)
       console.log("Requesting certificate for participantId:", participantId);
       await sendCertificate(participantId);
       alert("Certificate sent successfully!");
@@ -126,7 +129,7 @@ const Participants = () => {
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
               >
                 <td className="px-6 py-4">
-                  {participant.user?.name || participant.guest?.guest_name}
+                  {participant.user?.name || participant.guest?.name}
                 </td>
                 <td className="px-6 py-4">
                   {participant.seminar?.name_of_seminar}

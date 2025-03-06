@@ -21,6 +21,7 @@ const SeminarModal = ({
           seminar_image: null,
           about_the_speaker: "",
           certificate_template_id: 1,
+          price: 0,
         }
   );
   const [loading, setLoading] = useState(false);
@@ -57,6 +58,7 @@ const SeminarModal = ({
         formData.append("speaker_image", seminar.speaker_image);
       if (seminar.seminar_image)
         formData.append("seminar_image", seminar.seminar_image);
+      formData.append("price", seminar.price);
 
       await handleSubmit(formData);
 
@@ -70,12 +72,10 @@ const SeminarModal = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-900/50 z-100">
-     <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-xl relative">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-5xl relative">
         <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {
-              editingSeminar ? "Update Seminar" : "Create New Seminar"
-            }
+            {editingSeminar ? "Update Seminar" : "Create New Seminar"}
           </h3>
           <button
             onClick={() => setIsModalOpen(false)}
@@ -171,6 +171,59 @@ const SeminarModal = ({
               </div>
               <div className="w-full px-3 mb-6 md:mb-0">
                 <label
+                  htmlFor="price"
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                >
+                  price
+                </label>
+                <input
+                  type="number"
+                  name="price"
+                  id="price"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  placeholder="Price"
+                  value={seminar.price}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className="flex flex-wrap w-full flex-col">
+              <div className="w-full px-3 mb-6 md:mb-0">
+                <label
+                  htmlFor="speaker_name"
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                >
+                  Speaker Name
+                </label>
+                <input
+                  type="text"
+                  name="speaker_name"
+                  id="speaker_name"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  placeholder="Speaker Name"
+                  value={seminar.speaker_name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="w-full px-3 mb-6 md:mb-0">
+                <label
+                  htmlFor="organization_name"
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                >
+                  organization name
+                </label>
+                <input
+                  type="text"
+                  name="organization_name"
+                  id="organization_name"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  placeholder="Organization Name"
+                  value={seminar.organization_name}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="w-full px-3 mb-6 md:mb-0">
+                <label
                   htmlFor="description"
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 >
@@ -182,6 +235,22 @@ const SeminarModal = ({
                   placeholder="Description..."
                   className="appearance-none block w-full min-h-18 bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                   value={seminar.description}
+                  onChange={handleChange}
+                ></textarea>
+              </div>
+              <div className="w-full px-3 mb-6 md:mb-0">
+                <label
+                  htmlFor="about_the_speaker"
+                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                >
+                  About the Speaker
+                </label>
+                <textarea
+                  name="about_the_speaker"
+                  id="about_the_speaker"
+                  className="appearance-none block w-full min-h-18 bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                  placeholder="About the speaker..."
+                  value={seminar.about_the_speaker}
                   onChange={handleChange}
                 ></textarea>
               </div>
@@ -234,56 +303,6 @@ const SeminarModal = ({
                     Previous Seminar Image
                   </a>
                 )}
-              </div>
-              <div className="w-full px-3 mb-6 md:mb-0">
-                <label
-                  htmlFor="speaker_name"
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                >
-                  Speaker Name
-                </label>
-                <input
-                  type="text"
-                  name="speaker_name"
-                  id="speaker_name"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  placeholder="Speaker Name"
-                  value={seminar.speaker_name}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="w-full px-3 mb-6 md:mb-0">
-                <label
-                  htmlFor="organization_name"
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                >
-                  organization name
-                </label>
-                <input
-                  type="text"
-                  name="organization_name"
-                  id="organization_name"
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  placeholder="Organization Name"
-                  value={seminar.organization_name}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="w-full px-3 mb-6 md:mb-0">
-                <label
-                  htmlFor="about_the_speaker"
-                  className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                >
-                  About the Speaker
-                </label>
-                <textarea
-                  name="about_the_speaker"
-                  id="about_the_speaker"
-                  className="appearance-none block w-full min-h-18 bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                  placeholder="About the speaker..."
-                  value={seminar.about_the_speaker}
-                  onChange={handleChange}
-                ></textarea>
               </div>
             </div>
           </div>

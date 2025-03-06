@@ -78,7 +78,7 @@ export default function SignInForm() {
 
       if (response.status === 200) {
         localStorage.setItem("auth_token", response.data.access_token);
-        localStorage.setItem("user", JSON.stringify(response.data)); // Store user info
+        localStorage.setItem("user_id", JSON.stringify(response.data.user_id)); // Store user info
         navigate("/dashboard");
       }
     } catch (error) {
