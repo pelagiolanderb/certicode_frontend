@@ -68,6 +68,7 @@ export default function App() {
               element={<ProtectedRoute component={Archived} />}
             />
             <Route path="/seminar-management/:id" element={<LandingSeminar />} />
+            <Route path="/archived" element={<ProtectedRoute component={Archived} />} />
 
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />

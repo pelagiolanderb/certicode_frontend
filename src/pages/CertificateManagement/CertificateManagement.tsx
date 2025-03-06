@@ -5,6 +5,10 @@ import {
   updateCertificateTemplate,
   deleteCertificateTemplate,
 } from "../../api/certificate_templateAPI";
+import {
+  archiveCertificateTemplate,
+} from "../../api/archiveApi.js";
+
 import BeatLoader from "../../components/loading/loading";
 
 const CertificateManagement = () => {
@@ -19,6 +23,22 @@ const CertificateManagement = () => {
     fetchTemplates();
   }, []);
 
+  const handleArchive = async (id) => {
+    if (!window.confirm("Are you sure you want to archive this template?")) return;
+  
+    setLoading(true);
+    try {
+      await archiveCertificateTemplate(id);
+      alert("Template archived successfully!");
+      fetchTemplates();
+    } catch (error) {
+      alert("Failed to archive template.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   const fetchTemplates = async () => {
     setFetchingLoading(true);
     try {
@@ -188,7 +208,7 @@ const CertificateManagement = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500 hover:underline"
-                    >
+                    > 
                       View PDF
                     </a>
                   </td>
@@ -205,6 +225,13 @@ const CertificateManagement = () => {
                     >
                       Delete
                     </button>
+                    <button
+                      onClick={() => handleArchive(template.id)}
+                      className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700"
+                    >
+                      Archive
+                    </button>
+
                   </td>
                 </tr>
               ))
