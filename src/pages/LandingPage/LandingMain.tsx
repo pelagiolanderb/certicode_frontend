@@ -212,13 +212,9 @@ const LandingMain = () => {
 
       {/* Call to Action */}
 
-      <motion.div 
+      <div 
       className="grid grid-cols-1 md:grid-cols-2 gap-12 p-12 md:p-24 items-center bg-white"
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.2 }}
-      variants={fadeIn}
-      >
+  >
         <div>
           <img
             src={landing_page}
@@ -242,7 +238,7 @@ const LandingMain = () => {
             Sign Up Now
           </Link>
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 };
