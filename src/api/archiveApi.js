@@ -17,57 +17,7 @@ const getCSRFToken = async () => {
   });
 };
 
-export const fetchSeminars = async () => {
-  try {
-    await getCSRFToken();
-    const response = await api.get("/seminars");
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching seminars:", error);
-    throw error;
-  }
-};
 
-export const createSeminar = async (seminarData) => {
-  try {
-    await getCSRFToken();
-    const response = await api.post("/create-seminar", seminarData, {
-      headers: {
-        accept: "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error creating seminar:", error);
-    throw error;
-  }
-};
-
-export const updateSeminar = async (id, updatedData) => {
-  try {
-    await getCSRFToken();
-    const response = await api.post(`/edit-seminar/${id}`, updatedData, {
-      headers: {
-        accept: "application/json",
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error updating seminar:", error);
-    throw error;
-  }
-};
-
-export const deleteSeminar = async (id) => {
-  try {
-    await getCSRFToken();
-    const response = await api.delete(`/delete-seminar/${id}`);
-    return response.data;
-  } catch (error) {
-    console.error("Error deleting seminar:", error);
-    throw error;
-  }
-};
 
 export const archiveSeminar = async (id) => {
   try {
@@ -91,6 +41,7 @@ export const fetchArchivedSeminars = async () => {
   }
 };
 
+
 export const restoreSeminar = async (id) => {
     try {
       await getCSRFToken();
@@ -113,3 +64,45 @@ export const restoreSeminar = async (id) => {
     }
   };
   
+  export const archiveCertificateTemplate = async (id) => {
+    try {
+      await getCSRFToken();
+      const response = await api.post(`/template_archive/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error archiving template:", error);
+      throw error;
+    }
+  };
+
+  export const fetchArchivedCertificateTemplates = async () => {
+    try {
+      const response = await api.get("/archived_templates");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching archived templates:", error);
+      throw error;
+    }
+  };
+  
+  export const restoreCertificateTemplate = async (id) => {
+    try {
+      await getCSRFToken();
+      const response = await api.post(`/restore_template/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error restoring template:", error);
+      throw error;
+    }
+  };
+  
+  export const deleteArchivedCertificateTemplate = async (id) => {
+    try {
+      await getCSRFToken();
+      const response = await api.delete(`/delete_archived_template/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error("Error deleting archived template:", error);
+      throw error;
+    }
+  };

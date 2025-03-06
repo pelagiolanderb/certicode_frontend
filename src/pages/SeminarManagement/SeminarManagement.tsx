@@ -4,7 +4,13 @@ import {
   createSeminar,
   updateSeminar,
   deleteSeminar,
+
 } from "../../api/seminarAPI";
+
+import {
+
+  archiveSeminar,
+} from "../../api/archiveApi.js";
 import { createParticipant } from "../../api/participantAPI";
 import SeminarModal from "./SeminarModal";
 import { Link } from "react-router";
@@ -90,6 +96,19 @@ const ManageSeminarPage = () => {
     }
   };
 
+  const handleArchive = async (id) => {
+    if (window.confirm("Are you sure you want to archive this seminar?")) {
+      try {
+        await archiveSeminar(id);
+        setSeminars(seminars.filter((s) => s.id !== id));
+        alert("Seminar archived successfully.");
+      } catch (error) {
+        alert("Failed to archive seminar.");
+      }
+    }
+  };
+
+  
   const handleParticipant = async (seminar_id, user_id) => {
     let data = {
       seminar_id,
@@ -213,6 +232,14 @@ const ManageSeminarPage = () => {
                   >
                     Join
                   </Link>
+                  <Link
+                  to="#"
+                  onClick={() => handleArchive(seminar.id)}
+                  className="font-medium text-gray-600 hover:underline"
+                >
+                  Archive
+                </Link>
+
                 </td>
               </tr>
             ))}

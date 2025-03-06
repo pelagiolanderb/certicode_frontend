@@ -46,6 +46,8 @@ export default function App() {
             <Route path="/certificate-management" element={<ProtectedRoute component={CertificateManagement} />} />
             <Route path="/user-management" element={<ProtectedRoute component={UserProfiles} />} />
             <Route path="/archived" element={<ProtectedRoute component={Archived} />} />
+
+
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />

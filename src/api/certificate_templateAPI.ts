@@ -63,3 +63,4 @@ export const deleteCertificateTemplate = async (id) => {
     throw error;
   }
 };
+
