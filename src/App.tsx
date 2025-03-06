@@ -25,6 +25,8 @@ import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import LandingSeminar from "./pages/LandingPage/LandingSeminar";
+import LandingSeminarList from "./pages/LandingPage/LandingSeminarList";
 import SeminarManagement from "./pages/SeminarManagement/SeminarManagement";
 import Participants from "./pages/Participants/Participants";
 import CertificateManagement from "./pages/CertificateManagement/CertificateManagement";
@@ -96,6 +98,8 @@ export default function App() {
           </Route> */}
           <Route path="/verify-email" element={token ? <Navigate to="/dashboard" replace /> : <VerifyEmail />} />
           <Route path="/" element={<LandingPage />} />
+          <Route path="/seminar-list" element={<LandingSeminarList />} />
+          <Route path="/seminar/:id" element={<LandingSeminar />} />
           {/* Auth Layout */}
           <Route path="/signin" element={token ? <Navigate to="/dashboard" replace /> : <SignIn />} />
           <Route path="/signup" element={token ? <Navigate to="/dashboard" replace /> : <SignUp />} />
