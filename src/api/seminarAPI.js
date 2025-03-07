@@ -1,16 +1,20 @@
 import api from "./api";
 import axios from "axios";
 
-const getCSRFToken = async () => {
-  await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`, {
-    withCredentials: true,
-    withXSRFToken: true,
-  });
-};
+// const getCSRFToken = async () => {
+//   await axios.get(
+//     // `${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`,
+//     "http://127.0.0.1:8000/sanctum/csrf-cookie",
+//     {
+//       withCredentials: true,
+//       withXSRFToken: true,
+//     }
+//   );
+// };
 
 export const fetchSeminars = async () => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.get("/seminars");
     return response.data;
   } catch (error) {
@@ -21,7 +25,7 @@ export const fetchSeminars = async () => {
 
 export const createSeminar = async (seminarData) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.post("/create-seminar", seminarData);
     return response.data;
   } catch (error) {
@@ -32,7 +36,7 @@ export const createSeminar = async (seminarData) => {
 
 export const updateSeminar = async (id, updatedData) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.post(`/edit-seminar/${id}`, updatedData, {
       headers: {
         accept: "application/json",
@@ -47,7 +51,7 @@ export const updateSeminar = async (id, updatedData) => {
 
 export const deleteSeminar = async (id) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.delete(`/delete-seminar/${id}`);
     return response.data;
   } catch (error) {

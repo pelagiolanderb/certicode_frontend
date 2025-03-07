@@ -1,16 +1,20 @@
 import api from "./api";
 import axios from "axios";
 
-const getCSRFToken = async () => {
-  await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`, {
-    withCredentials: true,
-    withXSRFToken: true,
-  });
-};
+// const getCSRFToken = async () => {
+//   await axios.get(
+//     // `${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`,
+//     "http://127.0.0.1:8000/sanctum/csrf-cookie",
+//     {
+//       withCredentials: true,
+//       withXSRFToken: true,
+//     }
+//   );
+// };
 
 export const fetchCertificateTemplates = async () => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.get("/templates");
     return Array.isArray(response.data) ? response.data : [];
   } catch (error) {
@@ -21,7 +25,7 @@ export const fetchCertificateTemplates = async () => {
 
 export const uploadCertificateTemplate = async (formData) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.post("/templates", formData,{
       headers: {
         accept: "application/json",
@@ -36,7 +40,7 @@ export const uploadCertificateTemplate = async (formData) => {
 
 export const updateCertificateTemplate = async (id, formData) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.post(`/templates/${id}`, formData);
     return response.data;
   } catch (error) {
@@ -47,7 +51,7 @@ export const updateCertificateTemplate = async (id, formData) => {
 
 export const deleteCertificateTemplate = async (id) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.delete(`/templates/${id}`);
     return response.data;
   } catch (error) {
