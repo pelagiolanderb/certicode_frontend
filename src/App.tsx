@@ -42,12 +42,34 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/dashboard"  element={<ProtectedRoute component={Home} />} />
-            <Route path="/seminar-management" element={<ProtectedRoute component={SeminarManagement} />} />
-            <Route path="/participants" element={<ProtectedRoute component={Participants} />} />
-            <Route path="/certificate-management" element={<ProtectedRoute component={CertificateManagement} />} />
-            <Route path="/user-management" element={<ProtectedRoute component={UserProfiles} />} />
+            <Route
+              index
+              path="/dashboard"
+              element={<ProtectedRoute component={Home} />}
+            />
+            <Route
+              path="/seminar-management"
+              element={<ProtectedRoute component={SeminarManagement} />}
+            />
+            <Route
+              path="/participants"
+              element={<ProtectedRoute component={Participants} />}
+            />
+            <Route
+              path="/certificate-management"
+              element={<ProtectedRoute component={CertificateManagement} />}
+            />
+            <Route
+              path="/user-management"
+              element={<ProtectedRoute component={UserProfiles} />}
+            />
+            <Route
+              path="/archived"
+              element={<ProtectedRoute component={Archived} />}
+            />
+            <Route path="/seminar-management/:id" element={<LandingSeminar />} />
             <Route path="/archived" element={<ProtectedRoute component={Archived} />} />
+
             {/* Others Page */}
             {/* <Route path="/profile" element={<UserProfiles />} />
             <Route path="/calendar" element={<Calendar />} />
@@ -96,13 +118,24 @@ export default function App() {
             <Route index element={<HomePage />} />
             <Route path="seminar/:id" element={<SeminarPage />} />
           </Route> */}
-          <Route path="/verify-email" element={token ? <Navigate to="/dashboard" replace /> : <VerifyEmail />} />
+          <Route
+            path="/verify-email"
+            element={
+              token ? <Navigate to="/dashboard" replace /> : <VerifyEmail />
+            }
+          />
           <Route path="/" element={<LandingPage />} />
           <Route path="/seminar-list" element={<LandingSeminarList />} />
           <Route path="/seminar/:id" element={<LandingSeminar />} />
           {/* Auth Layout */}
-          <Route path="/signin" element={token ? <Navigate to="/dashboard" replace /> : <SignIn />} />
-          <Route path="/signup" element={token ? <Navigate to="/dashboard" replace /> : <SignUp />} />
+          <Route
+            path="/signin"
+            element={token ? <Navigate to="/dashboard" replace /> : <SignIn />}
+          />
+          <Route
+            path="/signup"
+            element={token ? <Navigate to="/dashboard" replace /> : <SignUp />}
+          />
 
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

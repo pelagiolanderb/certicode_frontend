@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { fetchSeminars } from "../../api/seminarAPI";
 import BeatLoader from "../../components/loading/loading";
 import LandingHeader from "./LandingHeader";
+import seminarListBg from "../../assets/images/seminar_list_bg.png"
 
 const SeminarListPage = () => {
   const [seminars, setSeminars] = useState([]);
@@ -11,6 +12,8 @@ const SeminarListPage = () => {
   const [selectedTopic, setSelectedTopic] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   useEffect(() => {
     const handleFetchSeminars = async () => {
@@ -36,6 +39,15 @@ const SeminarListPage = () => {
     handleFetchSeminars();
   }, []);
 
+  useEffect(() => {
+    if (selectedTopic === "All") {
+      setFilteredSeminars(seminars);
+    } else {
+      setFilteredSeminars(seminars.filter((seminar) => seminar.topics === selectedTopic));
+    }
+  }, [selectedTopic, seminars]);
+
+
   // Filter seminars based on selected topic
   useEffect(() => {
     if (selectedTopic === "All") {
@@ -48,77 +60,100 @@ const SeminarListPage = () => {
   return (
     <>
       <LandingHeader />
+  
+      <div className=" text-gray-900 pt-20 px-4">
+        {/* Page Header Section */}
+        <div className="flex flex-col-1">
+          <div className="flex flex-col  flex-2 justify-center">          
+            <h1 className="text-5xl font-bold text-[#37547C]">Explore Our Seminars</h1>
+         
+            <h2 className="text-xl text-[#37547C] mt-2 max-w-2xl">
+              Discover expert-led seminars designed to expand your knowledge and skills.
+            </h2>
+          
+          </div>       
+          <div>
+            <img src={seminarListBg} alt="" />
+          </div>
+        </div>
 
-      {/* Page Header Section */}
-      <div className="pt-30 text-center px-6">
-        <h1 className="text-5xl font-bold text-[#37547C] mb-4">Explore Our Seminars</h1>
-        <p className="text-lg text-[#37547C] max-w-2xl mx-auto">
-          Discover expert-led seminars designed to expand your knowledge and skills.
-        </p>
-      </div>
+        {/* Filter Section */}
+        <div className="flex justify-center gap-3 py-6">
+          {topics.map((topic) => (
+            <button
+              key={topic}
+              onClick={() => setSelectedTopic(topic)}
+              className={`px-4 py-2 rounded-full border ${
+                selectedTopic === topic
+                  ? "bg-black text-white border-black"
+                  : "bg-white text-black border-gray-300 hover:bg-gray-200"
+              }`}
+            >
+              {topic}
+            </button>
+          ))}
+        </div>
 
-      {/* Filter Section */}
-      <div className="flex justify-center gap-3 py-6">
-        {topics.map((topic) => (
-          <button
-            key={topic}
-            onClick={() => setSelectedTopic(topic)}
-            className={`px-4 py-2 rounded-full border ${
-              selectedTopic === topic
-                ? "bg-black text-white border-black"
-                : "bg-white text-black border-gray-300 hover:bg-gray-200"
-            }`}
-          >
-            {topic}
-          </button>
-        ))}
-      </div>
-
-      {/* Seminar List Section */}
-      <div className="max-w-6xl mx-auto py-10 px-4">
-        {loading ? (
-          <div className="flex justify-center">
+        <div className="max-w-6xl mx-auto py-20 rounded-xl">
+          {/* Loading & Empty State Handling */}
+          {loading ? (
             <BeatLoader />
-          </div>
-        ) : error ? (
-          <p className="text-center text-red-500">{error}</p>
-        ) : filteredSeminars.length === 0 ? (
-          <p className="text-center text-gray-600">No seminars available for this topic.</p>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {filteredSeminars.map((seminar) => (
-              <div
-                key={seminar.id}
-                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
-              >
-                <Link to={`/seminar/${seminar.id}`}>
-                  <img
-                    src={`http://localhost:8000/storage/${seminar.seminar_image}`}
-                    alt={seminar.name_of_seminar}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="p-4">
-                    <h3 className="text-lg font-bold text-[#37547C] pb-3">{seminar.name_of_seminar}</h3>
-                    <p className="text-sm text-gray-600 pb-3">Organized by {seminar.organization_name}</p>
-                    <p className="text-md text-[#37547C] pb-3">Topic Covered</p>
-                    <p className="text-sm text-gray-600 pb-3">{seminar.topics}</p>
-                    <p className="text-xs text-gray-500 pb-3">📅 {new Date(seminar.date).toLocaleDateString()}</p>
-                    <p className="text-xs text-gray-500">📍 {seminar.location}</p>
-                  </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        )}
+          ) : // <div className="flex justify-center">
+          // </div>
+          filteredSeminars.length === 0 ? (
+            <p className="text-center text-gray-600">
+              No seminars available at the moment.
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {filteredSeminars.map((seminar) => (
+                <div
+                  key={seminar.id}
+                  className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <Link to={`/seminar/${seminar.id}`}>
+                    <img
+                      src={`${BACKEND_URL}/storage/${
+                        seminar.seminar_image
+                      }`}
+                      alt={seminar.name_of_seminar}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-4">
+                      <h3 className="text-lg font-bold text-[#37547C] pb-3">
+                        {seminar.name_of_seminar}
+                      </h3>
+                      <p className="text-sm text-gray-600 pb-3">
+                        Organized by {seminar.organization_name}
+                      </p>
+                      <p className="text-md text-[#37547C] pb-3">
+                        Topic Covered
+                      </p>
+                      <p className="text-sm text-gray-600 pb-3">
+                        {seminar.topics}
+                      </p>
+                      <p className="text-xs text-gray-500 pb-3">
+                        📅 {new Date(seminar.date).toLocaleDateString()}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        📍 {seminar.location}
+                      </p>
+                    </div>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
 
-        {/* Back to Homepage Button */}
-        <div className="text-center mt-12">
-          <Link
-            to="/"
-            className="text-[#37547C] font-bold text-lg border-2 border-[#37547C] px-6 py-3 rounded-lg hover:bg-[#37547C] hover:text-white transition"
-          >
-            Back to Homepage
-          </Link>
+          {/* Back to Homepage */}
+          <div className="text-center mt-12">
+            <Link
+              to="/"
+              className="text-[#37547C] font-bold text-lg border-2 border-[#37547C] px-6 py-3 rounded-lg hover:bg-[#37547C] hover:text-white transition"
+            >
+              Back to Homepage
+            </Link>
+          </div>
         </div>
       </div>
     </>

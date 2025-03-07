@@ -5,12 +5,14 @@ import {
   updateSeminar,
   deleteSeminar,
 } from "../../api/seminarAPI";
+
+import { archiveSeminar } from "../../api/archiveApi.js";
 import { createParticipant } from "../../api/participantAPI";
 import SeminarModal from "./SeminarModal";
 import { Link } from "react-router";
 import BeatSpinner from "../../components/loading/loading";
 
-const ManageSeminarPage = () => {
+const SeminarManagement = () => {
   const [seminars, setSeminars] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -86,6 +88,18 @@ const ManageSeminarPage = () => {
         setSeminars(seminars.filter((s) => s.id !== id));
       } catch (error) {
         alert("Failed to delete seminar.");
+      }
+    }
+  };
+
+  const handleArchive = async (id) => {
+    if (window.confirm("Are you sure you want to archive this seminar?")) {
+      try {
+        await archiveSeminar(id);
+        setSeminars(seminars.filter((s) => s.id !== id));
+        alert("Seminar archived successfully.");
+      } catch (error) {
+        alert("Failed to archive seminar.");
       }
     }
   };
@@ -188,17 +202,10 @@ const ManageSeminarPage = () => {
                 <td className="px-6 py-4">{seminar.organization_name}</td>
                 <td className="py-4 flex flex-col">
                   <Link
-                    to="#"
+                    to={`/seminar-management/${seminar.id}`}
                     className="font-medium text-green-600 hover:underline"
                   >
                     View Seminar
-                  </Link>
-                  <Link
-                    to="#"
-                    onClick={() => handleUpdate(seminar)}
-                    className="font-medium text-blue-600 hover:underline"
-                  >
-                    Edit
                   </Link>
                   <Link
                     to="#"
@@ -212,6 +219,13 @@ const ManageSeminarPage = () => {
                     className="font-medium text-yellow-600 hover:underline"
                   >
                     Join
+                  </Link>
+                  <Link
+                    to="#"
+                    onClick={() => handleArchive(seminar.id)}
+                    className="font-medium text-gray-600 hover:underline"
+                  >
+                    Archive
                   </Link>
                 </td>
               </tr>
@@ -290,4 +304,4 @@ const ManageSeminarPage = () => {
   );
 };
 
-export default ManageSeminarPage;
+export default SeminarManagement;

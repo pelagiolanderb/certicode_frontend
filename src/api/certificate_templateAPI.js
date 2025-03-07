@@ -1,16 +1,8 @@
+import api from "./api";
 import axios from "axios";
 
-const api = axios.create({
-  baseURL: "http://localhost:8000/api",
-  headers: {
-    accept: "application/json",
-  },
-  withCredentials: true,
-  withXSRFToken: true,
-});
-
 const getCSRFToken = async () => {
-  await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+  await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`, {
     withCredentials: true,
     withXSRFToken: true,
   });
@@ -63,3 +55,4 @@ export const deleteCertificateTemplate = async (id) => {
     throw error;
   }
 };
+

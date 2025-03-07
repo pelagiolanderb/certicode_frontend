@@ -5,6 +5,10 @@ import {
   updateCertificateTemplate,
   deleteCertificateTemplate,
 } from "../../api/certificate_templateAPI";
+import {
+  archiveCertificateTemplate,
+} from "../../api/archiveApi.js";
+
 import BeatLoader from "../../components/loading/loading";
 
 const CertificateManagement = () => {
@@ -15,10 +19,28 @@ const CertificateManagement = () => {
   const [loading, setLoading] = useState(false);
   const [fetchingLoading, setFetchingLoading] = useState(false);
 
+  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
   useEffect(() => {
     fetchTemplates();
   }, []);
 
+  const handleArchive = async (id) => {
+    if (!window.confirm("Are you sure you want to archive this template?")) return;
+  
+    setLoading(true);
+    try {
+      await archiveCertificateTemplate(id);
+      alert("Template archived successfully!");
+      fetchTemplates();
+    } catch (error) {
+      alert("Failed to archive template.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   const fetchTemplates = async () => {
     setFetchingLoading(true);
     try {
@@ -184,11 +206,11 @@ const CertificateManagement = () => {
                   <td className="px-6 py-4">{template.name}</td>
                   <td className="px-6 py-4">
                     <a
-                      href={`http://localhost:8000/certificates/${template.pdf_filename}`}
+                      href={`${BACKEND_URL}/certificates/${template.pdf_filename}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-500 hover:underline"
-                    >
+                    > 
                       View PDF
                     </a>
                   </td>
@@ -205,6 +227,13 @@ const CertificateManagement = () => {
                     >
                       Delete
                     </button>
+                    <button
+                      onClick={() => handleArchive(template.id)}
+                      className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-700"
+                    >
+                      Archive
+                    </button>
+
                   </td>
                 </tr>
               ))

@@ -40,7 +40,7 @@ export default function UserDropdown() {
 
       if (response.status === 200 || response.status === 204) {
         localStorage.removeItem("auth_token");
-        localStorage.removeItem("user");
+        localStorage.removeItem("user_id");
         navigate("/");
       }
     } catch (error) {

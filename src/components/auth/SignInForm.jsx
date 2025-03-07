@@ -62,7 +62,7 @@ export default function SignInForm() {
         withCredentials: true,
       });
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
+        "http://localhost:8000/api/auth/login", 
         {
           email: formData.email,
           password: formData.password,
@@ -78,7 +78,7 @@ export default function SignInForm() {
 
       if (response.status === 200) {
         localStorage.setItem("auth_token", response.data.access_token);
-        localStorage.setItem("user", JSON.stringify(response.data)); // Store user info
+        localStorage.setItem("user_id", JSON.stringify(response.data.user_id)); // Store user info
         navigate("/dashboard");
       }
     } catch (error) {
