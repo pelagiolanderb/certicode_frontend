@@ -2,16 +2,20 @@ import api from "./api";
 import axios from "axios";
 import { createTransaction } from "./transactionAPI";
 
-const getCSRFToken = async () => {
-  await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`, {
-    withCredentials: true,
-    withXSRFToken: true,
-  });
-};
+// const getCSRFToken = async () => {
+//   await axios.get(
+//     // `${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`,
+//     "http://127.0.0.1:8000/sanctum/csrf-cookie",
+//     {
+//       withCredentials: true,
+//       withXSRFToken: true,
+//     }
+//   );
+// };
 
 export const createParticipant = async (seminarId, guest_id = null) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
 
     let user_id = localStorage.getItem("user_id");
 
@@ -20,8 +24,6 @@ export const createParticipant = async (seminarId, guest_id = null) => {
       user_id: user_id ? user_id : null,
       guest_id: user_id ? null : guest_id,
     };
-
-    // await createTransaction({seminar_id: seminarId, participant_id: 1, isPaid: false})
 
     const response = await api.post("/add-participant", data, {
       headers: {
@@ -38,7 +40,7 @@ export const createParticipant = async (seminarId, guest_id = null) => {
 
 export const fetchParticipants = async () => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.get("/participants");
     return response.data;
   } catch (error) {
@@ -49,7 +51,7 @@ export const fetchParticipants = async () => {
 
 export const sendCertificate = async (participantId) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.get(`/certificate/${participantId}`, {
       headers: {
         accept: "application/json",

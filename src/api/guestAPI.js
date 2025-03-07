@@ -3,10 +3,14 @@ import axios from "axios";
 import { createParticipant } from "./participantAPI";
 
 const getCSRFToken = async () => {
-  await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`, {
-    withCredentials: true,
-    withXSRFToken: true,
-  });
+  await axios.get(
+    // `${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`,
+    "http://127.0.0.1:8000/sanctum/csrf-cookie",
+    {
+      withCredentials: true,
+      withXSRFToken: true,
+    }
+  );
 };
 
 export const getGuests = async () => {

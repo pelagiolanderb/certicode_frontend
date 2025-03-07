@@ -25,7 +25,7 @@ const SeminarModal = ({
           speaker_image: null,
           seminar_image: null,
           about_the_speaker: "",
-          certificate_template_id: 1,
+          certificate_template_id: 0,
           price: 0,
         }
   );
@@ -81,7 +81,7 @@ const SeminarModal = ({
       formData.append("about_the_speaker", seminar.about_the_speaker);
       formData.append(
         "certificate_template_id",
-        seminar.certificate_template_id
+        templateId
       );
       if (seminar.speaker_image)
         formData.append("speaker_image", seminar.speaker_image);
@@ -252,7 +252,6 @@ const SeminarModal = ({
               />
             </div>
           </div>
-
           <div>
             <label
               htmlFor="description"
@@ -285,12 +284,11 @@ const SeminarModal = ({
               onChange={handleChange}
             ></textarea>
           </div>
-
-          <div className="flex flex-wrap w-full">
-            <div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="space-y-2">
               <label
                 htmlFor="speaker_image"
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold"
               >
                 Speaker Image
               </label>
@@ -298,48 +296,58 @@ const SeminarModal = ({
                 type="file"
                 name="speaker_image"
                 id="speaker_image"
-                className="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+                className="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
                 onChange={handleChange}
               />
               {editingSeminar && (
                 <a
                   href={`${BACKEND_URL}/storage/${editingSeminar.speaker_image}`}
                   target="_blank"
-                  className="font-medium text-xs text-green-600 hover:underline"
+                  className="text-xs font-medium text-green-600 hover:underline"
                 >
                   Previous Speaker Image
                 </a>
               )}
             </div>
-            <div>
+
+            <div className="space-y-2">
               <label
                 htmlFor="seminar_image"
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                className="block uppercase tracking-wide text-gray-700 text-xs font-bold"
               >
-                seminar image
+                Seminar Image
               </label>
               <input
                 type="file"
                 name="seminar_image"
                 id="seminar_image"
-                className="mt-2 block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+                className="block w-full text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
                 onChange={handleChange}
               />
               {editingSeminar && (
                 <a
                   href={`${BACKEND_URL}/storage/${editingSeminar.seminar_image}`}
                   target="_blank"
-                  className="font-medium text-xs text-green-600 hover:underline"
+                  className="text-xs font-medium text-green-600 hover:underline"
                 >
                   Previous Seminar Image
                 </a>
               )}
             </div>
-            <div>
-              <Link to="#" onClick={() => setChooseTemplate(true)}>
+
+            <div className="space-y-2 flex flex-col">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold">
+                Templates
+              </label>
+              <Link
+                to="#"
+                onClick={() => setChooseTemplate(true)}
+                className="py-2 px-4 bg-teal-500 rounded-md text-white text-center hover:bg-teal-700 transition duration-200"
+              >
                 Choose Template
               </Link>
             </div>
+
             {chooseTemplate && (
               <ChooseTemplate
                 setChooseTemplate={setChooseTemplate}
@@ -349,7 +357,6 @@ const SeminarModal = ({
               />
             )}
           </div>
-
           <div className="flex justify-end gap-3">
             <Button
               type="button"

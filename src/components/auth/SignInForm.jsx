@@ -37,6 +37,7 @@ export default function SignInForm() {
   const [errors, setErrors] = useState({
     email: "",
     password: "",
+    isAuthorize: false,
   });
 
   const navigate = useNavigate();
@@ -62,7 +63,7 @@ export default function SignInForm() {
         withCredentials: true,
       });
       const response = await axios.post(
-        "http://localhost:8000/api/auth/login", 
+        "http://localhost:8000/api/auth/login",
         {
           email: formData.email,
           password: formData.password,
@@ -83,6 +84,10 @@ export default function SignInForm() {
       }
     } catch (error) {
       console.error("Error during user login:", error);
+      if (error.status === 401) {
+        console.log("nag true");
+        setErrors({ ...errors, isAuthorize: true });
+      }
       if (error.response && error.response.status === 422) {
         const backendErrors = error.response.data.errors;
         setErrors((prevErrors) => ({
@@ -103,7 +108,7 @@ export default function SignInForm() {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="flex flex-col flex-1">
       <div className="w-full max-w-md pt-10 mx-auto">
@@ -127,9 +132,10 @@ export default function SignInForm() {
           </div>
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-              <button 
-              onClick={handleGoogleLogin}
-              className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button
+                onClick={handleGoogleLogin}
+                className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+              >
                 <svg
                   width="20"
                   height="20"
@@ -156,9 +162,10 @@ export default function SignInForm() {
                 </svg>
                 Sign in with Google
               </button>
-              <button 
-              onClick={handleFacebookLogin}
-              className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10">
+              <button
+                onClick={handleFacebookLogin}
+                className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+              >
                 <svg
                   width="21"
                   className="fill-current"
@@ -185,17 +192,18 @@ export default function SignInForm() {
             <form>
               <div className="space-y-6">
                 <div>
-                <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        name="email"
-                        placeholder="JohnDoe@gmail.com"
-                        value={formData.email}
-                        onChange={(e) =>
-                          setFormData({ ...formData, email: e.target.value })
-                        }
-                      />
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    className={`${errors.isAuthorize && "border-red-600"}`}
+                    placeholder="JohnDoe@gmail.com"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                  />
                 </div>
                 <div>
                   <Label>
@@ -207,6 +215,7 @@ export default function SignInForm() {
                       placeholder="Enter your password"
                       id="password"
                       name="password"
+                      className={`${errors.isAuthorize && "border-red-600"}`}
                       value={formData.password}
                       onChange={(e) =>
                         setFormData({ ...formData, password: e.target.value })
@@ -239,14 +248,14 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                   <Button
-                      onClick={handleSubmit}
-                      type="submit"
-                      className="w-full"
-                      disabled={loading}
-                    >
-                      {loading ? "Logging in..." : "Login"}
-                    </Button>
+                  <Button
+                    onClick={handleSubmit}
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? "Logging in..." : "Login"}
+                  </Button>
                 </div>
               </div>
             </form>
