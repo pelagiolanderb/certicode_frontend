@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 import { fetchSeminars } from "../../api/seminarAPI";
 import BeatLoader from "../../components/loading/loading";
 import LandingHeader from "./LandingHeader";
+import About from "../../assets/images/about_us.jpg";
 
 const SeminarListPage = () => {
   const [seminars, setSeminars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   useEffect(() => {
     const handleFetchSeminars = async () => {
@@ -28,29 +31,43 @@ const SeminarListPage = () => {
 
   return (
     <>
-      <div className="relative">
-        <LandingHeader />
-        <div className="max-w-6xl mx-auto py-20 px-6">
-          {/* Header Section */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-[#37547C] mb-4">
+      <LandingHeader />
+      <div className=" text-gray-900 pt-10 px-4">
+        <div className="relative my-10 h-[400px] rounded-xl overflow-hidden shadow-md">
+          {/* Background Image */}
+          <img
+            className="w-full h-full object-cover"
+            src={About}
+            alt="Seminars Hero"
+          />
+
+          {/* Overlay for readability */}
+          <div className="absolute inset-0 bg-opacity-50"></div>
+
+          {/* Hero Text (Centered) */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+            <h1 className="text-4xl font-bold text-white mb-4">
               Explore Our Seminars
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-200 max-w-2xl">
               Discover expert-led seminars designed to expand your knowledge and
               skills.
             </p>
           </div>
+        </div>
 
+        <div className="max-w-6xl mx-auto py-20 rounded-xl">
           {/* Loading & Empty State Handling */}
           {loading ? (
             <BeatLoader />
-          ) : seminars.length === 0 ? (
+          ) : // <div className="flex justify-center">
+          // </div>
+          seminars.length === 0 ? (
             <p className="text-center text-gray-600">
               No seminars available at the moment.
             </p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
               {seminars.map((seminar) => (
                 <div
                   key={seminar.id}
@@ -58,7 +75,9 @@ const SeminarListPage = () => {
                 >
                   <Link to={`/seminar/${seminar.id}`}>
                     <img
-                      src={`http://localhost:8000/storage/${seminar.seminar_image}`}
+                      src={`${BACKEND_URL}/storage/${
+                        seminar.seminar_image
+                      }`}
                       alt={seminar.name_of_seminar}
                       className="w-full h-48 object-cover"
                     />
@@ -70,7 +89,7 @@ const SeminarListPage = () => {
                         Organized by {seminar.organization_name}
                       </p>
                       <p className="text-md text-[#37547C] pb-3">
-                        Topic Corvered
+                        Topic Covered
                       </p>
                       <p className="text-sm text-gray-600 pb-3">
                         {seminar.topics}

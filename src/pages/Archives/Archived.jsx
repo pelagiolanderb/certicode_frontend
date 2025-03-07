@@ -16,6 +16,8 @@ const Archived = () => {
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("seminars");
 
+  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+
   useEffect(() => {
     loadArchivedData();
   }, []);
@@ -169,7 +171,7 @@ const Archived = () => {
         <td className="px-6 py-4">{template.name}</td>
         <td className="px-6 py-4">
           <a
-            href={`http://localhost:8000/certificates/${template.pdf_filename}`}
+            href={`${BACKEND_URL}/certificates/${template.pdf_filename}`}
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-500 hover:underline"

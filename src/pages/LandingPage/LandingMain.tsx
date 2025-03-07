@@ -7,6 +7,9 @@ import landing_page from "../../assets/images/landing_page.jpg";
 import about_us from "../../assets/images/about_us.jpg";
 import hero from "../../assets/images/hero.jpg";
 import BeatLoader from "../../components/loading/loading";
+import LandingTestimonials from "./LandingTestimonials";
+import LandingPageBg from "../../assets/images/LandingPageBg.jpg";
+import { motion } from "framer-motion";
 
 const LandingMain = () => {
   const [seminars, setSeminars] = useState([]);
@@ -45,10 +48,28 @@ const LandingMain = () => {
     },
   ];
 
+  const fadeIn = {
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+  };
+
   return (
-    <div className="relative">
-      <div className="relative w-full py-12 px-12">
-        <div className="relative z-10 text-center py-24 md:py-48">
+    <div 
+    className="relative bg-black text-gray-300 bg-cover bg-fixed bg-center"
+    style={{ backgroundImage: `url(${LandingPageBg})` }} 
+    >
+
+      <div 
+        className="relative bg-black text-gray-300 bg-cover bg-fixed bg-center h-screen flex flex-col items-center justify-center"
+        style={{ backgroundImage: `url(${hero})` }} // Set hero as background
+      >
+        <motion.div 
+        className="relative z-10 text-center px-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeIn}
+        >
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-12">
             Expand Your Knowledge with Expert-Led Seminars
           </h1>
@@ -58,23 +79,21 @@ const LandingMain = () => {
           >
             Browse Seminars
           </Link>
-        </div>
-
-        <img
-          src={hero}
-          className="w-full h-165 absolute inset-0 object-cover"
-          alt="Background"
-        />
+        </motion.div>
       </div>
 
-      <section className="py-24 bg-white">
-        <div className="container mx-auto max-w-screen-xl px-6">
+      {/* How it Works Section */}
+      <section className="relative py-24">
+        {/* Background Layer with Opacity */}
+        <div className="absolute inset-0 bg-[#B0C4DE] opacity-70"></div>
+
+        {/* Content Layer */}
+        <div className="relative z-10 container mx-auto max-w-screen-xl px-6">
           <div className="text-center mb-12">
             <p className="text-[#37547C] text-lg font-semibold uppercase tracking-widest pb-3">
               How it Works
             </p>
-            <p className="text-4xl text-[#37547C]  font-bold uppercase tracking-widest">
-              {" "}
+            <p className="text-4xl text-[#37547C] font-bold uppercase tracking-widest">
               Join seminars anytime, anywhere!
             </p>
           </div>
@@ -103,8 +122,17 @@ const LandingMain = () => {
         </div>
       </section>
 
-      <div id="seminar-list" className="max-w-6xl mx-auto py-12 px-6">
-        <h2 className="text-3xl font-bold text-center text-[#37547C]  mb-8">
+
+      {/* Upcoming Seminars Section */}
+      <motion.div 
+      id="seminar-list" 
+      className="max-w-6xl mx-auto py-12 px-6"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={fadeIn}
+      >
+        <h2 className="text-3xl font-bold text-center text-white  mb-8">
           Upcoming Seminars
         </h2>
         {loading ? (
@@ -148,23 +176,16 @@ const LandingMain = () => {
           </div>
         )}
         <div className="text-center mt-8">
-          <Link to="/seminar-list" className="text-[#37547C] font-bold text-lg">
+          <Link to="/seminar-list" className="text-white font-bold text-lg">
             View All Seminars →
           </Link>
         </div>
-      </div>
+      </motion.div>
 
       {/* About Us Section */}
-      <section id="about-us" className="py-24 bg-[#D6E4F0]">
-        <div className="container mx-auto max-w-screen-xl px-6 grid grid-cols-1 md:grid-cols-2 items-center">
-          {/* Image Section */}
-          <div className="mr-20">
-            <img
-              src={about_us}
-              className="rounded-2xl shadow-lg"
-              alt="About Us"
-            />
-          </div>
+      <section id="about-us" className=" relative py-24 ">
+        <div className="absolute inset-0 bg-[#B0C4DE] opacity-70"></div>
+        <div className="relative z-10 mx-auto max-w-screen-xl px-6 grid grid-cols-1 md:grid-cols-2 items-center">
 
           {/* Text Section */}
           <div>
@@ -174,47 +195,63 @@ const LandingMain = () => {
             <h2 className="text-4xl font-bold text-[#37547C] mb-6">
               Empowering Learners Through Knowledge
             </h2>
-            <p className="text-gray-700 mb-6">
+            <p className="text-gray-700 mb-6 font-semibold">
               At Certicode, we provide expert-led seminars designed to help you
               gain valuable skills and certifications. Our platform allows you
               to learn at your own pace, anywhere and anytime.
             </p>
-            <p className="text-gray-700 mb-6">
+            <p className="text-gray-700 mb-6 font-semibold">
               Whether you’re looking to upskill, switch careers, or just expand
               your knowledge, we are here to guide you with quality educational
               content and recognized certifications.
             </p>
           </div>
+          {/* Image Section */}
+          <div className="ml-20">
+            <img
+              src={about_us}
+              className="rounded-2xl shadow-lg"
+              alt="About Us"
+            />
+          </div>
         </div>
       </section>
+      
+      {/* Testimonials */}
+      <LandingTestimonials />
+   
 
       {/* Call to Action */}
+      <div className="relative" > 
+        <div className="absolute inset-0 bg-[#B0C4DE] opacity-70"></div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 p-12 md:p-24 items-center">
-        <div>
-          <img
-            src={landing_page}
-            className="w-full max-w-md rounded-2xl shadow-lg"
-            alt="Seminar"
-          />
-        </div>
+        <div className=" relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 p-12 md:p-24 items-center">
+          <div>
+            <img
+              src={landing_page}
+              className="w-full max-w-md rounded-2xl shadow-lg"
+              alt="Seminar"
+            />
+          </div>
 
-        <div>
-          <h2 className="text-3xl font-bold text-[#37547C] mb-4">
-            Start Learning Today!
-          </h2>
-          <p className="text-gray-700 mb-6">
-            Join our community of learners and get certified.
-          </p>
+          <div>
+            <h2 className="text-3xl font-bold text-[#37547C] mb-4">
+              Start Learning Today!
+            </h2>
+            <p className="text-[#37547C] mb-6 font-bold">
+              Join our community of learners and get certified.
+            </p>
 
-          <Link
-            to="/signup"
-            className="bg-[#37547C] text-white px-8 py-4 rounded-md font-bold"
-          >
-            Sign Up Now
-          </Link>
+            <Link
+              to="/signup"
+              className="bg-[#B0C4DE] text-[#37547C] px-8 py-4 rounded-md font-bold"
+            >
+              Sign Up Now
+            </Link>
+          </div>
         </div>
       </div>
+
     </div>
   );
 };

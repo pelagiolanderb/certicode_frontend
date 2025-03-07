@@ -4,19 +4,15 @@ import {
   createSeminar,
   updateSeminar,
   deleteSeminar,
-
 } from "../../api/seminarAPI";
 
-import {
-
-  archiveSeminar,
-} from "../../api/archiveApi.js";
+import { archiveSeminar } from "../../api/archiveApi.js";
 import { createParticipant } from "../../api/participantAPI";
 import SeminarModal from "./SeminarModal";
 import { Link } from "react-router";
 import BeatSpinner from "../../components/loading/loading";
 
-const ManageSeminarPage = () => {
+const SeminarManagement = () => {
   const [seminars, setSeminars] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -108,7 +104,6 @@ const ManageSeminarPage = () => {
     }
   };
 
-  
   const handleParticipant = async (seminar_id, user_id) => {
     let data = {
       seminar_id,
@@ -226,13 +221,12 @@ const ManageSeminarPage = () => {
                     Join
                   </Link>
                   <Link
-                  to="#"
-                  onClick={() => handleArchive(seminar.id)}
-                  className="font-medium text-gray-600 hover:underline"
-                >
-                  Archive
-                </Link>
-
+                    to="#"
+                    onClick={() => handleArchive(seminar.id)}
+                    className="font-medium text-gray-600 hover:underline"
+                  >
+                    Archive
+                  </Link>
                 </td>
               </tr>
             ))}
@@ -310,4 +304,4 @@ const ManageSeminarPage = () => {
   );
 };
 
-export default ManageSeminarPage;
+export default SeminarManagement;

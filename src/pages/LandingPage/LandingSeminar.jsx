@@ -16,14 +16,14 @@ const SeminarPage = () => {
   const [loading, setLoading] = useState(true);
   const [joinLoading, setJoinLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  let BASE_URL = 'http://127.0.0.1:8000/storage/'
+  const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   let isAuth = localStorage.getItem("auth_token");
 
   useEffect(() => {
     const fetchSeminar = async () => {
       try {
-        const res = await fetch(`http://localhost:8000/api/seminar/${id}`);
+        const res = await fetch(`${BACKEND_URL}/api/seminar/${id}`);
         const data = await res.json();
         setSeminar(data.seminar);
       } catch (error) {
@@ -54,8 +54,13 @@ const SeminarPage = () => {
     } finally {
       setJoinLoading(false);
     }
+
   };
 
+  const handleFormClose = () => {
+    setShowForm(false);
+  }
+  
   if (loading) {
     return <BeatLoader />;
   }
@@ -101,7 +106,7 @@ const SeminarPage = () => {
           <LandingHeader />
         )}
         <div className="my-2 mx-2">
-          <img src={`${BASE_URL}${seminar.seminar_image}`} className="rounded-sm h-96 w-full"/>
+          <img src={`${BACKEND_URL}/storage/${seminar.seminar_image}`} className="rounded-sm h-96 w-full"/>
         </div>
 
         <div className="flex flex-row gap-6 mx-7">
@@ -139,7 +144,7 @@ const SeminarPage = () => {
           <div className="w-1/3 bg-white p-6">
             <div className="p-6 bg-white rounded-lg shadow-lg flex flex-col items-center text-center mb-4">
               <img
-                src={`${BASE_URL}${seminar.speaker_image}`}
+                src={`${BACKEND_URL}/storage/${seminar.speaker_image}`}
                 className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 shadow-md"
               />
               <h3 className="text-xl font-bold text-gray-800 mt-4">

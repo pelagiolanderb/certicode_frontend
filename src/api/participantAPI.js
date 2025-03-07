@@ -3,7 +3,7 @@ import axios from "axios";
 import { createTransaction } from "./transactionAPI";
 
 const getCSRFToken = async () => {
-  await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+  await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/sanctum/csrf-cookie`, {
     withCredentials: true,
     withXSRFToken: true,
   });
