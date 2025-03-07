@@ -61,10 +61,10 @@ const SeminarListPage = () => {
     <>
       <LandingHeader />
   
-      <div className=" text-gray-900 pt-20 px-4">
+      <div className=" text-gray-900 pt-16">
         {/* Page Header Section */}
-        <div className="flex flex-col-1">
-          <div className="flex flex-col  flex-2 justify-center">          
+        <div className="flex flex-col-1 bg-[#B0C4DE]">
+          <div className="flex flex-col  flex-2 justify-center px-3">          
             <h1 className="text-5xl font-bold text-[#37547C]">Explore Our Seminars</h1>
          
             <h2 className="text-xl text-[#37547C] mt-2 max-w-2xl">
@@ -72,10 +72,12 @@ const SeminarListPage = () => {
             </h2>
           
           </div>       
-          <div>
-            <img src={seminarListBg} alt="" />
+          <div className="overflow-x-auto">
+            <img src={seminarListBg} alt="" className="h-90 px-3"/>
           </div>
         </div>
+
+        <h1 className="text-5xl font-bold text-[#37547C] text-center mt-4">Browse Topics</h1>
 
         {/* Filter Section */}
         <div className="flex justify-center gap-3 py-6">
@@ -85,8 +87,8 @@ const SeminarListPage = () => {
               onClick={() => setSelectedTopic(topic)}
               className={`px-4 py-2 rounded-full border ${
                 selectedTopic === topic
-                  ? "bg-black text-white border-black"
-                  : "bg-white text-black border-gray-300 hover:bg-gray-200"
+                  ? "bg-[#B0C4DE] text-[#37547C]"
+                  : "bg-white text-[#37547C] hover:bg-[#B0C4DE]"
               }`}
             >
               {topic}
@@ -129,10 +131,10 @@ const SeminarListPage = () => {
                       <p className="text-md text-[#37547C] pb-3">
                         Topic Covered
                       </p>
-                      <p className="text-sm text-gray-600 pb-3">
+                      <p className="text-sm bg-[#B0C4DE] text-[#37547C] px-1 inline rounded-lg">
                         {seminar.topics}
                       </p>
-                      <p className="text-xs text-gray-500 pb-3">
+                      <p className="text-xs text-gray-500 pt-3 pb-3">
                         📅 {new Date(seminar.date).toLocaleDateString()}
                       </p>
                       <p className="text-xs text-gray-500">
