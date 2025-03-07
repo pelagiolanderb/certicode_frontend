@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { fetchSeminars } from "../../api/seminarAPI";
 import BeatLoader from "../../components/loading/loading";
 import LandingHeader from "./LandingHeader";
-import About from "../../assets/images/about_us.jpg";
 
 const SeminarListPage = () => {
   const [seminars, setSeminars] = useState([]);
+  const [filteredSeminars, setFilteredSeminars] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -17,6 +19,13 @@ const SeminarListPage = () => {
       try {
         const data = await fetchSeminars();
         setSeminars(data);
+
+        // Extract unique topics
+        const uniqueTopics = ["All", ...new Set(data.map((seminar) => seminar.topics))];
+        setTopics(uniqueTopics);
+
+        // Default display all seminars
+        setFilteredSeminars(data);
       } catch (error) {
         setError(error.message || "Failed to fetch seminars.");
       } finally {
@@ -27,43 +36,57 @@ const SeminarListPage = () => {
     handleFetchSeminars();
   }, []);
 
-  return (
+  // Filter seminars based on selected topic
+  useEffect(() => {
+    if (selectedTopic === "All") {
+      setFilteredSeminars(seminars);
+    } else {
+      setFilteredSeminars(seminars.filter((seminar) => seminar.topics === selectedTopic));
+    }
+  }, [selectedTopic, seminars]);
 
+  return (
     <>
       <LandingHeader />
-      <div className=" text-gray-900 pt-10 px-4">
-      
-      <div className="relative my-10 h-[400px] rounded-xl overflow-hidden shadow-md">
-        {/* Background Image */}
-        <img className="w-full h-full object-cover" src={About} alt="Seminars Hero" />
 
-        {/* Overlay for readability */}
-        <div className="absolute inset-0 bg-opacity-50"></div>
-
-        {/* Hero Text (Centered) */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-          <h1 className="text-4xl font-bold text-white mb-4">
-            Explore Our Seminars
-          </h1>
-          <p className="text-lg text-gray-200 max-w-2xl">
-            Discover expert-led seminars designed to expand your knowledge and skills.
-          </p>
-        </div>
+      {/* Page Header Section */}
+      <div className="pt-30 text-center px-6">
+        <h1 className="text-5xl font-bold text-[#37547C] mb-4">Explore Our Seminars</h1>
+        <p className="text-lg text-[#37547C] max-w-2xl mx-auto">
+          Discover expert-led seminars designed to expand your knowledge and skills.
+        </p>
       </div>
 
+      {/* Filter Section */}
+      <div className="flex justify-center gap-3 py-6">
+        {topics.map((topic) => (
+          <button
+            key={topic}
+            onClick={() => setSelectedTopic(topic)}
+            className={`px-4 py-2 rounded-full border ${
+              selectedTopic === topic
+                ? "bg-black text-white border-black"
+                : "bg-white text-black border-gray-300 hover:bg-gray-200"
+            }`}
+          >
+            {topic}
+          </button>
+        ))}
+      </div>
 
-      <div className="max-w-6xl mx-auto py-20 rounded-xl">
-
-        {/* Loading & Empty State Handling */}
+      {/* Seminar List Section */}
+      <div className="max-w-6xl mx-auto py-10 px-4">
         {loading ? (
           <div className="flex justify-center">
             <BeatLoader />
           </div>
-        ) : seminars.length === 0 ? (
-          <p className="text-center text-gray-600">No seminars available at the moment.</p>
+        ) : error ? (
+          <p className="text-center text-red-500">{error}</p>
+        ) : filteredSeminars.length === 0 ? (
+          <p className="text-center text-gray-600">No seminars available for this topic.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {seminars.map((seminar) => (
+            {filteredSeminars.map((seminar) => (
               <div
                 key={seminar.id}
                 className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
@@ -75,17 +98,11 @@ const SeminarListPage = () => {
                     className="w-full h-48 object-cover"
                   />
                   <div className="p-4">
-                    <h3 className="text-lg font-bold text-[#37547C] pb-3">
-                      {seminar.name_of_seminar}
-                    </h3>
-                    <p className="text-sm text-gray-600 pb-3">
-                      Organized by {seminar.organization_name}
-                    </p>
+                    <h3 className="text-lg font-bold text-[#37547C] pb-3">{seminar.name_of_seminar}</h3>
+                    <p className="text-sm text-gray-600 pb-3">Organized by {seminar.organization_name}</p>
                     <p className="text-md text-[#37547C] pb-3">Topic Covered</p>
                     <p className="text-sm text-gray-600 pb-3">{seminar.topics}</p>
-                    <p className="text-xs text-gray-500 pb-3">
-                      📅 {new Date(seminar.date).toLocaleDateString()}
-                    </p>
+                    <p className="text-xs text-gray-500 pb-3">📅 {new Date(seminar.date).toLocaleDateString()}</p>
                     <p className="text-xs text-gray-500">📍 {seminar.location}</p>
                   </div>
                 </Link>
@@ -94,7 +111,7 @@ const SeminarListPage = () => {
           </div>
         )}
 
-        {/* Back to Homepage */}
+        {/* Back to Homepage Button */}
         <div className="text-center mt-12">
           <Link
             to="/"
@@ -104,9 +121,7 @@ const SeminarListPage = () => {
           </Link>
         </div>
       </div>
-    </div>
     </>
-    
   );
 };
 
