@@ -3,10 +3,13 @@ import { Link } from "react-router-dom";
 import { fetchSeminars } from "../../api/seminarAPI";
 import BeatLoader from "../../components/loading/loading";
 import LandingHeader from "./LandingHeader";
-import About from "../../assets/images/about_us.jpg";
+import seminarListBg from "../../assets/images/seminar_list_bg.png"
 
 const SeminarListPage = () => {
   const [seminars, setSeminars] = useState([]);
+  const [filteredSeminars, setFilteredSeminars] = useState([]);
+  const [topics, setTopics] = useState([]);
+  const [selectedTopic, setSelectedTopic] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -19,6 +22,13 @@ const SeminarListPage = () => {
       try {
         const data = await fetchSeminars();
         setSeminars(data);
+
+        // Extract unique topics
+        const uniqueTopics = ["All", ...new Set(data.map((seminar) => seminar.topics))];
+        setTopics(uniqueTopics);
+
+        // Default display all seminars
+        setFilteredSeminars(data);
       } catch (error) {
         setError(error.message || "Failed to fetch seminars.");
       } finally {
@@ -29,31 +39,61 @@ const SeminarListPage = () => {
     handleFetchSeminars();
   }, []);
 
+  useEffect(() => {
+    if (selectedTopic === "All") {
+      setFilteredSeminars(seminars);
+    } else {
+      setFilteredSeminars(seminars.filter((seminar) => seminar.topics === selectedTopic));
+    }
+  }, [selectedTopic, seminars]);
+
+
+  // Filter seminars based on selected topic
+  useEffect(() => {
+    if (selectedTopic === "All") {
+      setFilteredSeminars(seminars);
+    } else {
+      setFilteredSeminars(seminars.filter((seminar) => seminar.topics === selectedTopic));
+    }
+  }, [selectedTopic, seminars]);
+
   return (
     <>
       <LandingHeader />
-      <div className=" text-gray-900 pt-10 px-4">
-        <div className="relative my-10 h-[400px] rounded-xl overflow-hidden shadow-md">
-          {/* Background Image */}
-          <img
-            className="w-full h-full object-cover"
-            src={About}
-            alt="Seminars Hero"
-          />
-
-          {/* Overlay for readability */}
-          <div className="absolute inset-0 bg-opacity-50"></div>
-
-          {/* Hero Text (Centered) */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-            <h1 className="text-4xl font-bold text-white mb-4">
-              Explore Our Seminars
-            </h1>
-            <p className="text-lg text-gray-200 max-w-2xl">
-              Discover expert-led seminars designed to expand your knowledge and
-              skills.
-            </p>
+  
+      <div className=" text-gray-900 pt-16">
+        {/* Page Header Section */}
+        <div className="flex flex-col-1 bg-[#B0C4DE]">
+          <div className="flex flex-col  flex-2 justify-center px-3">          
+            <h1 className="text-5xl font-bold text-[#37547C]">Explore Our Seminars</h1>
+         
+            <h2 className="text-xl text-[#37547C] mt-2 max-w-2xl">
+              Discover expert-led seminars designed to expand your knowledge and skills.
+            </h2>
+          
+          </div>       
+          <div className="overflow-x-auto">
+            <img src={seminarListBg} alt="" className="h-90 px-3"/>
           </div>
+        </div>
+
+        <h1 className="text-5xl font-bold text-[#37547C] text-center mt-4">Browse Topics</h1>
+
+        {/* Filter Section */}
+        <div className="flex justify-center gap-3 py-6">
+          {topics.map((topic) => (
+            <button
+              key={topic}
+              onClick={() => setSelectedTopic(topic)}
+              className={`px-4 py-2 rounded-full border ${
+                selectedTopic === topic
+                  ? "bg-[#B0C4DE] text-[#37547C]"
+                  : "bg-white text-[#37547C] hover:bg-[#B0C4DE]"
+              }`}
+            >
+              {topic}
+            </button>
+          ))}
         </div>
 
         <div className="max-w-6xl mx-auto py-20 rounded-xl">
@@ -62,13 +102,13 @@ const SeminarListPage = () => {
             <BeatLoader />
           ) : // <div className="flex justify-center">
           // </div>
-          seminars.length === 0 ? (
+          filteredSeminars.length === 0 ? (
             <p className="text-center text-gray-600">
               No seminars available at the moment.
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              {seminars.map((seminar) => (
+              {filteredSeminars.map((seminar) => (
                 <div
                   key={seminar.id}
                   className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow"
@@ -91,10 +131,10 @@ const SeminarListPage = () => {
                       <p className="text-md text-[#37547C] pb-3">
                         Topic Covered
                       </p>
-                      <p className="text-sm text-gray-600 pb-3">
+                      <p className="text-sm bg-[#B0C4DE] text-[#37547C] px-1 inline rounded-lg">
                         {seminar.topics}
                       </p>
-                      <p className="text-xs text-gray-500 pb-3">
+                      <p className="text-xs text-gray-500 pt-3 pb-3">
                         📅 {new Date(seminar.date).toLocaleDateString()}
                       </p>
                       <p className="text-xs text-gray-500">

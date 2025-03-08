@@ -157,13 +157,13 @@ const LandingMain = () => {
                     <p className="text-sm text-gray-600 pb-3">
                       Organized by {seminar.organization_name}
                     </p>
-                    <p className="text-md text-[#37547C] pb-3">
+                    <p className="text-md text-[#37547C] pb-1">
                       Topic Corvered
                     </p>
-                    <p className="text-sm text-gray-600 pb-3">
+                    <p className="text-sm bg-[#B0C4DE] text-[#37547C] px-1 inline rounded-lg">
                       {seminar.topics}
                     </p>
-                    <p className="text-xs text-gray-500 pb-3">
+                    <p className="text-xs text-gray-500 pt-3 pb-3">
                       📅 {new Date(seminar.date).toLocaleDateString()}
                     </p>
                     <p className="text-xs text-gray-500 pb-3">
