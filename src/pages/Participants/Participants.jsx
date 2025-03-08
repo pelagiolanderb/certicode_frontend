@@ -5,6 +5,7 @@ import BeatLoader from "../../components/loading/loading"
 const Participants = () => {
   const [participants, setParticipants] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingStates, setLoadingStates] = useState({});
   const [error, setError] = useState("");
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedSeminar, setSelectedSeminar] = useState("");
@@ -39,13 +40,13 @@ const Participants = () => {
   };
 
   const handleSendCertificate = async (participantId) => {
+    setLoadingStates((prev) => ({...prev, [participantId]: true}));
     try {
-      console.log(participantId)
-      console.log("Requesting certificate for participantId:", participantId);
       await sendCertificate(participantId);
-      alert("Certificate sent successfully!");
     } catch (error) {
       alert("Failed to send certificate.");
+    } finally {
+      setLoadingStates((prev) => ({...prev, [participantId]: false}));
     }
   };
 
@@ -112,10 +113,10 @@ const Participants = () => {
                 className="px-6 py-3 uppercase cursor-pointer hover:bg-gray-200 transition"
                 onClick={toggleSortOrder}
               >
-                Seminar Title {sortOrder === "asc" ? "▲" : "▼"}
+                Seminar Attended {sortOrder === "asc" ? "▲" : "▼"}
               </th>
               <th scope="col" className="px-6 py-3 uppercase">
-                Speaker
+                Email
               </th>
               <th scope="col" className="px-6 py-3 uppercase text-center">
                 Action
@@ -135,14 +136,16 @@ const Participants = () => {
                   {participant.seminar?.name_of_seminar}
                 </td>
                 <td className="px-6 py-4">
-                  {participant.seminar?.speaker_name}
+                  {participant.user ? participant.user.email : participant.guest.email}
                 </td>
                 <td className="py-4 flex justify-center">
                   <button
                     onClick={() => handleSendCertificate(participant.id)}
                     className="text-white bg-blue-900 border border-blue-700 focus:outline-none hover:bg-blue-700 focus:ring-4 focus:ring-blue-700 font-medium rounded-lg text-sm px-3 py-1.5"
                   >
-                    📩 Send
+                    {
+                      loadingStates[participant.id] ? "📩 Sending..." : "📩 Send"
+                    }
                   </button>
                 </td>
               </tr>

@@ -46,7 +46,7 @@ export const restoreSeminar = async (id) => {
 
 export const deleteArchivedSeminar = async (id) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.delete(`/delete_archived_seminar/${id}`);
     return response.data;
   } catch (error) {
@@ -57,7 +57,7 @@ export const deleteArchivedSeminar = async (id) => {
 
 export const archiveCertificateTemplate = async (id) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.post(`/template_archive/${id}`);
     return response.data;
   } catch (error) {
@@ -78,7 +78,7 @@ export const fetchArchivedCertificateTemplates = async () => {
 
 export const restoreCertificateTemplate = async (id) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.post(`/restore_template/${id}`);
     return response.data;
   } catch (error) {
@@ -89,7 +89,7 @@ export const restoreCertificateTemplate = async (id) => {
 
 export const deleteArchivedCertificateTemplate = async (id) => {
   try {
-    await getCSRFToken();
+    // await getCSRFToken();
     const response = await api.delete(`/delete_archived_template/${id}`);
     return response.data;
   } catch (error) {
