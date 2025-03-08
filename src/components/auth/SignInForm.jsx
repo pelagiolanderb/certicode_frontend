@@ -11,7 +11,7 @@ import InputError from "../../pages/UiElements/InputError";
 // const GOOGLE_AUTH_URL = `${API_URL}/auth/redirection/google`;
 const GOOGLE_AUTH_URL = `http://127.0.0.1:8000/api/auth/redirection/google`;
 const Facebook_AUTH_URL =
-  "https://94d1-136-158-78-104.ngrok-free.app/api/auth/redirection/facebook";
+  "https://36e7-136-158-78-104.ngrok-free.app/api/auth/redirection/facebook";
 
 const handleGoogleLogin = ($url) => (e) => {
   e.preventDefault();

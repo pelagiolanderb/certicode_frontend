@@ -60,9 +60,17 @@ export default function AdminSignInForm() {
       );
 
       if (response.status === 200) {
-        localStorage.setItem("auth_token", response.data.access_token);
-        localStorage.setItem("user", JSON.stringify(response.data)); // Store user info
-        navigate("/dashboard");
+        if (response.data && response.data.isVerified) {
+          localStorage.setItem("auth_token", response.data.access_token);
+          localStorage.setItem("user", JSON.stringify(response.data));
+
+          navigate("/dashboard");
+        } else {
+          setErrors((prevErrors) => ({
+            ...prevErrors,
+            email: "Please verify your email first.",
+          }));
+        }
       }
     } catch (error) {
       console.error("Error during user login:", error);
