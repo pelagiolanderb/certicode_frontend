@@ -7,6 +7,7 @@ import Input from "../form/input/InputField";
 import Checkbox from "../form/input/Checkbox";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import InputError from "../../pages/UiElements/InputError";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,7 +16,7 @@ export default function SignUpForm() {
   const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
 
   const navigate = useNavigate();
-  const [isNext, setIsNext] = useState(false);
+
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     first_name: "",
@@ -43,61 +44,61 @@ export default function SignUpForm() {
     password_confirmation: "",
   });
 
-  const toggleNext = (e) => {
-    e.preventDefault();
+  // const toggleNext = (e) => {
+  //   e.preventDefault();
 
-    if (!isNext) {
-      const isValid = validateFirstStep();
-      if (isValid) {
-        setIsNext(true);
-      }
-    } else {
-      setIsNext(false);
-    }
-  };
+  //   if (!isNext) {
+  //     const isValid = validateFirstStep();
+  //     if (isValid) {
+  //       setIsNext(true);
+  //     }
+  //   } else {
+  //     setIsNext(false);
+  //   }
+  // };
 
-  const validateFirstStep = () => {
-    let valid = true;
-    let newErrors = { ...errors };
+  // const validateFirstStep = () => {
+  //   let valid = true;
+  //   let newErrors = { ...errors };
 
-    if (!formData.first_name) {
-      newErrors.first_name = "First name is required";
-      valid = false;
-    } else {
-      newErrors.first_name = "";
-    }
+  //   if (!formData.first_name) {
+  //     newErrors.first_name = "First name is required";
+  //     valid = false;
+  //   } else {
+  //     newErrors.first_name = "";
+  //   }
 
-    if (!formData.last_name) {
-      newErrors.last_name = "Last name is required";
-      valid = false;
-    } else {
-      newErrors.last_name = "";
-    }
+  //   if (!formData.last_name) {
+  //     newErrors.last_name = "Last name is required";
+  //     valid = false;
+  //   } else {
+  //     newErrors.last_name = "";
+  //   }
 
-    if (!formData.phone) {
-      newErrors.phone = "Phone number is required";
-      valid = false;
-    } else {
-      newErrors.phone = "";
-    }
+  //   if (!formData.phone) {
+  //     newErrors.phone = "Phone number is required";
+  //     valid = false;
+  //   } else {
+  //     newErrors.phone = "";
+  //   }
 
-    if (!formData.age) {
-      newErrors.age = "Age is required";
-      valid = false;
-    } else {
-      newErrors.age = "";
-    }
+  //   if (!formData.age) {
+  //     newErrors.age = "Age is required";
+  //     valid = false;
+  //   } else {
+  //     newErrors.age = "";
+  //   }
 
-    if (!formData.gender) {
-      newErrors.gender = "Gender is required";
-      valid = false;
-    } else {
-      newErrors.gender = "";
-    }
+  //   if (!formData.gender) {
+  //     newErrors.gender = "Gender is required";
+  //     valid = false;
+  //   } else {
+  //     newErrors.gender = "";
+  //   }
 
-    setErrors(newErrors);
-    return valid;
-  };
+  //   setErrors(newErrors);
+  //   return valid;
+  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -165,6 +166,15 @@ export default function SignUpForm() {
           ...prevErrors,
           email: backendErrors.email ? backendErrors.email[0] : "",
           password: backendErrors.password ? backendErrors.password[0] : "",
+
+          first_name: backendErrors.first_name
+            ? backendErrors.first_name[0]
+            : "",
+          last_name: backendErrors.last_name ? backendErrors.last_name[0] : "",
+          phone: backendErrors.phone ? backendErrors.phone[0] : "",
+          address: backendErrors.address ? backendErrors.address[0] : "",
+          age: backendErrors.age ? backendErrors.age[0] : "",
+          gender: backendErrors.gender ? backendErrors.gender[0] : "",
         }));
       } else if (error.response && error.response.status === 401) {
         const errorMessage =
@@ -186,8 +196,12 @@ export default function SignUpForm() {
     let value = e.target.value;
 
     if (/^\d*$/.test(value)) {
-      if (value.length <= 11 && (value === "" || value.startsWith("9"))) {
-        setFormData({ ...formData, phone: e.target.value });
+      if (value.length <= 11 && (value === "" || value.startsWith("0"))) {
+        if (value.startsWith("0") && value.length === 2) {
+          setFormData({ ...formData, phone: "09" });
+        } else {
+          setFormData({ ...formData, phone: value });
+        }
       }
     }
   };
@@ -284,6 +298,9 @@ export default function SignUpForm() {
                         })
                       }
                     />
+                    {!formData.first_name && errors.first_name && (
+                      <InputError message="First name is required" />
+                    )}
                   </div>
                   {/* <!-- Last Name --> */}
                   <div className="sm:col-span-1">
@@ -300,6 +317,9 @@ export default function SignUpForm() {
                         })
                       }
                     />
+                    {!formData.last_name && errors.last_name && (
+                      <InputError message="Last name is required" />
+                    )}
                   </div>
                   {/* <!-- Middle Name --> */}
                   <div className="sm:col-span-1">
@@ -324,13 +344,18 @@ export default function SignUpForm() {
                       name="phone"
                       type="text"
                       value={formData.phone}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          phone: e.target.value,
-                        })
-                      }
+                      onChange={handleChange}
                     />
+                    {!formData.phone && errors.phone && (
+                      <InputError message="Phone number is required" />
+                    )}
+
+                    {formData.phone &&
+                      formData.phone.length < 11 &&
+                      errors.phone &&
+                      errors.phone !== "The phone field is required." && (
+                        <InputError message={errors.phone} />
+                      )}
                   </div>
                   <div className="sm:col-span-1">
                     <Label htmlFor="address">Address</Label>
@@ -346,6 +371,9 @@ export default function SignUpForm() {
                         })
                       }
                     />
+                    {!formData.address && errors.address && (
+                      <InputError message="Address is required" />
+                    )}
                   </div>
                   <div className="sm:col-span-1">
                     <Label htmlFor="gender">Gender</Label>
@@ -361,12 +389,12 @@ export default function SignUpForm() {
                         })
                       }
                     >
-                      <option value="">Select Gender</option>
+                      <option hidden>Select Gender</option>
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
-                    {!formData.gender && (
-                      <p className="text-red-500 text-sm">{errors.gender}</p>
+                    {!formData.gender && errors.gender && (
+                      <InputError message="Gender is required" />
                     )}
                   </div>
                   <div className="sm:col-span-1">
@@ -387,13 +415,16 @@ export default function SignUpForm() {
                         }
                       }}
                     />
+                    {!formData.age && errors.age && (
+                      <InputError message="Age is required" />
+                    )}
                   </div>
                 </div>
                 <div>
                   <Label htmlFor="email">Email</Label>
                   <Input
                     id="email"
-                    type="text"
+                    type="email"
                     name="email"
                     placeholder="m@example.com"
                     value={formData.email}
@@ -404,6 +435,14 @@ export default function SignUpForm() {
                       })
                     }
                   />
+                  {!formData.email && errors.email && (
+                    <InputError message="Email is required" />
+                  )}
+                  {formData.email &&
+                    errors.email &&
+                    errors.email !== "The email field is required." && (
+                      <InputError message={errors.email} />
+                    )}
                 </div>
                 {/* <!-- Password --> */}
                 <div>
@@ -424,6 +463,14 @@ export default function SignUpForm() {
                         })
                       }
                     />
+                    {!formData.password && errors.password && (
+                      <InputError message="Password is required" />
+                    )}
+                    {formData.password &&
+                      errors.password &&
+                      errors.password !== "The password field is required." && (
+                        <InputError message={errors.password} />
+                      )}
                     <span
                       onClick={() => setShowPassword(!showPassword)}
                       className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"

@@ -32,6 +32,11 @@ import Participants from "./pages/Participants/Participants";
 import CertificateManagement from "./pages/CertificateManagement/CertificateManagement";
 import Archived from "./pages/Archives/Archived";
 import ProtectedRoute from "../src/route/ProtectedRoute";
+import VerificationHandler from "./pages/AuthPages/VerificationHandler";
+import SocialAuthHandler from "./pages/AuthPages/SocialAuthHandler";
+import ForgotPassword from "./pages/AuthPages/ForgotPassword";
+import ResetPassword from "./pages/AuthPages/ResetPassword";
+import AdminSignIn from "./pages/AuthPages/AdminSignIn";
 
 export default function App() {
   const token = localStorage.getItem("auth_token");
@@ -124,9 +129,56 @@ export default function App() {
               token ? <Navigate to="/dashboard" replace /> : <VerifyEmail />
             }
           />
+          <Route
+            path="/verify-handler"
+            element={
+              token ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <VerificationHandler />
+              )
+            }
+          />
+
+          <Route
+            path="/forgot-password"
+            element={
+              token ? <Navigate to="/dashboard" replace /> : <ForgotPassword />
+            }
+          />
+
+          <Route
+            path="/password-reset/:token"
+            element={
+              token ? <Navigate to="/dashboard" replace /> : <ResetPassword />
+            }
+          />
+
+          <Route
+            path="/social-auth-handler"
+            element={
+              token ? (
+                <Navigate to="/dashboard" replace />
+              ) : (
+                <SocialAuthHandler />
+              )
+            }
+          />
+
+          <Route
+            path="/@dmin-signin"
+            element={
+              token ? <Navigate to="/dashboard" replace /> : <AdminSignIn />
+            }
+          />
+
           <Route path="/" element={<LandingPage />} />
           <Route path="/seminar-list" element={<LandingSeminarList />} />
-          <Route path="/seminar/:id" element={<LandingSeminar />} />
+          <Route
+            index
+            path="/dashboard"
+            element={<ProtectedRoute component={Home} />}
+          />
           {/* Auth Layout */}
           <Route
             path="/signin"
