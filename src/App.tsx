@@ -174,6 +174,7 @@ export default function App() {
 
           <Route path="/" element={<LandingPage />} />
           <Route path="/seminar-list" element={<LandingSeminarList />} />
+          <Route path="/seminar/:id" element={<LandingSeminar />} />
           <Route
             index
             path="/dashboard"
