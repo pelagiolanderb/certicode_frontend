@@ -77,16 +77,19 @@ export default function SignInForm() {
           withXSRFToken: true,
         }
       );
-
       if (response.status === 200) {
-<<<<<<< HEAD
-        localStorage.setItem("auth_token", response.data.access_token);
-        localStorage.setItem("user_id", JSON.stringify(response.data.user_id)); // Store user info
-        navigate("/dashboard");
-=======
         if (response.data && response.data.isVerified) {
           localStorage.setItem("auth_token", response.data.access_token);
-          localStorage.setItem("user", JSON.stringify(response.data));
+          // localStorage.setItem("user", JSON.stringify(response.data));
+          const user = await axios.get("http://localhost:8000/api/auth/me", {
+            headers: {
+              Authorization: "Bearer " + response.data.access_token,
+              
+            },
+            withCredentials: true,
+          });
+          localStorage.setItem("user_id", JSON.stringify(user.data[0].id));
+         
 
           navigate("/dashboard");
         } else {
@@ -95,7 +98,6 @@ export default function SignInForm() {
             email: "Please verify your email first.",
           }));
         }
->>>>>>> lester
       }
     } catch (error) {
       console.error("Error during user login:", error);
@@ -148,11 +150,7 @@ export default function SignInForm() {
           <div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
               <button
-<<<<<<< HEAD
-                onClick={handleGoogleLogin}
-=======
                 onClick={handleGoogleLogin(GOOGLE_AUTH_URL)}
->>>>>>> lester
                 className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
               >
                 <svg
@@ -182,11 +180,7 @@ export default function SignInForm() {
                 Sign in with Google
               </button>
               <button
-<<<<<<< HEAD
-                onClick={handleFacebookLogin}
-=======
                 onClick={handleFacebookLogin(Facebook_AUTH_URL)}
->>>>>>> lester
                 className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
               >
                 <svg
@@ -220,20 +214,13 @@ export default function SignInForm() {
                     id="email"
                     type="email"
                     name="email"
-<<<<<<< HEAD
-                    className={`${errors.isAuthorize && "border-red-600"}`}
-=======
->>>>>>> lester
                     placeholder="JohnDoe@gmail.com"
                     value={formData.email}
                     onChange={(e) =>
                       setFormData({ ...formData, email: e.target.value })
                     }
                   />
-<<<<<<< HEAD
-=======
                   <InputError message={errors.email} />
->>>>>>> lester
                 </div>
                 <div>
                   <Label>

@@ -9,12 +9,22 @@ export default function SocialAuthHandler() {
 
   useEffect(() => {
     const token = searchParams.get("token");
-
     if (token) {
       try {
+        const currentUser = async () => {
+          const response = await axios.get("http://localhost:8000/api/auth/me", {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+            withCredentials: true,
+          });
+          const user = response.data[0].id;
+          localStorage.setItem("user", user);
+         
+        };
+        currentUser();
         localStorage.setItem("auth_token", token);
-
-        console.log("Token stored:", token);
+        
         navigate("/dashboard");
       } catch (error) {
         console.error("Error storing token:", error);
@@ -26,6 +36,7 @@ export default function SocialAuthHandler() {
     }
   }, [searchParams, navigate]);
 
+  
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <BeatLoader />
