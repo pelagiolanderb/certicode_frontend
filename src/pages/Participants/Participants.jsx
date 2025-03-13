@@ -1,24 +1,23 @@
 import { useEffect, useState } from "react";
-import { fetchParticipants, sendCertificate } from "../../api/participantAPI";
-import BeatLoader from "../../components/loading/loading"
+import BeatLoader from "../../components/loading/loading";
+import useApiService from "../../api/useApiService";
 
 const Participants = () => {
   const [participants, setParticipants] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [loadingStates, setLoadingStates] = useState({});
-  const [error, setError] = useState("");
+  const [isSendCertificate, setIsSendCertificate] = useState(false);
   const [sortOrder, setSortOrder] = useState("asc");
   const [selectedSeminar, setSelectedSeminar] = useState("");
+
+  const { loading, error, get, post } = useApiService();
 
   useEffect(() => {
     const loadParticipants = async () => {
       try {
-        const data = await fetchParticipants();
+        const data = await get('/participants');
         setParticipants(data);
       } catch (err) {
-        setError("Failed to load participants.");
-      } finally {
-        setLoading(false);
+        console.log("Failed to load participants.");
       }
     };
 
@@ -33,19 +32,20 @@ const Participants = () => {
       : titleB.localeCompare(titleA);
   });
 
-  console.log(sortedParticipants)
-
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === "asc" ? "desc" : "asc");
   };
 
   const handleSendCertificate = async (participantId) => {
+    setIsSendCertificate(true);
     setLoadingStates((prev) => ({...prev, [participantId]: true}));
     try {
-      await sendCertificate(participantId);
+      await get(`/certificate/${participantId}`);
+      alert(`Certificate sent.`);
     } catch (error) {
       alert("Failed to send certificate.");
     } finally {
+      setIsSendCertificate(false);
       setLoadingStates((prev) => ({...prev, [participantId]: false}));
     }
   };
@@ -62,7 +62,7 @@ const Participants = () => {
 
     try {
       for (const participant of seminarParticipants) {
-        await sendCertificate(participant.id);
+        await get(`/certificate/${participant.id}`);
       }
       alert(`Certificates sent to all participants of "${selectedSeminar}"`);
     } catch (error) {
@@ -70,7 +70,7 @@ const Participants = () => {
     }
   };
 
-  if (loading) return <BeatLoader />
+  if (loading && !isSendCertificate) return <BeatLoader />
   if (error) return <p className="text-center text-red-500 mt-10">{error}</p>;
 
   return (

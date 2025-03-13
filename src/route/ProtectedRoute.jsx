@@ -6,8 +6,6 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
 
   if (!token) {
     return <Navigate to="/signin" replace />;
-  }else{
-    return <Component {...rest} />;
   }
 
   return <Component {...rest} />;

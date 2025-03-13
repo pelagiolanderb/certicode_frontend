@@ -13,8 +13,6 @@ export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
 
-  const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
-
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -43,62 +41,6 @@ export default function SignUpForm() {
     password: "",
     password_confirmation: "",
   });
-
-  // const toggleNext = (e) => {
-  //   e.preventDefault();
-
-  //   if (!isNext) {
-  //     const isValid = validateFirstStep();
-  //     if (isValid) {
-  //       setIsNext(true);
-  //     }
-  //   } else {
-  //     setIsNext(false);
-  //   }
-  // };
-
-  // const validateFirstStep = () => {
-  //   let valid = true;
-  //   let newErrors = { ...errors };
-
-  //   if (!formData.first_name) {
-  //     newErrors.first_name = "First name is required";
-  //     valid = false;
-  //   } else {
-  //     newErrors.first_name = "";
-  //   }
-
-  //   if (!formData.last_name) {
-  //     newErrors.last_name = "Last name is required";
-  //     valid = false;
-  //   } else {
-  //     newErrors.last_name = "";
-  //   }
-
-  //   if (!formData.phone) {
-  //     newErrors.phone = "Phone number is required";
-  //     valid = false;
-  //   } else {
-  //     newErrors.phone = "";
-  //   }
-
-  //   if (!formData.age) {
-  //     newErrors.age = "Age is required";
-  //     valid = false;
-  //   } else {
-  //     newErrors.age = "";
-  //   }
-
-  //   if (!formData.gender) {
-  //     newErrors.gender = "Gender is required";
-  //     valid = false;
-  //   } else {
-  //     newErrors.gender = "";
-  //   }
-
-  //   setErrors(newErrors);
-  //   return valid;
-  // };
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -1,21 +1,25 @@
-import Carousel from "../../components/ui/carousel/Carousel";
-import seminar_image from "../../assets/images/seminar.jpg";
+// import Carousel from "../../components/ui/carousel/Carousel";
+// import seminar_image from "../../assets/images/seminar.jpg";
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { FaCalendarAlt, FaMapMarkerAlt, FaBuilding } from "react-icons/fa";
-import profile from "../../assets/images/house_4.jpg";
+// import profile from "../../assets/images/house_4.jpg";
 import GuestForm from "./GuestForm";
-import { createParticipant } from "../../API/participantAPI";
+// import { createParticipant } from "../../API/participantAPI";
 import LandingHeader from "./LandingHeader";
 import BeatLoader from "../../components/loading/loading";
 import { ChevronLeftIcon } from "../../icons";
+// import apiCreate from "../../api/apiCreate";
+import useApiService from "../../api/useApiService";
 
 const SeminarPage = () => {
   const { id } = useParams();
-  const [seminar, setSeminar] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [joinLoading, setJoinLoading] = useState(false);
+  const [seminar, setSeminar] = useState([]);
+  // const [loading, setLoading] = useState(true);
+  // const [joinLoading, setJoinLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const { loading, error, get, post } = useApiService();
+  const [isJoin, setIsJoin] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   let isAuth = localStorage.getItem("auth_token");
@@ -23,27 +27,24 @@ const SeminarPage = () => {
   useEffect(() => {
     const fetchSeminar = async () => {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/seminar/${id}`);
-        const data = await res.json();
+        const data = await get(`/seminar/${id}`);
         setSeminar(data.seminar);
       } catch (error) {
         console.log("Error fetching data", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchSeminar();
-  }, [id]);
-  const handleJoin = async () => {
-    setJoinLoading(true);
+  }, []);
 
+  const handleJoin = async () => {
+    setIsJoin(true);
     let userExist = localStorage.getItem("auth_token");
+    let user_id = localStorage.getItem("user_id");
 
     try {
       if (userExist) {
-        console.log("nag true");
-        await createParticipant(id);
+        await post('/add-participant', { seminar_id: id,  user_id});
         alert("Successfully joined the seminar!");
       } else {
         setShowForm(true);
@@ -52,21 +53,16 @@ const SeminarPage = () => {
       console.error("Error joining seminar:", error);
       alert("Error joining seminar.");
     } finally {
-      setJoinLoading(false);
+      setIsJoin(false);
     }
-
   };
 
   const handleFormClose = () => {
     setShowForm(false);
-  }
-  
-  if (loading) {
-    return <BeatLoader />;
-  }
+  };
 
-  if (!seminar) {
-    return <p className="text-center text-red-500">Error loading seminar.</p>;
+  if (loading && !isJoin) {
+    return <BeatLoader />;
   }
 
   return (
@@ -106,7 +102,10 @@ const SeminarPage = () => {
           <LandingHeader />
         )}
         <div className="my-2 mx-2">
-          <img src={`${BACKEND_URL}/storage/${seminar.seminar_image}`} className="rounded-sm h-96 w-full"/>
+          <img
+            src={`${BACKEND_URL}/storage/${seminar.seminar_image}`}
+            className="rounded-sm h-96 w-full"
+          />
         </div>
 
         <div className="flex flex-row gap-6 mx-7">
@@ -153,13 +152,15 @@ const SeminarPage = () => {
               <p className="text-gray-600 mt-2">{seminar.about_the_speaker}</p>
             </div>
             <div className="rounded-lg shadow-lg flex flex-col items-center text-center border border-gray-300 pb-5">
-              <p className="text-green-700 font-semibold text-xl pt-3">&#8369; {seminar.price}</p>
+              <p className="text-green-700 font-semibold text-xl pt-3">
+                &#8369; {seminar.price}
+              </p>
 
               <button
                 className="mt-4 bg-blue-600 text-white font-medium px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
                 onClick={handleJoin}
               >
-                {joinLoading ? "Joining..." : "Join"}
+                {loading ? "Joining..." : "Join"}
               </button>
 
               {showForm && (

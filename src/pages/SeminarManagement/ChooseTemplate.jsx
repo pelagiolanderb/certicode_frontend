@@ -6,13 +6,13 @@ const ChooseTemplate = ({
   templates,
   setChooseTemplate,
   templateLoading,
-  setTemplateId,
+  setSelectedTemplate,
 }) => {
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+  const [chosenTemplate, setChosenTemplate] = useState({});
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   const handleSelect = () => {
-    setTemplateId(selectedTemplate);
+    setSelectedTemplate(chosenTemplate);
     setChooseTemplate(false);
   };
 
@@ -53,7 +53,7 @@ const ChooseTemplate = ({
               <div
                 key={template.id}
                 className={`border rounded-lg p-4 shadow-sm hover:shadow-md transition ${
-                  selectedTemplate === template.id ? "border-blue-600" : ""
+                  chosenTemplate.id === template.id ? "border-blue-600" : ""
                 }`}
               >
                 <div className="flex justify-between">
@@ -65,8 +65,8 @@ const ChooseTemplate = ({
                       type="radio"
                       id={`template${template.id}`}
                       name="templateSelection"
-                      checked={selectedTemplate === template.id}
-                      onChange={() => setSelectedTemplate(template.id)}
+                      checked={chosenTemplate.id === template.id}
+                      onChange={() => setChosenTemplate({id: template.id, name: template.name})}
                       className="w-4 h-4 text-blue-600 border-gray-300 focus:ring focus:ring-blue-300"
                     />
                     <span className="text-gray-700 font-medium">

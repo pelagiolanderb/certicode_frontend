@@ -1,22 +1,21 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { addGuest } from "../../api/guestAPI";
+import useApiService from "../../api/useApiService";
 
 const GuestForm = ({ isFormOpen, setShowForm }) => {
   const { id } = useParams();
-  // const [showForm, setShowForm] = useState(isFormOpen);
 
   const [name, setGuestName] = useState("");
   const [address, setGuestAddress] = useState("");
   const [phone, setGuestPhone] = useState("");
   const [email, setGuestEmail] = useState("");
-
-  const [loading, setLoading] = useState(false);
+  
   const [error, setError] = useState(null);
+
+  const { loading, post } = useApiService();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
       const newGuest = {
         seminar_id: id,
@@ -26,12 +25,11 @@ const GuestForm = ({ isFormOpen, setShowForm }) => {
         email: email,
       };
 
-      await addGuest(newGuest);
+      await post('/create-guest', newGuest);
+      alert('You successfully joined to this seminar.');
       setShowForm(false);
     } catch (error) {
       setError(error.message);
-    } finally {
-      setLoading(false);
     }
   };
 

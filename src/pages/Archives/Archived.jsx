@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  fetchArchivedSeminars,
-  restoreSeminar,
-  deleteArchivedSeminar,
-  fetchArchivedCertificateTemplates,
-  restoreCertificateTemplate,
-  deleteArchivedCertificateTemplate,
-} from "../../api/archiveApi";
 import BeatSpinner from "../../components/loading/loading";
+import useApiService from "../../api/useApiService";
 
 const Archived = () => {
   const [archivedSeminars, setArchivedSeminars] = useState([]);
   const [archivedTemplates, setArchivedTemplates] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("seminars");
+
+  const { loading, error, get, post, remove } = useApiService();
 
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
@@ -24,15 +19,15 @@ const Archived = () => {
 
   const loadArchivedData = async () => {
     try {
-      setLoading(true);
-      const seminars = await fetchArchivedSeminars();
-      const templates = await fetchArchivedCertificateTemplates();
+      // setLoading(true);
+      const seminars = await get('/archived_seminars');
+      const templates = await get('/archived_templates');
       setArchivedSeminars(seminars);
       setArchivedTemplates(templates);
     } catch (error) {
       console.error("Error loading archived data:", error);
     } finally {
-      setLoading(false);
+      // setLoading(false);
     }
   };
 
@@ -43,7 +38,7 @@ const Archived = () => {
         : "Are you sure you want to restore this certificate template?";
     if (window.confirm(confirmMsg)) {
       try {
-        type === "seminar" ? await restoreSeminar(id) : await restoreCertificateTemplate(id);
+        type === "seminar" ? await post(`/restore_seminar/${id}`) : await post(`/restore_template/${id}`);
         loadArchivedData();
       } catch (error) {
         console.error(`Error restoring ${type}:`, error);
@@ -58,7 +53,7 @@ const Archived = () => {
         : "Are you sure you want to permanently delete this certificate template?";
     if (window.confirm(confirmMsg)) {
       try {
-        type === "seminar" ? await deleteArchivedSeminar(id) : await deleteArchivedCertificateTemplate(id);
+        type === "seminar" ? await remove(`/delete_archived_seminar/${id}`) : await remove(`/delete_archived_template/${id}`);
         loadArchivedData();
       } catch (error) {
         console.error(`Error deleting ${type}:`, error);

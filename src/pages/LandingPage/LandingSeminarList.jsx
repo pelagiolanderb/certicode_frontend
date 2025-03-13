@@ -1,39 +1,49 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { fetchSeminars } from "../../api/seminarAPI";
+// import { fetchSeminars } from "../../api/seminarAPI";
 import BeatLoader from "../../components/loading/loading";
 import LandingHeader from "./LandingHeader";
-import seminarListBg from "../../assets/images/seminar_list_bg.png"
+import seminarListBg from "../../assets/images/seminar_list_bg.png";
+// import apiService from "../../api/apiService";
+import useApiService from "../../api/useApiService";
 
 const SeminarListPage = () => {
   const [seminars, setSeminars] = useState([]);
   const [filteredSeminars, setFilteredSeminars] = useState([]);
   const [topics, setTopics] = useState([]);
   const [selectedTopic, setSelectedTopic] = useState("All");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  // const [loading, setLoading] = useState(true);
+  // const [error, setError] = useState(null);
+  const { loading, error, get, post } = useApiService();
 
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   useEffect(() => {
     const handleFetchSeminars = async () => {
-      setLoading(true);
-      setError(null);
+      // setLoading(true);
+      // setError(null);
       try {
-        const data = await fetchSeminars();
+        // const data = await fetchSeminars();
+        // const data = await apiService.get('/seminars');
+        const data = await get("/seminars");
         setSeminars(data);
 
         // Extract unique topics
-        const uniqueTopics = ["All", ...new Set(data.map((seminar) => seminar.topics))];
+        const uniqueTopics = [
+          "All",
+          ...new Set(data.map((seminar) => seminar.topics)),
+        ];
         setTopics(uniqueTopics);
 
         // Default display all seminars
         setFilteredSeminars(data);
       } catch (error) {
-        setError(error.message || "Failed to fetch seminars.");
-      } finally {
-        setLoading(false);
+        console.log(error.message);
+        // setError(error.message || "Failed to fetch seminars.");
       }
+      // finally {
+      //   setLoading(false);
+      // }
     };
 
     handleFetchSeminars();
@@ -43,41 +53,39 @@ const SeminarListPage = () => {
     if (selectedTopic === "All") {
       setFilteredSeminars(seminars);
     } else {
-      setFilteredSeminars(seminars.filter((seminar) => seminar.topics === selectedTopic));
+      setFilteredSeminars(
+        seminars.filter((seminar) => seminar.topics === selectedTopic)
+      );
     }
   }, [selectedTopic, seminars]);
 
-
-  // Filter seminars based on selected topic
-  useEffect(() => {
-    if (selectedTopic === "All") {
-      setFilteredSeminars(seminars);
-    } else {
-      setFilteredSeminars(seminars.filter((seminar) => seminar.topics === selectedTopic));
-    }
-  }, [selectedTopic, seminars]);
+  if (error) return <p>{error}</p>;
 
   return (
     <>
       <LandingHeader />
-  
+
       <div className=" text-gray-900 pt-16">
         {/* Page Header Section */}
         <div className="flex flex-col-1 bg-[#B0C4DE]">
-          <div className="flex flex-col  flex-2 justify-center px-3">          
-            <h1 className="text-5xl font-bold text-[#37547C]">Explore Our Seminars</h1>
-         
+          <div className="flex flex-col  flex-2 justify-center px-3">
+            <h1 className="text-5xl font-bold text-[#37547C]">
+              Explore Our Seminars
+            </h1>
+
             <h2 className="text-xl text-[#37547C] mt-2 max-w-2xl">
-              Discover expert-led seminars designed to expand your knowledge and skills.
+              Discover expert-led seminars designed to expand your knowledge and
+              skills.
             </h2>
-          
-          </div>       
+          </div>
           <div className="overflow-x-auto">
-            <img src={seminarListBg} alt="" className="h-90 px-3"/>
+            <img src={seminarListBg} alt="" className="h-90 px-3" />
           </div>
         </div>
 
-        <h1 className="text-5xl font-bold text-[#37547C] text-center mt-4">Browse Topics</h1>
+        <h1 className="text-5xl font-bold text-[#37547C] text-center mt-4">
+          Browse Topics
+        </h1>
 
         {/* Filter Section */}
         <div className="flex justify-center gap-3 py-6">
@@ -100,9 +108,7 @@ const SeminarListPage = () => {
           {/* Loading & Empty State Handling */}
           {loading ? (
             <BeatLoader />
-          ) : // <div className="flex justify-center">
-          // </div>
-          filteredSeminars.length === 0 ? (
+          ) : filteredSeminars.length === 0 ? (
             <p className="text-center text-gray-600">
               No seminars available at the moment.
             </p>
@@ -115,9 +121,7 @@ const SeminarListPage = () => {
                 >
                   <Link to={`/seminar/${seminar.id}`}>
                     <img
-                      src={`${BACKEND_URL}/storage/${
-                        seminar.seminar_image
-                      }`}
+                      src={`${BACKEND_URL}/storage/${seminar.seminar_image}`}
                       alt={seminar.name_of_seminar}
                       className="w-full h-48 object-cover"
                     />

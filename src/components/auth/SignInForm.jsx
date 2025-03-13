@@ -8,7 +8,6 @@ import Button from "../ui/button/Button";
 import axios from "axios";
 import InputError from "../../pages/UiElements/InputError";
 
-// const GOOGLE_AUTH_URL = `${API_URL}/auth/redirection/google`;
 const GOOGLE_AUTH_URL = `http://127.0.0.1:8000/api/auth/redirection/google`;
 const Facebook_AUTH_URL =
   "https://36e7-136-158-78-104.ngrok-free.app/api/auth/redirection/facebook";
@@ -84,12 +83,10 @@ export default function SignInForm() {
           const user = await axios.get("http://localhost:8000/api/auth/me", {
             headers: {
               Authorization: "Bearer " + response.data.access_token,
-              
             },
             withCredentials: true,
           });
           localStorage.setItem("user_id", JSON.stringify(user.data[0].id));
-         
 
           navigate("/dashboard");
         } else {
@@ -184,14 +181,13 @@ export default function SignInForm() {
                 className="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
               >
                 <svg
-                  width="21"
-                  className="fill-current"
-                  height="20"
-                  viewBox="0 0 21 20"
-                  fill="none"
                   xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
                 >
-                  <path d="M15.6705 1.875H18.4272L12.4047 8.75833L19.4897 18.125H13.9422L9.59717 12.4442L4.62554 18.125H1.86721L8.30887 10.7625L1.51221 1.875H7.20054L11.128 7.0675L15.6705 1.875ZM14.703 16.475H16.2305L6.37054 3.43833H4.73137L14.703 16.475Z" />
+                  <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.88v-6.988H7.898V12h2.54V9.797c0-2.507 1.492-3.89 3.777-3.89 1.096 0 2.24.195 2.24.195v2.465H15.56c-1.373 0-1.798.85-1.798 1.722V12h3.05l-.488 2.892h-2.562v6.988C18.344 21.128 22 16.991 22 12z" />
                 </svg>
                 Sign in with Facebook
               </button>
