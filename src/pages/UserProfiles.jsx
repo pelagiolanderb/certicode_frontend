@@ -5,6 +5,10 @@ import UserAddressCard from "../components/UserProfile/UserAddressCard";
 import PageMeta from "../components/common/PageMeta";
 
 export default function UserProfiles() {
+  let current_user = JSON.parse(localStorage.getItem("current_user"));
+
+  console.log(current_user);
+
   return (
     <>
       <PageMeta
@@ -17,9 +21,19 @@ export default function UserProfiles() {
           Profile
         </h3>
         <div className="space-y-6">
-          <UserMetaCard />
-          <UserInfoCard />
-          <UserAddressCard />
+          <UserMetaCard fullname={current_user.users.name} />
+          <UserInfoCard
+            first_name={current_user.first_name}
+            last_name={current_user.last_name}
+            email={current_user.users.email}
+            phone={current_user.phone}
+            bio={null}
+          />
+          <UserAddressCard
+            country={null}
+            city_state={current_user.address}
+            postal_code={null}
+          />
         </div>
       </div>
     </>

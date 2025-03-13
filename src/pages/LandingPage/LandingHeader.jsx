@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import UserDropdown from "../../components/header/UserDropdown";
 
 const LandingHeader = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  let token = localStorage.getItem("auth_token");
+  let role = localStorage.getItem("role");
 
   const isHomePage = location.pathname === "/";
 
@@ -42,14 +45,18 @@ const LandingHeader = () => {
           <Link to="/seminar-list" className="text-white hover:text-gray-300">
             Seminars
           </Link>
-          <div className="space-x-4">
-            <Link to="/signin" className="text-white hover:text-gray-300">
-              Sign In
-            </Link>
-            <Link to="/signup" className="text-white hover:text-gray-300">
-              Sign Up
-            </Link>
-          </div>
+          {token && role === "user" ? (
+            <UserDropdown />
+          ) : (
+            <div className="space-x-4">
+              <Link to="/signin" className="text-white hover:text-gray-300">
+                Sign In
+              </Link>
+              <Link to="/signup" className="text-white hover:text-gray-300">
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </nav>

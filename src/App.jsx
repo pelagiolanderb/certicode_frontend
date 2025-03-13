@@ -37,9 +37,11 @@ import SocialAuthHandler from "./pages/AuthPages/SocialAuthHandler";
 import ForgotPassword from "./pages/AuthPages/ForgotPassword";
 import ResetPassword from "./pages/AuthPages/ResetPassword";
 import AdminSignIn from "./pages/AuthPages/AdminSignIn";
+import UserProtectedRoute from "./route/UserProtectedRoute";
 
 export default function App() {
   const token = localStorage.getItem("auth_token");
+  const role = localStorage.getItem("role");
   return (
     <>
       <Router>
@@ -65,16 +67,15 @@ export default function App() {
               element={<ProtectedRoute component={CertificateManagement} />}
             />
             <Route
-              path="/user-management"
-              element={<ProtectedRoute component={UserProfiles} />}
-            />
-            <Route
               path="/archived"
               element={<ProtectedRoute component={Archived} />}
             />
-            <Route path="/seminar-management/:id" element={<LandingSeminar />} />
-            <Route path="/archived" element={<ProtectedRoute component={Archived} />} />
+            <Route
+              path="/seminar-management/:id"
+              element={<ProtectedRoute component={LandingSeminar} />}
+            />
           </Route>
+
           <Route
             path="/verify-email"
             element={
@@ -93,28 +94,23 @@ export default function App() {
           />
 
           <Route
+            path="/user-profile"
+            element={<UserProtectedRoute component={UserProfiles} />}
+          />
+
+          <Route
             path="/forgot-password"
-            element={
-              token ? <Navigate to="/dashboard" replace /> : <ForgotPassword />
-            }
+            element={<UserProtectedRoute component={ForgotPassword} />}
           />
 
           <Route
             path="/password-reset/:token"
-            element={
-              token ? <Navigate to="/dashboard" replace /> : <ResetPassword />
-            }
+            element={<UserProtectedRoute component={ResetPassword} />}
           />
 
           <Route
             path="/social-auth-handler"
-            element={
-              token ? (
-                <Navigate to="/dashboard" replace />
-              ) : (
-                <SocialAuthHandler />
-              )
-            }
+            element={<UserProtectedRoute component={SocialAuthHandler} />}
           />
 
           <Route
@@ -127,19 +123,31 @@ export default function App() {
           <Route path="/" element={<LandingPage />} />
           <Route path="/seminar-list" element={<LandingSeminarList />} />
           <Route path="/seminar/:id" element={<LandingSeminar />} />
-          <Route
-            index
-            path="/dashboard"
-            element={<ProtectedRoute component={Home} />}
-          />
           {/* Auth Layout */}
           <Route
             path="/signin"
-            element={token ? <Navigate to="/dashboard" replace /> : <SignIn />}
+            element={
+              !token ? (
+                <SignIn />
+              ) : token && role === "user" ? (
+                <Navigate to="/" />
+              ) : (
+                <Navigate to="/dashboard" />
+              )
+            }
           />
+
           <Route
             path="/signup"
-            element={token ? <Navigate to="/dashboard" replace /> : <SignUp />}
+            element={
+              !token ? (
+                <SignUp />
+              ) : token && role === "user" ? (
+                <Navigate to="/" />
+              ) : (
+                <Navigate to="/dashboard" />
+              )
+            }
           />
 
           {/* Fallback Route */}

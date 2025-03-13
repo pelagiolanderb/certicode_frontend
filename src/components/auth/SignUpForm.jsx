@@ -322,7 +322,7 @@ export default function SignUpForm() {
                     <select
                       id="gender"
                       name="gender"
-                      className="border rounded p-2"
+                      className="border rounded p-2 dark:text-gray-100 dark:bg-gray-900"
                       value={formData.gender}
                       onChange={(e) =>
                         setFormData({

@@ -104,52 +104,52 @@ const SeminarPage = () => {
         <div className="my-2 mx-2">
           <img
             src={`${BACKEND_URL}/storage/${seminar.seminar_image}`}
-            className="rounded-sm h-96 w-full"
+            className="rounded-sm h-auto w-full"
           />
         </div>
 
         <div className="flex flex-row gap-6 mx-7">
           <div className="w-2/3 p-6">
-            <h1 className="text-5xl font-bold text-gray-800">
+            <h1 className="text-5xl font-bold text-gray-800 dark:text-gray-100">
               {seminar.name_of_seminar}
             </h1>
-            <p className="text-gray-600 mt-2">{seminar.description}</p>
+            <p className="text-gray-600 mt-2 dark:text-gray-100">{seminar.description}</p>
 
             <div className="mt-4">
-              <h3 className="text-lg font-semibold text-gray-700">
+              <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">
                 Topics Covered:
               </h3>
-              <ul className="list-disc list-inside text-gray-600 mt-1">
+              <ul className="list-disc list-inside text-gray-600 mt-1 dark:text-gray-100">
                 {seminar.topics}
               </ul>
             </div>
 
             <div className="mt-4 text-gray-700">
-              <p className="flex items-center gap-2">
-                <FaCalendarAlt className="text-gray-800" />
+              <p className="flex items-center gap-2 dark:text-gray-100">
+                <FaCalendarAlt className="text-gray-800 dark:text-gray-100" />
                 <strong>Date:</strong> {seminar.date}
               </p>
-              <p className="flex items-center gap-2">
-                <FaMapMarkerAlt className="text-gray-800" />
+              <p className="flex items-center gap-2 dark:text-gray-100">
+                <FaMapMarkerAlt className="text-gray-800 dark:text-gray-100" />
                 <strong>Location:</strong> {seminar.location}
               </p>
-              <p className="flex items-center gap-2">
-                <FaBuilding className="text-gray-800" />
+              <p className="flex items-center gap-2 dark:text-gray-100">
+                <FaBuilding className="text-gray-800 dark:text-gray-100" />
                 <strong>Organizer:</strong> {seminar.organization_name}
               </p>
             </div>
           </div>
 
-          <div className="w-1/3 bg-white p-6">
-            <div className="p-6 bg-white rounded-lg shadow-lg flex flex-col items-center text-center mb-4">
+          <div className="w-1/3 bg-white p-6 dark:bg-gray-900">
+            <div className="p-6 bg-white rounded-lg shadow-lg flex flex-col items-center text-center mb-4 dark:bg-gray-900 dark:border-gray-300">
               <img
                 src={`${BACKEND_URL}/storage/${seminar.speaker_image}`}
                 className="w-32 h-32 object-cover rounded-full border-4 border-gray-300 shadow-md"
               />
-              <h3 className="text-xl font-bold text-gray-800 mt-4">
+              <h3 className="text-xl font-bold text-gray-800 mt-4 dark:text-gray-100">
                 {seminar.speaker_name}
               </h3>
-              <p className="text-gray-600 mt-2">{seminar.about_the_speaker}</p>
+              <p className="text-gray-600 mt-2 dark:text-gray-100">{seminar.about_the_speaker}</p>
             </div>
             <div className="rounded-lg shadow-lg flex flex-col items-center text-center border border-gray-300 pb-5">
               <p className="text-green-700 font-semibold text-xl pt-3">

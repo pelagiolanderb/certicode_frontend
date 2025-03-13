@@ -11,8 +11,6 @@ const CertificateManagement = () => {
   const [isUpload, setIsUpload] = useState(false);
   const [isArchive, setIsArchive] = useState(false);
   const [loadingState, setLoadingState] = useState({});
-  // const [loading, setLoading] = useState(false);
-  // const [fetchingLoading, setFetchingLoading] = useState(false);
 
   const { loading, error, get, post, put } = useApiService();
 
@@ -23,16 +21,12 @@ const CertificateManagement = () => {
   }, []);
 
   const fetchTemplates = async () => {
-    // setFetchingLoading(true);
     try {
       const data = await get("/templates");
       setTemplates(data);
     } catch (error) {
       console.error("Error fetching templates:", error);
     }
-    // finally {
-    //   setFetchingLoading(false);
-    // }
   };
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
@@ -90,22 +84,22 @@ const CertificateManagement = () => {
   if (error) return <p>{error}</p>;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+    <div className="max-w-5xl mx-auto p-6 bg-white shadow-md rounded-lg dark:bg-gray-900">
+      <h2 className="text-2xl font-bold text-gray-800 mb-4 dark:text-gray-100">
         Certificate Management
       </h2>
 
       <form
         onSubmit={handleFormSubmit}
-        className="bg-gray-50 p-6 rounded-lg shadow"
+        className="bg-gray-50 p-6 rounded-lg border shadow dark:bg-gray-900 dark:border-gray-100"
       >
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-100">
             Template Name
           </label>
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-100"
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter template name"
@@ -113,14 +107,14 @@ const CertificateManagement = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2 dark:text-gray-100">
             Upload PDF Template
           </label>
           <input
             type="file"
             ref={fileInputRef}
             accept="application/pdf"
-            className="block w-full border border-gray-300 rounded-lg p-1 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60"
+            className="block w-full border border-gray-300 rounded-lg p-1 text-sm file:mr-4 file:rounded-md file:border-0 file:bg-teal-500 file:py-2 file:px-4 file:text-sm file:font-semibold file:text-white hover:file:bg-teal-700 focus:outline-none disabled:pointer-events-none disabled:opacity-60 dark:text-gray-100"
             onChange={handleFileChange}
           />
         </div>
@@ -152,11 +146,11 @@ const CertificateManagement = () => {
 
       <div className="overflow-x-auto mt-6">
         <table className="w-full text-sm text-gray-600 border-collapse border border-gray-200">
-          <thead className="bg-gray-100">
+          <thead className="bg-gray-100 dark:bg-gray-900">
             <tr>
-              <th className="px-6 py-3 text-left">Template Name</th>
-              <th className="px-6 py-3 text-left">PDF</th>
-              <th className="px-6 py-3 text-center">Actions</th>
+              <th className="px-6 py-3 text-left dark:text-gray-100">Template Name</th>
+              <th className="px-6 py-3 text-left dark:text-gray-100">PDF</th>
+              <th className="px-6 py-3 text-center dark:text-gray-100">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -170,9 +164,9 @@ const CertificateManagement = () => {
               templates.map((template) => (
                 <tr
                   key={template.id}
-                  className="border-t border-gray-200 hover:bg-gray-50"
+                  className="border-t border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
-                  <td className="px-6 py-4">{template.name}</td>
+                  <td className="px-6 py-4 dark:text-gray-100">{template.name}</td>
                   <td className="px-6 py-4">
                     <a
                       href={`${BACKEND_URL}/certificates/${template.pdf_filename}`}

@@ -79,16 +79,18 @@ export default function SignInForm() {
       if (response.status === 200) {
         if (response.data && response.data.isVerified) {
           localStorage.setItem("auth_token", response.data.access_token);
-          // localStorage.setItem("user", JSON.stringify(response.data));
           const user = await axios.get("http://localhost:8000/api/auth/me", {
             headers: {
               Authorization: "Bearer " + response.data.access_token,
             },
             withCredentials: true,
           });
+          localStorage.setItem('role', user.data[0].role);
           localStorage.setItem("user_id", JSON.stringify(user.data[0].id));
+          localStorage.setItem("current_user", JSON.stringify(response.data.current_user));
 
-          navigate("/dashboard");
+          if (user.data[0].role && user.data[0].role === 'user') navigate("/");
+          else navigate('/dashboard');
         } else {
           setErrors((prevErrors) => ({
             ...prevErrors,

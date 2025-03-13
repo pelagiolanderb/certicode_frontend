@@ -98,7 +98,7 @@ const Participants = () => {
       <div className="flex flex-col sm:flex-row flex-wrap space-y-4 sm:space-y-0 items-center justify-between">
         <div className="flex items-center justify-between w-full m-4">
           <select
-            className="border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-300"
+            className="border border-gray-300 rounded-lg p-2 focus:ring focus:ring-blue-300 dark:text-gray-100 dark:bg-gray-900"
             value={selectedSeminar}
             onChange={(e) => setSelectedSeminar(e.target.value)}
           >
