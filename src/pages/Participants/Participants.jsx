@@ -11,6 +11,10 @@ const Participants = () => {
 
   const { loading, error, get, post } = useApiService();
 
+  const [currentPage, setCurrentPage] = useState(0);
+  const pageCount = Math.ceil(participants.length / 5);
+  const currentItems = participants.slice(currentPage * 5, (currentPage + 1) * 5);
+
   useEffect(() => {
     const loadParticipants = async () => {
       try {
@@ -23,6 +27,22 @@ const Participants = () => {
 
     loadParticipants();
   }, []);
+
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage);
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 0) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < pageCount - 1) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   const sortedParticipants = [...participants].sort((a, b) => {
     const titleA = a.seminar?.name_of_seminar.toLowerCase() || "";
@@ -82,7 +102,7 @@ const Participants = () => {
             value={selectedSeminar}
             onChange={(e) => setSelectedSeminar(e.target.value)}
           >
-            <option value="">-- Select Seminar --</option>
+              <option value="" >-- ALL SEMINAR --</option>
             {[
               ...new Set(participants.map((p) => p.seminar?.name_of_seminar)),
             ].map((seminar) => (
@@ -124,7 +144,11 @@ const Participants = () => {
             </tr>
           </thead>
           <tbody>
-            {sortedParticipants.map((participant, index) => (
+          {sortedParticipants
+              .filter((participant) =>
+                selectedSeminar ? participant.seminar?.name_of_seminar === selectedSeminar : true
+              )
+              .map((participant, index) => (
               <tr
                 key={participant.id}
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
@@ -152,6 +176,63 @@ const Participants = () => {
             ))}
           </tbody>
         </table>
+        <nav
+          className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
+          aria-label="Table navigation"
+        >
+          <span className="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">
+            Showing{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {currentItems.length}
+            </span>{" "}
+            of{" "}
+            <span className="font-semibold text-gray-900 dark:text-white">
+              {participants.length}
+            </span>
+          </span>
+          <ul className="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
+            <li>
+              <button
+                onClick={handlePrevious}
+                disabled={currentPage === 0}
+                className={`${
+                  currentPage === 0
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100 hover:text-gray-700"
+                } flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg`}
+              >
+                Previous
+              </button>
+            </li>
+            {Array.from({ length: pageCount }, (_, i) => (
+              <li key={i}>
+                <button
+                  onClick={() => handlePageClick(i)}
+                  className={`flex items-center justify-center px-3 h-8 leading-tight ${
+                    i === currentPage
+                      ? "bg-blue-200 text-gray-700 font-medium"
+                      : "bg-white text-gray-500"
+                  } border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white`}
+                >
+                  {i + 1}
+                </button>
+              </li>
+            ))}
+            <li>
+              <button
+                onClick={handleNext}
+                disabled={currentPage === pageCount - 1}
+                className={`${
+                  currentPage === pageCount - 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100 hover:text-gray-700"
+                } flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg`}
+              >
+                Next
+              </button>
+            </li>
+          </ul>
+        </nav>  
       </div>
     </div>
   );
