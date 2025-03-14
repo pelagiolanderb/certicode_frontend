@@ -25,6 +25,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
   const [selectedTemplate, setSelectedTemplate] = useState({});
   const [isCreate, setIsCreate] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isChecked, setIsChecked] = useState(false);
 
   const { loading, error, get, post } = useApiService();
 
@@ -47,11 +48,13 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
   };
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
+    const { name, value, files, checked } = e.target;
     setSeminar((prev) => ({
       ...prev,
       [name]: files ? files[0] : value,
     }));
+
+    setIsChecked(checked);
 
     if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
   };
@@ -139,7 +142,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
                 type="text"
                 name="name_of_seminar"
                 id="name_of_seminar"
-                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                className={`appearance-none block w-full bg-gray-100 text-gray-700 border ${
                   errors.name_of_seminar ? "border-red-500" : "border-teal-500"
                 } rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
                 placeholder="Name of Seminar"
@@ -163,7 +166,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
                 type="text"
                 name="topics"
                 id="topics"
-                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                className={`appearance-none block w-full bg-gray-100 text-gray-700 border ${
                   errors.topics ? "border-red-500" : "border-teal-500"
                 } rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
                 placeholder="Topic"
@@ -187,7 +190,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
                 type="date"
                 name="date"
                 id="date"
-                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                className={`appearance-none block w-full bg-gray-100 text-gray-700 border ${
                   errors.date ? "border-red-500" : "border-teal-500"
                 } rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
                 value={seminar.date}
@@ -210,7 +213,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
                 type="text"
                 name="location"
                 id="location"
-                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                className={`appearance-none block w-full bg-gray-100 text-gray-700 border ${
                   errors.location ? "border-red-500" : "border-teal-500"
                 } rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
                 placeholder="Location"
@@ -219,6 +222,22 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
               />
             </div>
             <div>
+              <div>
+                <label
+                  htmlFor="free"
+                  className="flex items-center space-x-1 cursor-pointer uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                >
+                  <input
+                    type="checkbox"
+                    name="free"
+                    id="free"
+                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                    checked={isChecked}
+                    onChange={handleChange}
+                  />
+                  <span className="text-gray-700 font-medium">Free</span>
+                </label>
+              </div>
               <label
                 htmlFor="price"
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -229,10 +248,11 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
                 type="number"
                 name="price"
                 id="price"
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-teal-500 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white"
-                placeholder="Price"
-                value={seminar.price}
+                className={`appearance-none block w-full ${isChecked ? 'bg-gray-300' : 'bg-gray-100'} text-gray-700 border border-teal-500 rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
+                placeholder={isChecked ? 'Free' : 'Price'}
+                value={isChecked ? 0 : seminar.price}
                 onChange={handleChange}
+                disabled={isChecked}
               />
             </div>
             <div>
@@ -251,7 +271,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
                 type="text"
                 name="speaker_name"
                 id="speaker_name"
-                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                className={`appearance-none block w-full bg-gray-100 text-gray-700 border ${
                   errors.speaker_name ? "border-red-500" : "border-teal-500"
                 } rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
                 placeholder="Speaker Name"
@@ -275,7 +295,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
                 type="text"
                 name="organization_name"
                 id="organization_name"
-                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                className={`appearance-none block w-full bg-gray-100 text-gray-700 border ${
                   errors.organization_name
                     ? "border-red-500"
                     : "border-teal-500"
@@ -302,7 +322,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
               name="description"
               id="description"
               placeholder="Description..."
-              className={`appearance-none block w-full min-h-18 bg-gray-200 text-gray-700 border ${
+              className={`appearance-none block w-full min-h-18 bg-gray-100 text-gray-700 border ${
                 errors.description ? "border-red-500" : "border-teal-500"
               } rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
               value={seminar.description}
@@ -324,7 +344,7 @@ const SeminarModal = ({ setIsModalOpen, handleFetchSeminars }) => {
             <textarea
               name="about_the_speaker"
               id="about_the_speaker"
-              className={`appearance-none block w-full min-h-18 bg-gray-200 text-gray-700 border ${
+              className={`appearance-none block w-full min-h-18 bg-gray-100 text-gray-700 border ${
                 errors.about_the_speaker ? "border-red-500" : "border-teal-500"
               } rounded py-2 px-4 leading-tight focus:outline-none focus:bg-white`}
               placeholder="About the speaker..."

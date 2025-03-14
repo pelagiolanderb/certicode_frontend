@@ -38,6 +38,7 @@ import ForgotPassword from "./pages/AuthPages/ForgotPassword";
 import ResetPassword from "./pages/AuthPages/ResetPassword";
 import AdminSignIn from "./pages/AuthPages/AdminSignIn";
 import UserProtectedRoute from "./route/UserProtectedRoute";
+import UserManagement from "./pages/UserManagement/UserManagement";
 
 export default function App() {
   const token = localStorage.getItem("auth_token");
@@ -74,6 +75,10 @@ export default function App() {
               path="/seminar-management/:id"
               element={<ProtectedRoute component={LandingSeminar} />}
             />
+            {/* <Route
+              path="/user-management"
+              element={<ProtectedRoute component={UserManagement} />}
+            /> */}
           </Route>
 
           <Route

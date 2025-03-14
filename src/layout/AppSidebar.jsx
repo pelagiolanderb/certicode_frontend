@@ -43,11 +43,11 @@ const navItems = [
     name: "Certificate Management",
     path: "/certificate-management",
   },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/user-profile",
-  },
+  // {
+  //   icon: <UserCircleIcon />,
+  //   name: "User Management",
+  //   path: "/user-management",
+  // },
   {
     icon: <FolderIcon />,
     name: "Archived",
@@ -273,34 +273,23 @@ const AppSidebar = () => {
     >
       <div
         className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
+          !isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
         }`}
       >
         <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
-              CertiCode
-              {/* <img
-                className="dark:hidden"
-                src="/images/logo/logo.svg"
-                alt="Logo"
-                width={150}
-                height={40}
-              />
               <img
-                className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                className="rounded-full w-50"
+                src="/images/user/certicode_logo.png"
                 alt="Logo"
-                width={150}
-                height={40}
-              /> */}
+              />
             </>
           ) : (
             <img
-              src="/images/logo/logo-icon.svg"
+              className="rounded-full"
+              src="/images/user/certicode_logo_responsive.png"
               alt="Logo"
-              width={32}
-              height={32}
             />
           )}
         </Link>
@@ -324,7 +313,7 @@ const AppSidebar = () => {
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
-            <div className="">
+            {/* <div className="">
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
                   !isExpanded && !isHovered
@@ -339,7 +328,7 @@ const AppSidebar = () => {
                 )}
               </h2>
               {renderMenuItems(othersItems, "others")}
-            </div>
+            </div> */}
           </div>
         </nav>
         {/* {isExpanded || isHovered || isMobileOpen ? <SidebarWidget /> : null} */}

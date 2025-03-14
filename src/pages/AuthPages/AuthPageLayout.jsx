@@ -2,8 +2,6 @@ import React from "react";
 import GridShape from "../../components/common/GridShape";
 import { Link } from "react-router";
 import ThemeTogglerTwo from "../../components/common/ThemeTogglerTwo";
-import Logo from "../../assets/images/testronix.png";
-import Logo1 from "../../assets/images/testronix_1.png";
 
 export default function AuthLayout({ children }) {
   return (
@@ -16,7 +14,7 @@ export default function AuthLayout({ children }) {
             <GridShape />
             <div className="flex flex-col items-center max-w-xs">
               <Link to="/" className="block mb-4">
-                <img width={231} height={10} src={Logo} alt="Logo" />
+                <img width={231} height={10} src='/images/user/certicode_logo.png' alt="Logo" className="rounded-full"/>
               </Link>
               <p className="text-center text-gray-400 dark:text-white/60">
                 Certify. Verify. Trust.
