@@ -13,15 +13,18 @@ export default function EcommerceMetrics() {
   const { loading, error, get } = useApiService();
   const [seminarCount, setSeminarCount] = useState(0);
   const [certificateCount, setCertificateCount] = useState(0);
+  const [participantCount, setParticipantCount] = useState(0);
 
   useEffect(() => {
     const fetchCounts = async () => {
       try {
         const allSeminars = await get("/seminars");
         const allTemplates = await get("/templates");
+        const allParticipants = await get("/participants");
 
         setSeminarCount(allSeminars.length);
         setCertificateCount(allTemplates.length);
+        setParticipantCount(allParticipants.length);
       } catch (error) {
         console.log(error.message);
       }
@@ -32,19 +35,16 @@ export default function EcommerceMetrics() {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
-      {/* <!-- Metric Item Start --> */}
+      {/* Participants Metric */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
           <GroupIcon className="text-gray-800 size-6 dark:text-white/90" />
         </div>
-
         <div className="flex items-end justify-between mt-5">
           <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Participants
-            </span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">Participants</span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              3,782
+              {loading ? "Loading..." : participantCount}
             </h4>
           </div>
           <Badge color="success">
@@ -53,25 +53,19 @@ export default function EcommerceMetrics() {
           </Badge>
         </div>
       </div>
-      {/* <!-- Metric Item End --> */}
-
-      {/* <!-- Metric Item Start --> */}
+      
+      {/* Seminars Metric */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
           <CalenderIcon className="text-gray-800 size-6 dark:text-white/90" />
         </div>
         <div className="flex items-end justify-between mt-5">
           <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
-              Existing Seminars
-            </span>
+            <span className="text-sm text-gray-500 dark:text-gray-400">Existing Seminars</span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-              {
-                loading ? "Loading..." : seminarCount
-              }
+              {loading ? "Loading..." : seminarCount}
             </h4>
           </div>
-
           <Badge color="error">
             <ArrowDownIcon />
             9.05%
@@ -79,26 +73,24 @@ export default function EcommerceMetrics() {
         </div>
       </div>
 
+      {/* Certificates Metric */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-           <CalenderIcon className="text-gray-800 size-6 dark:text-white/90" />
-         </div>
-         <div className="flex items-end justify-between mt-5">
-           <div>
-             <span className="text-sm text-gray-500 dark:text-gray-400">
-               Total Certificates
-             </span>
-             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
-               {loading ? "Loading..." : certificateCount}
-             </h4>
-           </div>
-           <Badge color="success">
-             <ArrowUpIcon />
-             5.25%
-           </Badge>
-         </div>
-       </div>
-      {/* <!-- Metric Item End --> */}
+        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
+          <CalenderIcon className="text-gray-800 size-6 dark:text-white/90" />
+        </div>
+        <div className="flex items-end justify-between mt-5">
+          <div>
+            <span className="text-sm text-gray-500 dark:text-gray-400">Total Certificates</span>
+            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+              {loading ? "Loading..." : certificateCount}
+            </h4>
+          </div>
+          <Badge color="success">
+            <ArrowUpIcon />
+            5.25%
+          </Badge>
+        </div>
+      </div>
     </div>
   );
 }
