@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+import useApiService from "../../api/useApiService"; 
 import {
   Table,
   TableBody,
@@ -8,184 +10,93 @@ import {
 import Badge from "../ui/badge/Badge";
 import img1 from "../../assets/images/house_3.jpg";
 
-const tableData = [
-  {
-    id: 1,
-    "name_of_seminar": "AI and the Future of Work",
-    "speaker_name": "Dr. Carlos Mendoza",
-    "date": "2025-03-15",
-    "participants": 17,
-    "status": "On going"
-  },
-  {
-    id: 2,
-    "name_of_seminar": "Cybersecurity in the Digital Age",
-    "speaker_name": "Ms. Joanna Cruz",
-    "date": "2025-03-15",
-    "participants": 15,
-    "status": "Preparing"
-  },
-  {
-    id: 3,
-    "name_of_seminar": "Web Development Trends 2025",
-    "speaker_name": "Engr. Mark Dela Torre",
-    "date": "2025-03-15",
-    "participants": 10,
-    "status": "On going"
-  },
-  {
-    id: 4,
-    "name_of_seminar": "Cloud Computing and DevOps",
-    "speaker_name": "Mr. Raymond Tan",
-    "date": "2025-03-15",
-    "participants": 40,
-    "status": "On going"
-  },
-  {
-    id: 5,
-    "name_of_seminar": "Ethical AI and Responsible Innovation",
-    "speaker_name": "Dr. Angela Santos",
-    "date": "2025-03-15",
-    "participants": 5,
-    "status": "Done"
-  }
-]
+export default function RecentSeminars() {
+  const { get, loading, error } = useApiService();
+  const [seminars, setSeminars] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
+  useEffect(() => {
+    const getRecentSeminars = async () => {
+      try {
+        const data = await get("/seminars"); 
+        const sortedSeminars = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setSeminars(sortedSeminars);
+      } catch (err) {
+        console.error("Failed to fetch seminars:", err);
+      }
+    };
 
-export default function RecentOrders() {
+    getRecentSeminars();
+  }, []);
+
+  // Pagination logic
+  const totalPages = Math.max(1, Math.ceil(seminars.length / itemsPerPage));
+  const paginatedSeminars = seminars.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
-      <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Recent Seminars
-          </h3>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-            <svg
-              className="stroke-current fill-white dark:fill-gray-800"
-              width="20"
-              height="20"
-              viewBox="0 0 20 20"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                d="M2.29004 5.90393H17.7067"
-                stroke=""
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M17.7075 14.0961H2.29085"
-                stroke=""
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M12.0826 3.33331C13.5024 3.33331 14.6534 4.48431 14.6534 5.90414C14.6534 7.32398 13.5024 8.47498 12.0826 8.47498C10.6627 8.47498 9.51172 7.32398 9.51172 5.90415C9.51172 4.48432 10.6627 3.33331 12.0826 3.33331Z"
-                fill=""
-                stroke=""
-                strokeWidth="1.5"
-              />
-              <path
-                d="M7.91745 11.525C6.49762 11.525 5.34662 12.676 5.34662 14.0959C5.34661 15.5157 6.49762 16.6667 7.91745 16.6667C9.33728 16.6667 10.4883 15.5157 10.4883 14.0959C10.4883 12.676 9.33728 11.525 7.91745 11.525Z"
-                fill=""
-                stroke=""
-                strokeWidth="1.5"
-              />
-            </svg>
-            Filter
-          </button>
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-            See all
-          </button>
-        </div>
-      </div>
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">Recent Seminars</h3>
       <div className="max-w-full overflow-x-auto">
-        <Table>
-          {/* Table Header */}
-          <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
-            <TableRow>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Seminar Name
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Date
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Participants
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Status
-              </TableCell>
-            </TableRow>
-          </TableHeader>
+        {loading ? (
+          <p>Loading...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : (
+          <>
+            <Table>
+              <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
+                <TableRow>
+                  <TableCell isHeader className="py-3 text-start text-gray-500 font-medium">Seminar Name</TableCell>
+                  <TableCell isHeader className="py-3 text-start text-gray-500 font-medium">Date</TableCell>
+                  <TableCell isHeader className="py-3 text-start text-gray-500 font-medium">Participants</TableCell>
+                  <TableCell isHeader className="py-3 text-start text-gray-500 font-medium">Status</TableCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
+                {paginatedSeminars.map((seminar) => (
+                  <TableRow key={seminar.id}>
+                    <TableCell className="py-3 flex items-center gap-3">
+                      <div className="h-[50px] w-[50px] overflow-hidden rounded-md">
+                        <img src={img1} className="h-[50px] w-[50px]" alt={seminar.name_of_seminar} />
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-800 dark:text-white/90">{seminar.name_of_seminar}</p>
+                        <span className="text-gray-500 dark:text-gray-400">{seminar.speaker_name}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-3 text-gray-500 dark:text-gray-400">{seminar.date}</TableCell>
+                    <TableCell className="py-3 text-gray-500 dark:text-gray-400">001</TableCell>
+                    <TableCell className="py-3 text-gray-500 dark:text-gray-400">
+                      <Badge size="sm" color="warning">On going</Badge>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
 
-          {/* Table Body */}
 
-          <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-            {tableData.map((seminar) => (
-              <TableRow key={seminar.id} className="">
-                <TableCell className="py-3">
-                  <div className="flex items-center gap-3">
-                    <div className="h-[50px] w-[50px] overflow-hidden rounded-md">
-                      <img
-                        src={img1}
-                        className="h-[50px] w-[50px]"
-                        alt={seminar.name_of_seminar}
-                      />
-                    </div>
-                    <div>
-                      <p className="font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                        {seminar.name_of_seminar}
-                      </p>
-                      <span className="text-gray-500 text-theme-xs dark:text-gray-400">
-                        {seminar.speaker_name}
-                      </span>
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {seminar.date}
-                </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  {seminar.participants}
-                </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  <Badge
-                    size="sm"
-                    color={
-                      seminar.status === "Done"
-                        ? "success"
-                        : seminar.status === "On going"
-                        ? "warning"
-                        : "error"
-                    }
-                  >
-                    {seminar.status}
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            
+            {/* Pagination Controls */}
+            <div className="flex justify-between items-center mt-4">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+              >
+                Previous
+              </button>
+              <span className="text-gray-700 dark:text-gray-300">Page {currentPage} of {totalPages}</span>
+              <button
+                onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
