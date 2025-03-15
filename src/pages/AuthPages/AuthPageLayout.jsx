@@ -14,7 +14,7 @@ export default function AuthLayout({ children }) {
             <GridShape />
             <div className="flex flex-col items-center max-w-xs">
               <Link to="/" className="block mb-4">
-                <img width={231} height={10} src='/images/user/certicode_logo.png' alt="Logo" className="rounded-full"/>
+                <img width={231} height={10} src='/images/user/certicode_logo.png' alt="Logo" />
               </Link>
               <p className="text-center text-gray-400 dark:text-white/60">
                 Certify. Verify. Trust.

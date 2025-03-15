@@ -78,6 +78,8 @@ const AppSidebar = () => {
   const [subMenuHeight, setSubMenuHeight] = useState({});
   const subMenuRefs = useRef({});
 
+  const [theme, setTheme] = useState(localStorage.getItem("theme"));
+
   // const isActive = (path: string) => location.pathname === path;
   const isActive = useCallback(
     (path) => location.pathname === path,
@@ -273,24 +275,27 @@ const AppSidebar = () => {
     >
       <div
         className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-center"
+          !isExpanded && !isHovered ? "lg:justify-center" : "justify-left"
         }`}
       >
         <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img
-                className="rounded-full w-50"
+                className="dark:hidden"
+                src="/images/user/certicode_logo_dark.png"
+                alt="Logo"
+                width={170}
+              />
+              <img
+                className="hidden dark:block"
                 src="/images/user/certicode_logo.png"
                 alt="Logo"
+                width={170}
               />
             </>
           ) : (
-            <img
-              className="rounded-full"
-              src="/images/user/certicode_logo_responsive.png"
-              alt="Logo"
-            />
+            <img src="/images/user/certicode_logo_responsive.png" alt="Logo" width={45} />
           )}
         </Link>
       </div>
