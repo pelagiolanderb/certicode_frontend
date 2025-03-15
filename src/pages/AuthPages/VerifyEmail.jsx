@@ -39,7 +39,7 @@ export default function VerifyEmail({ status }) {
         }
       );
 
-      console.log("Response:", response.data); // Debugging: Log the response
+      console.log("Verify Email Response:", response.data); // Debugging: Log the response
 
       // Check if the response contains a token and redirect_url
       if (response.data.token && response.data.redirect_url) {

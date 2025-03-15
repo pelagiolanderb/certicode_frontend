@@ -28,13 +28,17 @@ export default function VerificationHandler() {
             }
           );
 
-          console.log("Response:", response.data);
+          console.log(response.data);
 
-          if (response.data.token) {
+          if (response.status === 200) {
             localStorage.setItem("auth_token", response.data.token);
-            console.log("Token stored:", response.data.token);
-
-            navigate("/dashboard");
+            localStorage.setItem(
+              "current_user",
+              JSON.stringify(response.data.current_user)
+            );
+            localStorage.setItem("user_id", response.data.current_user.users.id);
+            localStorage.setItem("role", response.data.current_user.users.role);
+            navigate("/");
           }
         } catch (error) {
           console.error("Email verification failed", error);

@@ -84,14 +84,14 @@ export default function App() {
           <Route
             path="/verify-email"
             element={
-              token ? <Navigate to="/dashboard" replace /> : <VerifyEmail />
+              token && role === 'user' ? <Navigate to="/" replace /> : <VerifyEmail />
             }
           />
           <Route
             path="/verify-handler"
             element={
               token ? (
-                <Navigate to="/dashboard" replace />
+                <Navigate to="/" replace />
               ) : (
                 <VerificationHandler />
               )

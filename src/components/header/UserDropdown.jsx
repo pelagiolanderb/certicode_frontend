@@ -62,10 +62,14 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        <span className={`block mr-1 font-medium ${role === 'admin' ? 'text-gray-500' : 'text-gray-200'}`}>
+        <span
+          className={`block mr-1 font-medium ${
+            role === "admin" ? "text-gray-500" : "text-gray-200"
+          }`}
+        >
           {role === "user"
-            ? current_user.first_name
-              ? current_user.first_name
+            ? current_user.first_name || current_user.users?.name
+              ? current_user.first_name || current_user.users?.name
               : "User"
             : current_user?.first_name
             ? current_user.first_name
@@ -83,7 +87,7 @@ export default function UserDropdown() {
         >
           <path
             d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
-            stroke={role === 'admin' && 'currentColor'}
+            stroke={role === "admin" && "currentColor"}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -104,8 +108,10 @@ export default function UserDropdown() {
             <div>
               <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
                 {role === "user"
-                  ? current_user.first_name && current_user.last_name
-                    ? `${current_user.first_name} ${current_user.last_name}`
+                  ? (current_user.first_name && current_user.last_name) ||
+                    current_user.users?.name
+                    ? current_user.first_name && current_user.last_name ||
+                      current_user.users?.name
                     : "User"
                   : current_user.first_name && current_user.last_name
                   ? `${current_user.first_name} ${current_user.last_name}`
