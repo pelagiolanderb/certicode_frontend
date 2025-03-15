@@ -4,12 +4,15 @@ import browse from "../../assets/images/browse.jpg";
 import register from "../../assets/images/register.jpg";
 import attend from "../../assets/images/attend.jpg";
 import landing_page from "../../assets/images/landing_page.jpg";
-import about_us from "../../assets/images/about_us.jpg";
+import banner_certicode_about_us from "../../assets/images/banner_certicode_about_us.png";
 import hero from "../../assets/images/hero.jpg";
 import BeatLoader from "../../components/loading/loading";
 import LandingTestimonials from "./LandingTestimonials";
 import LandingPageBg from "../../assets/images/LandingPageBg.jpg";
 import { motion } from "framer-motion";
+import model_about_us from "../../assets/images/model_about_us.png"
+import banner_certicode_cta from "../../assets/images/banner_certicode_cta.png"
+import banner_certicode_profile_cta from "../../assets/images/banner_certicode_profile_cta.PNG"
 
 const LandingMain = () => {
   const [seminars, setSeminars] = useState([]);
@@ -55,13 +58,12 @@ const LandingMain = () => {
 
   return (
     <div 
-    className="relative bg-black text-gray-300 bg-cover bg-fixed bg-center"
-    style={{ backgroundImage: `url(${LandingPageBg})` }} 
+    className="relative text-gray-300 bg-cover bg-fixed bg-center"
     >
 
       <div 
-        className="relative bg-black text-gray-300 bg-cover bg-fixed bg-center h-screen flex flex-col items-center justify-center"
-        style={{ backgroundImage: `url(${hero})` }} // Set hero as background
+        className="relative bg-gradient-to-b from-[#5882ED] to-blue-300 text-gray-300 bg-cover bg-fixed bg-center h-screen flex flex-col items-center justify-center"
+       
       >
         <motion.div 
         className="relative z-10 text-center px-6"
@@ -73,9 +75,10 @@ const LandingMain = () => {
           <h1 className="text-white text-4xl md:text-5xl font-bold mb-12">
             Expand Your Knowledge with Expert-Led Seminars
           </h1>
+
           <Link
             to="/seminar-list"
-            className="bg-[#B0C4DE] text-[#37547C] uppercase text-sm px-8 py-4 rounded-md"
+            className="bg-white text-[#5882ED] uppercase text-sm px-8 py-4 rounded-md"
           >
             Browse Seminars
           </Link>
@@ -85,15 +88,21 @@ const LandingMain = () => {
       {/* How it Works Section */}
       <section className="relative py-24">
         {/* Background Layer with Opacity */}
-        <div className="absolute inset-0 bg-[#B0C4DE] opacity-70"></div>
+        <div className="absolute inset-0 bg-white "></div>
 
         {/* Content Layer */}
-        <div className="relative z-10 container mx-auto max-w-screen-xl px-6">
+        <motion.div 
+        className="relative z-10 container mx-auto max-w-screen-xl px-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeIn}
+        >
           <div className="text-center mb-12">
-            <p className="text-[#37547C] text-lg font-semibold uppercase tracking-widest pb-3">
+            <p className="text-gray-800 text-lg font-semibold uppercase tracking-widest pb-3">
               How it Works
             </p>
-            <p className="text-4xl text-[#37547C] font-bold uppercase tracking-widest">
+            <p className="text-4xl text-gray-800 font-bold uppercase tracking-widest">
               Join seminars anytime, anywhere!
             </p>
           </div>
@@ -102,24 +111,30 @@ const LandingMain = () => {
             {howItWorksData.map((item, i) => (
               <div
                 key={i}
-                className="bg-[#D6E4F0] p-8 shadow-lg rounded-3xl flex flex-col items-center text-center relative mt-15"
+                className="bg-blue-200 p-8 shadow-lg rounded-3xl flex flex-col items-center text-center relative mt-15"
               >
-                <div className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-6 absolute -top-12">
+                <motion.div 
+                className="w-24 h-24 rounded-full bg-white flex items-center justify-center mb-6 absolute -top-12"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.5 }}
+                variants={fadeIn}
+                >
                   <img
                     src={item.imgSrc}
                     className="w-16 h-16 object-contain"
                     alt={item.heading}
                   />
-                </div>
+                </motion.div>
 
-                <h3 className="text-2xl font-semibold text-[#37547C] mt-12">
+                <h3 className="text-2xl font-semibold text-gray-800 mt-12">
                   {item.heading}
                 </h3>
-                <p className="text-[#37547C] mt-2">{item.subheading}</p>
+                <p className="text-gray-800 mt-2">{item.subheading}</p>
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </section>
 
 
@@ -183,71 +198,84 @@ const LandingMain = () => {
       </motion.div>
 
       {/* About Us Section */}
-      <section id="about-us" className=" relative py-24 ">
-        <div className="absolute inset-0 bg-[#B0C4DE] opacity-70"></div>
-        <div className="relative z-10 mx-auto max-w-screen-xl px-6 grid grid-cols-1 md:grid-cols-2 items-center">
-
-          {/* Text Section */}
-          <div>
-            <p className="text-lg font-semibold text-[#37547C] uppercase tracking-widest pb-3">
-              About Us
-            </p>
-            <h2 className="text-4xl font-bold text-[#37547C] mb-6">
+      <section id="about-us" className="relative">
+        <div
+          className="w-full h-[600px] flex items-center justify-end"
+          style={{
+            backgroundImage: `url(${banner_certicode_about_us})`,
+            backgroundSize: "100% 100%", 
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="w-1/2 p-10">
+            <h2 className="text-xl font-semibold text-white">About us</h2>
+            <h1 className="text-4xl font-bold text-white">
               Empowering Learners Through Knowledge
-            </h2>
-            <p className="text-gray-700 mb-6 font-semibold">
-              At Certicode, we provide expert-led seminars designed to help you
-              gain valuable skills and certifications. Our platform allows you
-              to learn at your own pace, anywhere and anytime.
+            </h1>
+            <p className="mt-4 text-lg text-white">
+              At Certicode, we provide expert-led seminars designed to help you gain
+              valuable skills and certifications. Our platform allows you to learn at
+              your own pace, anywhere and anytime.
             </p>
-            <p className="text-gray-700 mb-6 font-semibold">
-              Whether you’re looking to upskill, switch careers, or just expand
-              your knowledge, we are here to guide you with quality educational
-              content and recognized certifications.
+            <p className="mt-4 text-lg text-white">
+              Whether you’re looking to upskill, switch careers, or just expand your
+              knowledge, we are here to guide you with quality educational content and
+              recognized certifications.
             </p>
           </div>
-          {/* Image Section */}
-          <div className="ml-20">
-            <img
-              src={about_us}
-              className="rounded-2xl shadow-lg"
-              alt="About Us"
-            />
+
+          <div className="relative w-1/2 flex justify-end overflow-hidden pt-37 pr-25">
+            <img src={model_about_us} alt="About Us" className="h-[450px] object-contain scale-155" />
           </div>
         </div>
       </section>
+
+
       
       {/* Testimonials */}
       <LandingTestimonials />
    
 
       {/* Call to Action */}
-      <div className="relative" > 
-        <div className="absolute inset-0 bg-[#B0C4DE] opacity-70"></div>
+      <div className="relative">
+        <div
+          className="w-full h-[400px] flex items-center"
+          style={{
+            backgroundImage: `url(${banner_certicode_cta})`,
+            backgroundSize: "100% 100%",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+          }}
+        >
+          <div className="grid grid-cols-2 w-full px-10">
+            {/* Left Side Content */}
+            <div className="pl-15 pb-15">
+              <h2 className="text-4xl font-bold text-white mb-5 pt-10">
+                Innovate, Learn, and Lead <br /> with Certicode
+              </h2>
+              <p className="text-white mb-8">
+                “Unlock endless career opportunities with our seminars.”
+              </p>
+              <div className="pt-4">
+                <Link
+                  to="/signup"
+                  className="bg-white text-[#5882ED] px-8 py-4 rounded-lg"
+                >
+                  Sign Up Now
+                </Link>
+              </div>
+            </div>
 
-        <div className=" relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 p-12 md:p-24 items-center">
-          <div>
-            <img
-              src={landing_page}
-              className="w-full max-w-md rounded-2xl shadow-lg"
-              alt="Seminar"
-            />
-          </div>
-
-          <div>
-            <h2 className="text-3xl font-bold text-[#37547C] mb-4">
-              Start Learning Today!
-            </h2>
-            <p className="text-[#37547C] mb-6 font-bold">
-              Join our community of learners and get certified.
-            </p>
-
-            <Link
-              to="/signup"
-              className="bg-[#B0C4DE] text-[#37547C] px-8 py-4 rounded-md font-bold"
+            {/* Right Side Image (Inside Blue Oval) */}
+            <div
+              className="absolute top-1/2 right-20 transform -translate-y-20 -translate-x-12 flex justify-center items-center w-63 h-63 rounded-full bg-white overflow-hidden"
             >
-              Sign Up Now
-            </Link>
+              <img
+                src={banner_certicode_profile_cta}
+                className="w-80 h-80 object-contain pt-10 pr-3"
+              />
+            </div>
           </div>
         </div>
       </div>
