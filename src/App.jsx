@@ -4,6 +4,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import PaymentPage from "./pages/LandingPage/PaymentPage";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
@@ -149,7 +150,7 @@ export default function App() {
               )
             }
           />
-
+          <Route path="/payment" element={<PaymentPage />} />
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>

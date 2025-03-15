@@ -22,7 +22,10 @@ const SeminarPage = () => {
   const [isJoin, setIsJoin] = useState(false);
 
   const [showPaymentOptions, setShowPaymentOptions] = useState(false);
-  
+  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(null);
+  const [gcashOption, setGcashOption] = useState(null);
+  const [bpiOption, setBpiOption] = useState(null);
   const userExist = localStorage.getItem("auth_token");
   const user_id = localStorage.getItem("user_id");
 
@@ -70,73 +73,11 @@ const SeminarPage = () => {
     setShowPaymentOptions(true); // Show modal for payment options
   };
 
+  // const handlePayNow = async () => {};
 
-//   const handlePayNow = async () => {
-//     setIsJoin(true);
-  
-//     if (!seminar?.id || !user_id) {
-//         console.error("Missing seminar_id or participant_id", { seminarId: seminar?.id, userId: user_id });
-//         alert("Invalid seminar or user. Please try again.");
-//         setIsJoin(false);
-//         return;
-//     }
-
-//     const payload = {
-//       seminar_id: seminar.id, 
-//       participant_id: user_id, 
-//     };
-
-//     console.log("Sending payment payload:", payload); // Debugging step
-    
-//     try {
-//       const response = await post("/transactions/pay", payload);
-  
-//       console.log("Payment response:", response);
-      
-//       if (response.paymongo_link) {
-//         window.location.href = response.paymongo_link;
-//       } else {
-//         alert("Failed to generate payment link.");
-//       }
-//     } catch (error) {
-//       console.error("Payment error:", error.response?.data || error.message);
-//       alert("Payment failed. Please try again.");
-//     }
-  
-//     setIsJoin(false);
-//     setShowPaymentOptions(false);
-// };
-
-const handlePayNow = async () => {
-  setIsJoin(true);
-
-  if (!seminar?.id) {
-      console.error("Missing seminar_id");
-      alert("Invalid seminar. Please try again.");
-      setIsJoin(false);
-      return;
-  }
-
-  const payload = {
-      seminar_id: seminar.id,
+  const handlePayNow = () => {
+    setShowPaymentMethods(true); // Show GCash & BPI options when "Pay Now" is clicked
   };
-
-  try {
-      const response = await post("/transactions/pay", payload);
-
-      if (response.paymongo_link) {
-          window.location.href = response.paymongo_link;
-      } else {
-          alert("Failed to generate payment link.");
-      }
-  } catch (error) {
-      console.error("Payment error:", error.response?.data || error.message);
-      alert("Payment failed. Please try again.");
-  }
-
-  setIsJoin(false);
-  setShowPaymentOptions(false);
-};
 
   const handlePayLater = async () => {
     setIsJoin(true);
@@ -212,7 +153,9 @@ const handlePayNow = async () => {
             <h1 className="text-5xl font-bold text-gray-800 dark:text-gray-100">
               {seminar.name_of_seminar}
             </h1>
-            <p className="text-gray-600 mt-2 dark:text-gray-100">{seminar.description}</p>
+            <p className="text-gray-600 mt-2 dark:text-gray-100">
+              {seminar.description}
+            </p>
 
             <div className="mt-4">
               <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100">
@@ -248,7 +191,9 @@ const handlePayNow = async () => {
               <h3 className="text-xl font-bold text-gray-800 mt-4 dark:text-gray-100">
                 {seminar.speaker_name}
               </h3>
-              <p className="text-gray-600 mt-2 dark:text-gray-100">{seminar.about_the_speaker}</p>
+              <p className="text-gray-600 mt-2 dark:text-gray-100">
+                {seminar.about_the_speaker}
+              </p>
             </div>
             <div className="rounded-lg shadow-lg flex flex-col items-center text-center border border-gray-300 pb-5">
               <p className="text-green-700 font-semibold text-xl pt-3">
@@ -256,40 +201,172 @@ const handlePayNow = async () => {
               </p>
 
               <div>
-              <button
-                className="mt-4 bg-blue-600 text-white font-medium px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
-                onClick={handleJoin}
-                disabled={isJoin}
-              >
-                {isJoin ? "Processing..." : "Join"}
-              </button>
+                <button
+                  className="mt-4 bg-blue-600 text-white font-medium px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
+                  onClick={handleJoin}
+                  disabled={isJoin}
+                >
+                  {isJoin ? "Processing..." : "Join"}
+                </button>
 
-              {/* Payment Modal */}
-              {showPaymentOptions && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                  <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-                    <h2 className="text-lg font-semibold">Choose Payment Option</h2>
-                    <p className="text-gray-600">Would you like to pay now or later?</p>
-                    <div className="mt-4 space-x-4">
-                      <button
-                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
-                        onClick={handlePayNow}
-                        disabled={isJoin}
-                      >
-                        {isJoin ? "Processing..." : "Pay Now"}
-                      </button>
-                      <button
-                        className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
-                        onClick={handlePayLater}
-                        disabled={isJoin}
-                      >
-                        {isJoin ? "Joining..." : "Pay Later"}
-                      </button>
-                    </div>
+                {showPaymentOptions && (
+    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      <div className="bg-white p-8 rounded-xl shadow-lg text-center w-96">
+        <h2 className="text-xl font-semibold">Choose Payment Option</h2>
+        <p className="text-gray-600">Would you like to pay now or later?</p>
+
+        {/* Payment Selection */}
+        {showPaymentMethods && (
+          <div className="mt-4 text-left">
+            {/* GCash Option */}
+            <label className="flex items-center space-x-2">
+              <input
+                type="radio"
+                name="payment"
+                value="gcash"
+                checked={selectedPayment === "gcash"}
+                onChange={() => {
+                  setSelectedPayment("gcash");
+                  setGcashOption(null);
+                  setBpiOption(null);
+                }}
+              />
+              <span>GCash</span>
+            </label>
+
+            {/* Sub-options for GCash */}
+            {selectedPayment === "gcash" && (
+              <div className="ml-6 mt-2 text-left">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="gcashOption"
+                    value="qr"
+                    checked={gcashOption === "qr"}
+                    onChange={() => setGcashOption("qr")}
+                  />
+                  <span>QR Code</span>
+                </label>
+
+                {gcashOption === "qr" && (
+                  <div className="mt-2">
+                    <img
+                      src="/path/to/gcash-qr.png"
+                      alt="GCash QR Code"
+                      className="mx-auto w-48"
+                    />
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+
+                <label className="flex items-center space-x-2 mt-2">
+                  <input
+                    type="radio"
+                    name="gcashOption"
+                    value="account"
+                    checked={gcashOption === "account"}
+                    onChange={() => setGcashOption("account")}
+                  />
+                  <span>Account Number</span>
+                </label>
+
+                {gcashOption === "account" && (
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      placeholder="Enter GCash Account Number"
+                      className="w-full border rounded-lg p-2"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* BPI Option */}
+            <label className="flex items-center space-x-2 mt-2">
+              <input
+                type="radio"
+                name="payment"
+                value="bpi"
+                checked={selectedPayment === "bpi"}
+                onChange={() => {
+                  setSelectedPayment("bpi");
+                  setGcashOption(null);
+                  setBpiOption(null);
+                }}
+              />
+              <span>BPI</span>
+            </label>
+
+            {/* Sub-options for BPI */}
+            {selectedPayment === "bpi" && (
+              <div className="ml-6 mt-2 text-left">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="radio"
+                    name="bpiOption"
+                    value="qr"
+                    checked={bpiOption === "qr"}
+                    onChange={() => setBpiOption("qr")}
+                  />
+                  <span>QR Code</span>
+                </label>
+
+                {bpiOption === "qr" && (
+                  <div className="mt-2">
+                    <img
+                      src="/path/to/bpi-qr.png"
+                      alt="BPI QR Code"
+                      className="mx-auto w-48"
+                    />
+                  </div>
+                )}
+
+                <label className="flex items-center space-x-2 mt-2">
+                  <input
+                    type="radio"
+                    name="bpiOption"
+                    value="account"
+                    checked={bpiOption === "account"}
+                    onChange={() => setBpiOption("account")}
+                  />
+                  <span>Account Number</span>
+                </label>
+
+                {bpiOption === "account" && (
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      placeholder="Enter BPI Account Number"
+                      className="w-full border rounded-lg p-2"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Pay Now and Pay Later Buttons */}
+        <div className="mt-6 space-x-2">
+          <button
+            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition"
+            onClick={handlePayNow}
+            disabled={isJoin}
+          >
+            {isJoin ? "Processing..." : "Pay Now"}
+          </button>
+          <button
+            className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition"
+            onClick={handlePayLater}
+            disabled={isJoin}
+          >
+            {isJoin ? "Joining..." : "Pay Later"}
+          </button>
+        </div>
+      </div>
+    </div>
+  )}
+              </div>
 
               {showForm && (
                 <GuestForm isFormOpen={showForm} setShowForm={setShowForm} />
