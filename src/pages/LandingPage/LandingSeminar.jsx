@@ -6,6 +6,7 @@ import LandingHeader from "./LandingHeader";
 import BeatLoader from "../../components/loading/loading";
 import { ChevronLeftIcon } from "../../icons";
 import useApiService from "../../api/useApiService";
+import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 
 const SeminarPage = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const SeminarPage = () => {
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   let isAuth = localStorage.getItem("auth_token");
+  let role = localStorage.getItem("role");
 
   useEffect(() => {
     const fetchSeminar = async () => {
@@ -60,8 +62,8 @@ const SeminarPage = () => {
 
   return (
     <>
-      <div className={isAuth ? "" : "relative pt-20"}>
-        {isAuth ? (
+      <div className={isAuth && role === 'admin' ? "" : "p-4"}>
+        {isAuth && role === 'admin' ? (
           <>
             <div className="w-full flex justify-between">
               <Link
@@ -92,7 +94,7 @@ const SeminarPage = () => {
             </div>
           </>
         ) : (
-          <LandingHeader />
+          <PageBreadcrumb pageTitle={seminar.name_of_seminar} to="/" />
         )}
         <div className="my-2 mx-2">
           <img

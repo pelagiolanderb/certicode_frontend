@@ -7,25 +7,34 @@ export default function SocialAuthHandler() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
+  console.log("nag true");
+
   useEffect(() => {
     const token = searchParams.get("token");
     if (token) {
       try {
         const currentUser = async () => {
-          const response = await axios.get("http://localhost:8000/api/auth/me", {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-            withCredentials: true,
-          });
+          const response = await axios.get(
+            "http://localhost:8000/api/auth/me",
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+              withCredentials: true,
+            }
+          );
           const user = response.data[0].id;
-          localStorage.setItem("user", user);
-         
+          localStorage.setItem("user_id", user);
+          localStorage.setItem("role", response.data[0].role);
+          localStorage.setItem(
+            "current_user",
+            JSON.stringify({ users: response.data[0] })
+          );
         };
         currentUser();
         localStorage.setItem("auth_token", token);
-        
-        navigate("/dashboard");
+
+        navigate("/");
       } catch (error) {
         console.error("Error storing token:", error);
         window.location.href = "/";
@@ -36,7 +45,6 @@ export default function SocialAuthHandler() {
     }
   }, [searchParams, navigate]);
 
-  
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <BeatLoader />

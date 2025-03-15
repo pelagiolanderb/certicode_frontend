@@ -25,7 +25,8 @@ const GuestForm = ({ isFormOpen, setShowForm }) => {
         email: email,
       };
 
-      await post('/create-guest', newGuest);
+      const response = await post('/create-guest', newGuest);
+      await post("/add-participant", { seminar_id: id, guest_id: response.guest_id });
       alert('You successfully joined to this seminar.');
       setShowForm(false);
     } catch (error) {

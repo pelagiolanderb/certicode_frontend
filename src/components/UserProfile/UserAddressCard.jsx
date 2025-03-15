@@ -35,7 +35,7 @@ export default function UserAddressCard(props) {
                   City/State
                 </p>
                 <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                  {props.city_state}
+                  {props.city_state ? props.city_state : 'N/A'}
                 </p>
               </div>
 

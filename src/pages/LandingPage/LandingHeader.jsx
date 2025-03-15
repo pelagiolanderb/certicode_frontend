@@ -45,7 +45,13 @@ const LandingHeader = () => {
           <Link to="/seminar-list" className="text-white hover:text-gray-300">
             Seminars
           </Link>
-          {token && role === "user" ? (
+          {token && role === "admin" ? (
+            <div className="space-x-4">
+              <Link to="/dashboard" className="text-white hover:text-gray-300">
+                Back to Dashboard
+              </Link>
+            </div>
+          ) : token && role === "user" ? (
             <UserDropdown />
           ) : (
             <div className="space-x-4">

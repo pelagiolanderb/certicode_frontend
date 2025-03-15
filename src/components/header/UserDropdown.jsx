@@ -62,11 +62,17 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        <span className="block mr-1 font-medium text-theme-sm">
-          {current_user?.first_name ? current_user.first_name : "Admin"}
+        <span className={`block mr-1 font-medium ${role === 'admin' ? 'text-gray-500' : 'text-gray-200'}`}>
+          {role === "user"
+            ? current_user.first_name
+              ? current_user.first_name
+              : "User"
+            : current_user?.first_name
+            ? current_user.first_name
+            : "Admin"}
         </span>
         <svg
-          className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
+          className={`stroke-gray-100 dark:stroke-gray-400 transition-transform duration-200 ${
             isOpen ? "rotate-180" : ""
           }`}
           width="18"
@@ -77,7 +83,7 @@ export default function UserDropdown() {
         >
           <path
             d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
-            stroke="currentColor"
+            stroke={role === 'admin' && 'currentColor'}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -97,7 +103,13 @@ export default function UserDropdown() {
           <>
             <div>
               <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-                {`${current_user?.first_name} ${current_user?.last_name}`}
+                {role === "user"
+                  ? current_user.first_name && current_user.last_name
+                    ? `${current_user.first_name} ${current_user.last_name}`
+                    : "User"
+                  : current_user.first_name && current_user.last_name
+                  ? `${current_user.first_name} ${current_user.last_name}`
+                  : "Admin"}
               </span>
               <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
                 {current_user?.users?.email}
@@ -183,7 +195,9 @@ export default function UserDropdown() {
         )}
         <button
           // to="/signin"
-          className={`flex items-center gap-3 px-3 py-2 ${token && role === "user" && 'mt-3'} font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300`}
+          className={`flex items-center gap-3 px-3 py-2 ${
+            token && role === "user" && "mt-3"
+          } font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300`}
           onClick={handleLogout}
         >
           <svg

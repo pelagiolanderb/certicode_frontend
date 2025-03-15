@@ -49,7 +49,7 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
-          <Route element={<AppLayout />}>
+          <Route element={<ProtectedRoute component={AppLayout} />}>
             <Route
               index
               path="/dashboard"
@@ -115,7 +115,7 @@ export default function App() {
 
           <Route
             path="/social-auth-handler"
-            element={<UserProtectedRoute component={SocialAuthHandler} />}
+            element={<SocialAuthHandler />}
           />
 
           <Route

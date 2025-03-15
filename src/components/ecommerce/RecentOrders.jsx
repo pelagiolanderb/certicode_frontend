@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
-import img1 from "../../assets/images/house_3.jpg";
 
 export default function RecentSeminars() {
   const { get, loading, error } = useApiService();
@@ -58,11 +57,11 @@ export default function RecentSeminars() {
                   <TableRow key={seminar.id}>
                     <TableCell className="py-3 flex items-center gap-3">
                       <div className="h-[50px] w-[50px] overflow-hidden rounded-md">
-                        <img src={img1} className="h-[50px] w-[50px]" alt={seminar.name_of_seminar} />
+                        <img src={`${import.meta.env.VITE_APP_BACKEND_URL}/storage/${seminar['seminar_image']}`} className="h-[50px] w-[50px]" alt={seminar.name_of_seminar} />
                       </div>
                       <div>
                         <p className="font-medium text-gray-800 dark:text-white/90">{seminar.name_of_seminar}</p>
-                        <span className="text-gray-500 dark:text-gray-400">{seminar.speaker_name}</span>
+                        <span className="text-gray-500 dark:text-gray-400">{seminar['speaker_name']}</span>
                       </div>
                     </TableCell>
                     <TableCell className="py-3 text-gray-500 dark:text-gray-400">{seminar.date}</TableCell>

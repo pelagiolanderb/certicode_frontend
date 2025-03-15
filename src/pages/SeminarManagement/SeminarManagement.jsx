@@ -54,6 +54,19 @@ const SeminarManagement = () => {
     }
   };
 
+  const SeminarDate = ({ isoDate }) => {
+    const formattedDate = new Date(isoDate).toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  
+    return formattedDate;
+  };
+
   if (error) return <p>{error}</p>;
 
   return loading ? (
@@ -100,6 +113,9 @@ const SeminarManagement = () => {
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
             <tr>
+            <th scope="col" className="px-6 py-3 uppercase">
+                created at
+              </th>
               <th scope="col" className="px-6 py-3 uppercase">
                 Name of Seminar
               </th>
@@ -107,7 +123,7 @@ const SeminarManagement = () => {
                 topics
               </th>
               <th scope="col" className="px-6 py-3 uppercase">
-                date
+                start on
               </th>
               <th scope="col" className="px-6 py-3 uppercase">
                 location
@@ -129,9 +145,10 @@ const SeminarManagement = () => {
                 className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600"
                 key={seminar.id}
               >
+                <td className="px-6 py-4">{<SeminarDate isoDate={seminar.created_at}/>}</td>
                 <td className="px-6 py-4">{seminar.name_of_seminar}</td>
                 <td className="px-6 py-4">{seminar.topics}</td>
-                <td className="px-6 py-4">{seminar.date}</td>
+                <td className="px-6 py-4">{<SeminarDate isoDate={seminar.date}/>}</td>
                 <td className="px-6 py-4">{seminar.location}</td>
                 <td className="px-6 py-4">{seminar.speaker_name}</td>
                 <td className="px-6 py-4">{seminar.organization_name}</td>
