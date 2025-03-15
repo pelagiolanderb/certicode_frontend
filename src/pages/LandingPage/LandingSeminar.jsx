@@ -20,6 +20,12 @@ const SeminarPage = () => {
   const [showForm, setShowForm] = useState(false);
   const { loading, error, get, post } = useApiService();
   const [isJoin, setIsJoin] = useState(false);
+
+  const [showPaymentOptions, setShowPaymentOptions] = useState(false);
+  
+  const userExist = localStorage.getItem("auth_token");
+  const user_id = localStorage.getItem("user_id");
+
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   let isAuth = localStorage.getItem("auth_token");
@@ -37,24 +43,87 @@ const SeminarPage = () => {
     fetchSeminar();
   }, []);
 
-  const handleJoin = async () => {
-    setIsJoin(true);
-    let userExist = localStorage.getItem("auth_token");
-    let user_id = localStorage.getItem("user_id");
+  // const handleJoin = async () => {
+  //   setIsJoin(true);
+  //   let userExist = localStorage.getItem("auth_token");
+  //   let user_id = localStorage.getItem("user_id");
 
+  //   try {
+  //     if (userExist) {
+  //       await post('/add-participant', { seminar_id: id,  user_id});
+  //       alert("Successfully joined the seminar!");
+  //     } else {
+  //       setShowForm(true);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error joining seminar:", error);
+  //     alert("Error joining seminar.");
+  //   } finally {
+  //     setIsJoin(false);
+  //   }
+  // };
+
+  const handleJoin = () => {
+    if (!userExist) {
+      alert("Please log in to join the seminar.");
+      return;
+    }
+    setShowPaymentOptions(true); // Show modal for payment options
+  };
+
+
+  const handlePayNow = async () => {
+    setIsJoin(true);
+  
+    if (!seminar?.id || !user_id) {
+        console.error("Missing seminar_id or participant_id", { seminarId: seminar?.id, userId: user_id });
+        alert("Invalid seminar or user. Please try again.");
+        setIsJoin(false);
+        return;
+    }
+
+    const payload = {
+      seminar_id: seminar.id, 
+      participant_id: user_id, 
+    };
+
+    console.log("Sending payment payload:", payload); // Debugging step
+    
     try {
-      if (userExist) {
-        await post('/add-participant', { seminar_id: id,  user_id});
-        alert("Successfully joined the seminar!");
+      const response = await post("/transactions/pay", payload);
+  
+      console.log("Payment response:", response);
+      
+      if (response.paymongo_link) {
+        window.location.href = response.paymongo_link;
       } else {
-        setShowForm(true);
+        alert("Failed to generate payment link.");
       }
+    } catch (error) {
+      console.error("Payment error:", error.response?.data || error.message);
+      alert("Payment failed. Please try again.");
+    }
+  
+    setIsJoin(false);
+    setShowPaymentOptions(false);
+};
+
+  const handlePayLater = async () => {
+    setIsJoin(true);
+    try {
+      await post("/add-participant", {
+        seminar_id: seminar?.id,
+        user_id,
+        isPaid: 0, // Unpaid but joined
+      });
+
+      alert("You have successfully joined the seminar. Please pay later.");
     } catch (error) {
       console.error("Error joining seminar:", error);
       alert("Error joining seminar.");
-    } finally {
-      setIsJoin(false);
     }
+    setIsJoin(false);
+    setShowPaymentOptions(false);
   };
 
   const handleFormClose = () => {
@@ -156,12 +225,41 @@ const SeminarPage = () => {
                 &#8369; {seminar.price}
               </p>
 
+              <div>
               <button
                 className="mt-4 bg-blue-600 text-white font-medium px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
                 onClick={handleJoin}
+                disabled={isJoin}
               >
-                {loading ? "Joining..." : "Join"}
+                {isJoin ? "Processing..." : "Join"}
               </button>
+
+              {/* Payment Modal */}
+              {showPaymentOptions && (
+                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                  <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+                    <h2 className="text-lg font-semibold">Choose Payment Option</h2>
+                    <p className="text-gray-600">Would you like to pay now or later?</p>
+                    <div className="mt-4 space-x-4">
+                      <button
+                        className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition"
+                        onClick={handlePayNow}
+                        disabled={isJoin}
+                      >
+                        {isJoin ? "Processing..." : "Pay Now"}
+                      </button>
+                      <button
+                        className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition"
+                        onClick={handlePayLater}
+                        disabled={isJoin}
+                      >
+                        {isJoin ? "Joining..." : "Pay Later"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
               {showForm && (
                 <GuestForm isFormOpen={showForm} setShowForm={setShowForm} />
