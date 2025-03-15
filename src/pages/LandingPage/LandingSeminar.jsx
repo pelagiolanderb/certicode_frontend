@@ -65,47 +65,77 @@ const SeminarPage = () => {
 
   const handleJoin = () => {
     if (!userExist) {
-      alert("Please log in to join the seminar.");
-      return;
+      setShowForm(true);
     }
     setShowPaymentOptions(true); // Show modal for payment options
   };
 
 
-  const handlePayNow = async () => {
-    setIsJoin(true);
+//   const handlePayNow = async () => {
+//     setIsJoin(true);
   
-    if (!seminar?.id || !user_id) {
-        console.error("Missing seminar_id or participant_id", { seminarId: seminar?.id, userId: user_id });
-        alert("Invalid seminar or user. Please try again.");
-        setIsJoin(false);
-        return;
-    }
+//     if (!seminar?.id || !user_id) {
+//         console.error("Missing seminar_id or participant_id", { seminarId: seminar?.id, userId: user_id });
+//         alert("Invalid seminar or user. Please try again.");
+//         setIsJoin(false);
+//         return;
+//     }
 
-    const payload = {
-      seminar_id: seminar.id, 
-      participant_id: user_id, 
-    };
+//     const payload = {
+//       seminar_id: seminar.id, 
+//       participant_id: user_id, 
+//     };
 
-    console.log("Sending payment payload:", payload); // Debugging step
+//     console.log("Sending payment payload:", payload); // Debugging step
     
-    try {
-      const response = await post("/transactions/pay", payload);
+//     try {
+//       const response = await post("/transactions/pay", payload);
   
-      console.log("Payment response:", response);
+//       console.log("Payment response:", response);
       
+//       if (response.paymongo_link) {
+//         window.location.href = response.paymongo_link;
+//       } else {
+//         alert("Failed to generate payment link.");
+//       }
+//     } catch (error) {
+//       console.error("Payment error:", error.response?.data || error.message);
+//       alert("Payment failed. Please try again.");
+//     }
+  
+//     setIsJoin(false);
+//     setShowPaymentOptions(false);
+// };
+
+const handlePayNow = async () => {
+  setIsJoin(true);
+
+  if (!seminar?.id) {
+      console.error("Missing seminar_id");
+      alert("Invalid seminar. Please try again.");
+      setIsJoin(false);
+      return;
+  }
+
+  const payload = {
+      seminar_id: seminar.id,
+  };
+
+  try {
+      const response = await post("/transactions/pay", payload);
+
       if (response.paymongo_link) {
-        window.location.href = response.paymongo_link;
+          window.location.href = response.paymongo_link;
       } else {
-        alert("Failed to generate payment link.");
+          alert("Failed to generate payment link.");
       }
-    } catch (error) {
+  } catch (error) {
       console.error("Payment error:", error.response?.data || error.message);
       alert("Payment failed. Please try again.");
-    }
-  
-    setIsJoin(false);
-    setShowPaymentOptions(false);
+  }
+
+  setIsJoin(false);
+  setShowPaymentOptions(false);
 };
 
   const handlePayLater = async () => {
