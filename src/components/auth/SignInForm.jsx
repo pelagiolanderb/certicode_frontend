@@ -7,6 +7,7 @@ import Checkbox from "../form/input/Checkbox";
 import Button from "../ui/button/Button";
 import axios from "axios";
 import InputError from "../../pages/UiElements/InputError";
+import useApiService from "../../api/useApiService";
 
 const GOOGLE_AUTH_URL = `http://127.0.0.1:8000/api/auth/redirection/google`;
 const Facebook_AUTH_URL =
@@ -20,15 +21,13 @@ const handleGoogleLogin = ($url) => (e) => {
 
 const handleFacebookLogin = ($url) => (e) => {
   e.preventDefault();
-  console.log("Redirecting to Facebook login");
   window.location.href = $url;
 };
 
 export default function SignInForm() {
-  const API_URL = import.meta.env.VITE_REACT_APP_API_URL;
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -37,93 +36,175 @@ export default function SignInForm() {
   const [errors, setErrors] = useState({
     email: "",
     password: "",
-    isAuthorize: false,
+    isUnauthorized: "",
   });
+
+  const { loading, get, post } = useApiService();
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("auth_token");
-    if (token) {
-      navigate("/");
-    }
-  }, [navigate]);
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
     setErrors({
       email: "",
       password: "",
     });
 
-    try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
-        withCredentials: true,
-      });
-      const response = await axios.post(
-        "http://localhost:8000/api/auth/login",
-        {
-          email: formData.email,
-          password: formData.password,
-        },
-        {
-          headers: {
-            accept: "application/json",
-          },
-          withCredentials: true,
-          withXSRFToken: true,
-        }
-      );
-      if (response.status === 200) {
-        if (response.data && response.data.isVerified) {
-          localStorage.setItem("auth_token", response.data.access_token);
-          const user = await axios.get("http://localhost:8000/api/auth/me", {
-            headers: {
-              Authorization: "Bearer " + response.data.access_token,
-            },
-            withCredentials: true,
-          });
-          localStorage.setItem('role', user.data[0].role);
-          localStorage.setItem("user_id", JSON.stringify(user.data[0].id));
-          localStorage.setItem("current_user", JSON.stringify(response.data.current_user));
+    Object.keys(formData).forEach((key) => {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(formData.email) && formData.email)
+        setErrors((prev) => ({
+          ...prev,
+          email: "Email is not valid.",
+        }));
+      setErrors((prev) => ({
+        ...prev,
+        [key]: !formData[key] && "required",
+      }));
+    });
 
-          if (user.data[0].role && user.data[0].role === 'user') navigate("/");
-          else navigate('/dashboard');
-        } else {
-          setErrors((prevErrors) => ({
-            ...prevErrors,
-            email: "Please verify your email first.",
-          }));
+    if (formData.email && formData.password) {
+      try {
+        await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+          withCredentials: true,
+        });
+
+        const data = await post("/auth/login", formData);
+
+        if (data) {
+          console.log(data);
+          if (data.isVerified) {
+            localStorage.setItem("auth_token", data.access_token);
+            localStorage.setItem("role", data.current_user.users?.role);
+            localStorage.setItem("user_id", data.current_user.users?.id);
+            localStorage.setItem(
+              "current_user",
+              JSON.stringify(data.current_user)
+            );
+
+            let role = data.current_user?.users?.role;
+
+            navigate(role === "user" ? "/" : "/dashboard");
+          } else {
+            setErrors((prev) => ({
+              ...prev,
+              email: "Please verify your email.",
+            }));
+          }
+        }
+      } catch (error) {
+        switch (error.status) {
+          case 401:
+            setErrors((prev) => ({
+              ...prev,
+              isUnauthorized:
+                "This credentials is unauthorized, please double check your email or password.",
+            }));
+            break;
+          case 422:
+            console.log(error);
+            break;
+          default:
+            break;
         }
       }
-    } catch (error) {
-      console.error("Error during user login:", error);
-      if (error.status === 401) {
-        console.log("nag true");
-        setErrors({ ...errors, isAuthorize: true });
-      }
-      if (error.response && error.response.status === 422) {
-        const backendErrors = error.response.data.errors;
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          email: backendErrors.email ? backendErrors.email[0] : "",
-          password: backendErrors.password ? backendErrors.password[0] : "",
-        }));
-      } else if (error.response && error.response.status === 401) {
-        const errorMessage =
-          error.response.data.message || "Invalid credentials";
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          email: errorMessage,
-          // password: errorMessage,
-        }));
-      }
-    } finally {
-      setLoading(false);
     }
   };
+
+  // useEffect(() => {
+  //   const token = localStorage.getItem("auth_token");
+  //   if (token) {
+  //     console.log("nag true");
+  //     navigate("/");
+  //   }
+  // }, [navigate]);
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   setErrors({
+  //     email: "",
+  //     password: "",
+  //   });
+
+  //   try {
+  //     await axios.get("http://localhost:8000/sanctum/csrf-cookie", {
+  //       withCredentials: true,
+  //     });
+
+  //     const response = await axios.post(
+  //       "http://localhost:8000/api/auth/login",
+  //       {
+  //         email: formData.email,
+  //         password: formData.password,
+  //       },
+  //       {
+  //         headers: {
+  //           accept: "application/json",
+  //         },
+  //         withCredentials: true,
+  //         withXSRFToken: true,
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       console.log(response.data);
+  //       if (response.data && response.data.isVerified) {
+  //         const user = await axios.get("http://localhost:8000/api/auth/me", {
+  //           headers: {
+  //             Authorization: "Bearer " + response.data.access_token,
+  //           },
+  //           withCredentials: true,
+  //         });
+  //         localStorage.setItem("auth_token", response.data.access_token);
+  //         localStorage.setItem("role", user.data[0].role);
+  //         localStorage.setItem("user_id", JSON.stringify(user.data[0].id));
+  //         localStorage.setItem(
+  //           "current_user",
+  //           JSON.stringify(response.data.current_user)
+  //         );
+
+  //         if (user.data[0].role && user.data[0].role === "user") navigate("/");
+  //         else navigate("/dashboard");
+  //       } else {
+  //         setErrors((prevErrors) => ({
+  //           ...prevErrors,
+  //           email: "Please verify your email first.",
+  //         }));
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during user login:", error);
+  //     if (error.status === 401) {
+  //       setErrors({ ...errors, isUnauthorized: true });
+  //     }
+  //     if (error.response && error.response.status === 422) {
+  //       const backendErrors = error.response.data.errors;
+  //       setErrors((prevErrors) => ({
+  //         ...prevErrors,
+  //         email: backendErrors.email ? backendErrors.email[0] : "",
+  //         password: backendErrors.password ? backendErrors.password[0] : "",
+  //       }));
+  //     } else if (error.response && error.response.status === 401) {
+  //       const errorMessage =
+  //         error.response.data.message || "Invalid credentials";
+  //       setErrors((prevErrors) => ({
+  //         ...prevErrors,
+  //         email: errorMessage,
+  //         // password: errorMessage,
+  //       }));
+  //     }
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <div className="flex flex-col flex-1">
@@ -206,23 +287,40 @@ export default function SignInForm() {
             </div>
             <form>
               <div className="space-y-6">
+                {errors.isUnauthorized && (
+                  <span className="text-red-500 text-xs">
+                    {errors.isUnauthorized}
+                  </span>
+                )}
                 <div>
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email">
+                    Email{" "}
+                    {errors.email && (
+                      <span className="text-red-500 ml-2 capitalize">
+                        ({errors.email})
+                      </span>
+                    )}
+                  </Label>
                   <Input
                     id="email"
                     type="email"
                     name="email"
+                    className={`${
+                      errors.email && "border-red-600 dark:border-red-600"
+                    }`}
                     placeholder="JohnDoe@gmail.com"
                     value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
+                    onChange={handleChange}
                   />
-                  <InputError message={errors.email} />
                 </div>
                 <div>
                   <Label>
-                    Password <span className="text-error-500">*</span>{" "}
+                    Password{" "}
+                    {errors.password && (
+                      <span className="text-red-500 ml-2 capitalize">
+                        ({errors.password})
+                      </span>
+                    )}
                   </Label>
                   <div className="relative">
                     <Input
@@ -230,16 +328,15 @@ export default function SignInForm() {
                       placeholder="Enter your password"
                       id="password"
                       name="password"
-                      className={`${errors.isAuthorize && "border-red-600"}`}
+                      className={`${
+                        errors.password && "border-red-600 dark:border-red-600"
+                      }`}
                       value={formData.password}
-                      onChange={(e) =>
-                        setFormData({ ...formData, password: e.target.value })
-                      }
+                      onChange={handleChange}
                     />
-                    <InputError message={errors.password} />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
+                      className="absolute z-30 cursor-pointer right-4 top-1/4"
                     >
                       {showPassword ? (
                         <EyeIcon className="fill-gray-500 dark:fill-gray-400 size-5" />

@@ -37,12 +37,9 @@ import SocialAuthHandler from "./pages/AuthPages/SocialAuthHandler";
 import ForgotPassword from "./pages/AuthPages/ForgotPassword";
 import ResetPassword from "./pages/AuthPages/ResetPassword";
 import AdminSignIn from "./pages/AuthPages/AdminSignIn";
-import UserProtectedRoute from "./route/UserProtectedRoute";
 import UserManagement from "./pages/UserManagement/UserManagement";
 
 export default function App() {
-  const token = localStorage.getItem("auth_token");
-  const role = localStorage.getItem("role");
   return (
     <>
       <Router>
@@ -83,47 +80,36 @@ export default function App() {
 
           <Route
             path="/verify-email"
-            element={
-              token && role === 'user' ? <Navigate to="/" replace /> : <VerifyEmail />
-            }
+            element={<ProtectedRoute component={VerifyEmail} />}
           />
           <Route
             path="/verify-handler"
-            element={
-              token ? (
-                <Navigate to="/" replace />
-              ) : (
-                <VerificationHandler />
-              )
-            }
+            element={<ProtectedRoute component={VerificationHandler} />}
           />
 
           <Route
             path="/user-profile"
-            element={<UserProtectedRoute component={UserProfiles} />}
+            element={<ProtectedRoute component={UserProfiles} />}
           />
 
           <Route
             path="/forgot-password"
-            element={<UserProtectedRoute component={ForgotPassword} />}
+            element={<ProtectedRoute component={ForgotPassword} />}
           />
 
           <Route
             path="/password-reset/:token"
-            element={<UserProtectedRoute component={ResetPassword} />}
+            element={<ProtectedRoute component={ResetPassword} />}
           />
 
-          <Route
-            path="/social-auth-handler"
-            element={<SocialAuthHandler />}
-          />
+          <Route path="/social-auth-handler" element={<SocialAuthHandler />} />
 
-          <Route
-            path="/@dmin-signin"
-            element={
-              token ? <Navigate to="/dashboard" replace /> : <AdminSignIn />
-            }
-          />
+          {/* <Route
+              path="/@dmin-signin"
+              element={
+                token ? <Navigate to="/dashboard" replace /> : <AdminSignIn />
+              }
+            /> */}
 
           <Route path="/" element={<LandingPage />} />
           <Route path="/seminar-list" element={<LandingSeminarList />} />
@@ -131,28 +117,11 @@ export default function App() {
           {/* Auth Layout */}
           <Route
             path="/signin"
-            element={
-              !token ? (
-                <SignIn />
-              ) : token && role === "user" ? (
-                <Navigate to="/" />
-              ) : (
-                <Navigate to="/dashboard" />
-              )
-            }
+            element={<ProtectedRoute component={SignIn} />}
           />
-
           <Route
             path="/signup"
-            element={
-              !token ? (
-                <SignUp />
-              ) : token && role === "user" ? (
-                <Navigate to="/" />
-              ) : (
-                <Navigate to="/dashboard" />
-              )
-            }
+            element={<ProtectedRoute component={SignUp} />}
           />
 
           {/* Fallback Route */}

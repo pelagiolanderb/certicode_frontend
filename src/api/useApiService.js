@@ -3,9 +3,6 @@ import { useState } from 'react';
 
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_APP_BACKEND_URL}/api`,
-  headers: {
-    Accept: "application/json",
-  },
   withCredentials: true,
   withXSRFToken: true,
 });
@@ -32,7 +29,7 @@ const useApiService = () => {
   return {
     loading,
     error,
-    get: (endpoint, params = {}) => handleRequest(() => api.get(endpoint, { params })),
+    get: (endpoint, params = {}) => handleRequest(() => api.get(endpoint, params)),
     post: (endpoint, data) => handleRequest(() => api.post(endpoint, data)),
     put: (endpoint, data) => handleRequest(() => api.put(endpoint, data)),
     remove: (endpoint) => handleRequest(() => api.delete(endpoint)),
