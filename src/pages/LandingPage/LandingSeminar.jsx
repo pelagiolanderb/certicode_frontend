@@ -7,6 +7,7 @@ import BeatLoader from "../../components/loading/loading";
 import { ChevronLeftIcon } from "../../icons";
 import useApiService from "../../api/useApiService";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
+import PaymentForm from "../Forms/PaymentForm";
 
 const SeminarPage = () => {
   const { id } = useParams();
@@ -14,7 +15,9 @@ const SeminarPage = () => {
   const [showForm, setShowForm] = useState(false);
   const { loading, error, get, post } = useApiService();
   const [isJoin, setIsJoin] = useState(false);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
+  
 
   let isAuth = localStorage.getItem("auth_token");
   let role = localStorage.getItem("role");
@@ -23,7 +26,14 @@ const SeminarPage = () => {
     const fetchSeminar = async () => {
       try {
         const data = await get(`/seminar/${id}`);
-        setSeminar(data.seminar);
+        // Add test price to seminar data
+        setSeminar(
+          {
+          ...data.seminar,
+          price: 0 
+        }
+        // data.seminar
+      );
       } catch (error) {
         console.log("Error fetching data", error);
       }
@@ -39,9 +49,17 @@ const SeminarPage = () => {
 
     try {
       if (userExist) {
-        await post("/add-participant", { seminar_id: id, user_id });
-        alert("Successfully joined the seminar!");
+        // For logged in users
+        if (seminar.price > 0) {
+          // Show payment form directly for paid seminars
+          setShowPaymentForm(true);
+        } else {
+          await post("/add-participant", { seminar_id: id, user_id, payment_status: 'completed' });
+          // For free seminars
+          alert("Successfully joined the seminar!");
+        }
       } else {
+        // For guests - show guest registration form first
         setShowForm(true);
       }
     } catch (error) {
@@ -163,11 +181,29 @@ const SeminarPage = () => {
                 className="mt-4 bg-blue-600 text-white font-medium px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
                 onClick={handleJoin}
               >
-                {loading ? "Joining..." : "Join"}
+                {loading ? "Joining..." : seminar.price > 0 ? "Register Now" : "Join now for free"}
               </button>
 
               {showForm && (
-                <GuestForm isFormOpen={showForm} setShowForm={setShowForm} />
+                <GuestForm 
+                  isFormOpen={showForm} 
+                  setShowForm={setShowForm}
+                  price={seminar.price}
+                />
+              )}
+
+              {showPaymentForm && (
+                <PaymentForm
+                  setShowForm={setShowPaymentForm}
+                  guestId={null}
+                  userId={localStorage.getItem("user_id")}
+                  seminarId={id}
+                  price={seminar.price}
+                  onSuccess={() => {
+                    setShowPaymentForm(true);
+                    alert("Successfully joined the seminar!");
+                  }}
+                />
               )}
             </div>
           </div>
