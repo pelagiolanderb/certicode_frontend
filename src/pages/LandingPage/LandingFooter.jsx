@@ -64,22 +64,22 @@ const LandingFooter = () => {
           <div className="font-display text-white uppercase text-sm tracking-widest mb-6">
             Stay Connected
           </div>
-          <a href="https://www.facebook.com/CertiCode" className="block mb-4 text-xs">
+          <a href="https://www.facebook.com/CertiCode" className="block mb-4 text-xs" target="_blank">
             Facebook
           </a>
-          <a href="https://x.com/CertiCode?s=09" className="block mb-4 text-xs">
+          <a href="https://x.com/CertiCode?s=09" className="block mb-4 text-xs" target="_blank">
             X
           </a>
-          <a href="https://www.linkedin.com/in/certi-code-501785355/?originalSubdomain=ph" className="block mb-4 text-xs">
+          <a href="https://www.linkedin.com/in/certi-code-501785355/?originalSubdomain=ph" className="block mb-4 text-xs" target="_blank">
             LinkedIn
           </a>
-          <a href="https://www.instagram.com/certi_code/" className="block mb-4 text-xs">
+          <a href="https://www.instagram.com/certi_code/" className="block mb-4 text-xs" target="_blank">
             Instagrram
           </a>
         </div>
 
         <div>
-          <h2 className="font-display text-white uppercase text-sm tracking-widest mb-6">
+          <h2 className="font-display text-white uppercase text-sm tracking-widest mb-6" >
             Contact Us
           </h2>
           <div className="grid md:grid-cols-2 gap-8 text-left">

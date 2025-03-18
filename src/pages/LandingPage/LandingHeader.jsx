@@ -29,7 +29,7 @@ const LandingHeader = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 ${navColor} transition-all duration-2000 `}
+      className={`fixed top-0 left-0 w-full z-50 ${navColor} transition-all duration-1000 `}
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden">
