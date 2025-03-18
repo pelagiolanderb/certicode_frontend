@@ -6,7 +6,7 @@ import attend from "../../assets/images/attend.jpg";
 
 import BeatLoader from "../../components/loading/loading";
 import LandingTestimonials from "./LandingTestimonials";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import model_about_us from "../../assets/images/model_about_us.png"
 import seminar_model_image from "../../assets/images/seminar_model_image.png"
 import training_model_image from "../../assets/images/training_model_image.png"
@@ -60,6 +60,11 @@ const LandingMain = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
   };
 
+  const { scrollYProgress } = useScroll();
+
+  // Hero title moves up while scrolling
+  const scrollUpAnimation = useTransform(scrollYProgress, [0, 1], [100, -100]);
+
 
 
   return (
@@ -71,32 +76,72 @@ const LandingMain = () => {
         {/* Left Side - Image & Graphics */}
         <div className="relative flex-1/2 h-full w-full justify-center items-center">
           {/* Top Left Triangle */}
-          <img src={top_page} className="absolute top-0 right-0 w-155 h-75"/>
+          <motion.img 
+          src={top_page} className="absolute top-0 right-0 w-155 h-75"
+          initial={{ y: -100, opacity:0}}  // No opacity change
+          animate={{ y: 0, opacity:1 }}
+          transition={{ duration: .5, delay:.5 }}
+          />
 
           {/* Background Image */}
-          <img src={background_page} className="absolute top-0 left-0 h-full w-auto]" />
+          <motion.img 
+          src={background_page} className="absolute top-0 left-0 h-full w-auto]" 
+          initial={{ x: -100, opacity:0 }}  // No opacity change
+          animate={{ x: 0, opacity:1 }}
+          transition={{ duration: .5, delay:.5 }}
+          />
 
           {/* Banner Model (People Holding Laptop) */}
-          <img src={banner_model} className="absolute bottom-0 z-20 h-auto w-auto max-h-[90%]" />
+          <motion.img 
+          src={banner_model} className="absolute bottom-0 z-20 h-auto w-auto max-h-[90%]" 
+          initial={{ x: -100, opacity:0 }}  // No opacity change
+          animate={{ x: 0, opacity:1 }}
+          transition={{ duration: .5, delay:.5 }}
+          />
 
           {/* Bottom Small Triangle */}
-          <img src={bottom_page} className="absolute bottom-0 left-0 w-40 h-auto rounded-lg z-30" />
+          <motion.img 
+          src={bottom_page} className="absolute bottom-0 left-0 w-40 h-auto rounded-lg z-30" 
+          initial={{ y: 100, opacity:0 }}  // No opacity change
+          animate={{ y: 0, opacity:1}}
+          transition={{ duration: .5, delay:.5 }}
+          />
         </div>
 
         {/* Right Side - Hero Content */}
         <div className=" flex flex-col flex-1/3 justify-center">
-          <span className="pb-10 text-6xl font-bold text-blue-900">
+          <motion.span 
+          className="pb-10 text-6xl font-bold text-blue-900"
+          initial={{ x: 100, opacity:0 }}  // No opacity change
+          animate={{ x: 0, opacity:1 }}
+          transition={{ duration: .5, delay:.5 }}
+          >
             CERTICODE
-          </span>
-          <span className="pb-4 text-2xl text-blue-900">
+          </motion.span>
+          <motion.span 
+          className="pb-4 text-2xl text-blue-900"
+          initial={{ x: 100, opacity:0 }}  // No opacity change
+          animate={{ x: 0, opacity:1 }}
+          transition={{ duration: .5, delay:.5 }}
+          >
             Seamless Certificate Creation & Delivery!
-          </span>
-          <p className="pb-10 text-blue-900 leading-relaxed">
+          </motion.span>
+          <motion.p 
+          className="pb-10 text-blue-900 leading-relaxed"
+          initial={{ x: 100, opacity:0 }}  // No opacity change
+          animate={{ x: 0, opacity:1}}
+          transition={{ duration: .5, delay:.5 }}
+          >
             Generate professional certificates in seconds,<br/> automate sending to attendees, and ensure a secure, reliable, and hassle-free experience.
-          </p>
-          <button className="px-6 py-3 w-[30%] text-white bg-blue-900 rounded-4xl shadow-md hover:bg-blue-700 transition">
+          </motion.p>
+          <motion.button 
+          className="px-6 py-3 w-[30%] text-white bg-blue-900 rounded-4xl shadow-md hover:bg-blue-700 transition"
+          initial={{ x: 100,opacity:0 }}  // No opacity change
+          animate={{ x: 0,opacity:1 }}
+          transition={{ duration: .5, delay:.5 }}
+          >
             REGISTER NOW
-          </button>
+          </motion.button>
 
         </div>
     </section>
@@ -145,13 +190,17 @@ const LandingMain = () => {
 
 
       {/* How it Works Section */}
-      <section className="relative py-24">
+      <motion.section 
+      className="relative py-24"
+   
+      >
         {/* Background Layer with Opacity */}
         <div className="absolute inset-0 bg-white "></div>
 
         {/* Content Layer */}
         <motion.div 
         className="relative z-10 container mx-auto max-w-screen-xl px-6"
+  
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
@@ -194,7 +243,7 @@ const LandingMain = () => {
             ))}
           </div>
         </motion.div>
-      </section>
+      </motion.section>
 
       <div className="max-w-6xl mx-auto py-16 px-7 grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* Seminars Card */}
