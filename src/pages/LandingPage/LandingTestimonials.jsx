@@ -20,10 +20,11 @@ const LandingTestimonials = () => {
           <div className="max-w-6xl mx-auto">
               <div className="flex-col items-center ">
                   <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl pr-8 mx-auto text-center">
-                      <p className="my-5 text-base font-medium tracking-tight text-white uppercase">What our users say</p>
-                      <h2 className="text-4xl font-extrabold leading-10 tracking-tight text-white sm:text-5xl sm:leading-none md:text-6xl lg:text-5xl xl:text-6xl">
-                          Testimonials</h2>
-                      <p className="my-6 text-xl font-medium text-white">See how our platform is making seminar participation easier and hassle-free for everyone.</p>
+                      <p className="my-5 text-base font-medium tracking-tight text-gray-800 uppercase">What our users say</p>
+                      <h2 className="text-4xl font-extrabold leading-10 tracking-tight text-gray-800 sm:text-5xl sm:leading-none md:text-6xl lg:text-5xl xl:text-6xl">
+                          Testimonials
+                        </h2>
+                      <p className="my-6 text-xl font-medium text-gray-800">See how our platform is making seminar participation easier and hassle-free for everyone.</p>
                   </div>
                   <div className="flex flex-col items-center justify-center max-w-2xl py-8 mx-auto xl:flex-row xl:max-w-full">
                       <div className="w-full xl:w-1/2 xl:pr-8">

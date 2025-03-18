@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import UserDropdown from "../../components/header/UserDropdown";
 
@@ -10,11 +10,26 @@ const LandingHeader = () => {
 
   const isHomePage = location.pathname === "/";
 
+ 
+
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50); // Change when scrolled 50px down
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navColor = isHomePage ? isScrolled? "bg-[#063F78] shadow-m" : "bg-transparent" : "bg-[#37547C]";
+  const navTextColor = isHomePage ? isScrolled? "text-white" : "tex-gray-800" : "text-white";
+  
+
   return (
     <nav
-      className={`absolute top-0 left-0 w-full z-50 ${
-        isHomePage ? "bg-transparent" : "bg-[#37547C]"
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 ${navColor} transition-all duration-2000 `}
     >
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden">
@@ -34,20 +49,20 @@ const LandingHeader = () => {
           </svg>
         </button>
 
-        <Link to="/" className="text-white text-2xl font-bold">
+        <Link to="/" className={`text-2xl font-bold ${navTextColor}`}>
           Certicode
         </Link>
 
         <div className="hidden lg:flex space-x-6 items-center">
-          <Link to="/" className="text-white hover:text-gray-300">
+          <Link to="/" className={` hover:text-gray-300 ${navTextColor}`}>
             Home
           </Link>
-          <Link to="/seminar-list" className="text-white hover:text-gray-300">
+          <Link to="/seminar-list" className={`${navTextColor} hover:text-gray-300`}>
             Seminars
           </Link>
           {token && role === "admin" ? (
             <div className="space-x-4">
-              <Link to="/dashboard" className="text-white hover:text-gray-300">
+              <Link to="/dashboard" className={`${navTextColor} hover:text-gray-300`}>
                 Back to Dashboard
               </Link>
             </div>
@@ -55,10 +70,10 @@ const LandingHeader = () => {
             <UserDropdown />
           ) : (
             <div className="space-x-4">
-              <Link to="/signin" className="text-white hover:text-gray-300">
+              <Link to="/signin" className={`${navTextColor} hover:text-gray-300`}>
                 Sign In
               </Link>
-              <Link to="/signup" className="text-white hover:text-gray-300">
+              <Link to="/signup" className={`${navTextColor} hover:text-gray-300`}>
                 Sign Up
               </Link>
             </div>

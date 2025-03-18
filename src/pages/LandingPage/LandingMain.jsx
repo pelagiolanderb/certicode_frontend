@@ -3,16 +3,20 @@ import { Link } from "react-router-dom";
 import browse from "../../assets/images/browse.jpg";
 import register from "../../assets/images/register.jpg";
 import attend from "../../assets/images/attend.jpg";
-import landing_page from "../../assets/images/landing_page.jpg";
-import banner_certicode_about_us from "../../assets/images/banner_certicode_about_us.png";
-import hero from "../../assets/images/hero.jpg";
+
 import BeatLoader from "../../components/loading/loading";
 import LandingTestimonials from "./LandingTestimonials";
-import LandingPageBg from "../../assets/images/LandingPageBg.jpg";
 import { motion } from "framer-motion";
 import model_about_us from "../../assets/images/model_about_us.png"
+import seminar_model_image from "../../assets/images/seminar_model_image.png"
+import training_model_image from "../../assets/images/training_model_image.png"
 import banner_certicode_cta from "../../assets/images/banner_certicode_cta.png"
-import banner_certicode_profile_cta from "../../assets/images/banner_certicode_profile_cta.PNG"
+
+import bottom_page from "../../assets/images/bottom_page.png"
+import top_page from "../../assets/images/top_page.png"
+import background_page from "../../assets/images/background_page.png"
+import banner_model from "../../assets/images/banner_model.png"
+
 
 const LandingMain = () => {
   const [seminars, setSeminars] = useState([]);
@@ -56,34 +60,89 @@ const LandingMain = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
   };
 
+
+
   return (
+    <>
     <div 
-    className="relative text-gray-300 bg-cover bg-fixed bg-center"
+    className=" text-gray-300 bg-cover bg-fixed bg-center"
     >
+      <section className="flex h-screen bg-white">
+        {/* Left Side - Image & Graphics */}
+        <div className="relative flex-1/2 h-full w-full justify-center items-center">
+          {/* Top Left Triangle */}
+          <img src={top_page} className="absolute top-0 right-0 w-155 h-75"/>
 
-      <div 
-        className="relative bg-gradient-to-b from-[#5882ED] to-blue-300 text-gray-300 bg-cover bg-fixed bg-center h-screen flex flex-col items-center justify-center"
-       
-      >
-        <motion.div 
-        className="relative z-10 text-center px-6"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }}
-        variants={fadeIn}
-        >
-          <h1 className="text-white text-4xl md:text-5xl font-bold mb-12">
-            Expand Your Knowledge with Expert-Led Seminars
-          </h1>
+          {/* Background Image */}
+          <img src={background_page} className="absolute top-0 left-0 h-full w-auto]" />
 
-          <Link
-            to="/seminar-list"
-            className="bg-white text-[#5882ED] uppercase text-sm px-8 py-4 rounded-md"
-          >
-            Browse Seminars
-          </Link>
-        </motion.div>
-      </div>
+          {/* Banner Model (People Holding Laptop) */}
+          <img src={banner_model} className="absolute bottom-0 z-20 h-auto w-auto max-h-[90%]" />
+
+          {/* Bottom Small Triangle */}
+          <img src={bottom_page} className="absolute bottom-0 left-0 w-40 h-auto rounded-lg z-30" />
+        </div>
+
+        {/* Right Side - Hero Content */}
+        <div className=" flex flex-col flex-1/3 justify-center">
+          <span className="pb-10 text-6xl font-bold text-blue-900">
+            CERTICODE
+          </span>
+          <span className="pb-4 text-2xl text-blue-900">
+            Seamless Certificate Creation & Delivery!
+          </span>
+          <p className="pb-10 text-blue-900 leading-relaxed">
+            Generate professional certificates in seconds,<br/> automate sending to attendees, and ensure a secure, reliable, and hassle-free experience.
+          </p>
+          <button className="px-6 py-3 w-[30%] text-white bg-blue-900 rounded-4xl shadow-md hover:bg-blue-700 transition">
+            REGISTER NOW
+          </button>
+
+        </div>
+    </section>
+      {/* <section className="flex">
+        <div className="relative w-full h-screen bg-white">
+            
+              <img 
+                src={top_page} 
+                className="z-5 absolute top-0 right-130 h-70 w-160"
+              />
+
+              <img 
+              src={banner_model}
+              className=" absolute z-20 max-h-full right-170 bottom-0"
+              />
+
+              
+              <img 
+                src={background_page} 
+                className="z-0 absolute  max-h-full max-w-full"
+              />
+             
+              <img 
+                src={bottom_page} 
+                className="z-30 absolute bottom-0 left-0  h-30  max-w-full rounded-lg"
+              />
+        </div>
+
+        <div>
+          <div className="">
+            <h1>Certicode</h1>
+          </div>
+          <div className="">
+            <p>Seamless Certificate Creation & Delivery!</p>
+          </div>
+          <div className="">
+            <p>Generate professional certificates in seconds, automate sending to attendees, and ensure a secure, reliable, and hassle-free experience.</p>
+          </div>
+          <div className="">
+            <button>Register now!</button>
+          </div>
+        </div>
+      </section> */}
+      
+
+
 
       {/* How it Works Section */}
       <section className="relative py-24">
@@ -137,17 +196,75 @@ const LandingMain = () => {
         </motion.div>
       </section>
 
+      <div className="max-w-6xl mx-auto py-16 px-7 grid grid-cols-1 md:grid-cols-2 gap-8">
+      {/* Seminars Card */}
+      <motion.div
+        className="relative bg-gray-700 text-white rounded-lg shadow-lg flex flex-col text-left justify-between"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        {/* Text Section */}
+        <div className="text-center mt-8">
+          <h2 className="text-3xl font-bold mb-4">Seminars</h2>
+          <p className="text-lg mb-6">
+            Learn from industry experts and expand your knowledge.
+          </p>
+          <Link
+            to="/seminar-list"
+            className="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold"
+          >
+            Learn More
+          </Link>
+        </div>
+
+        {/* Image positioned in the right-bottom corner */}
+        
+        <img className="h-auto max-w-full" src={seminar_model_image} alt="Seminar" />
+     
+      </motion.div>
+
+
+
+      {/* Training Programs Card */}
+      <motion.div
+        className="relative bg-blue-300 text-white rounded-lg shadow-lg flex flex-col text-left justify-between"
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+      >
+        {/* Text Section */}
+        <div className="text-center mt-8">
+          <h2 className="text-3xl font-bold mb-4">Training Programs</h2>
+          <p className="text-lg mb-6">
+            Gain hands-on experience and practical skills.
+          </p>
+          <Link
+            to="/seminar-list"
+            className="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold"
+          >
+            Learn More
+          </Link>
+        </div>
+
+        {/* Image positioned in the right-bottom corner */}
+        
+        <img className="h-auto max-w-full" src={training_model_image} alt="Seminar" />
+     
+      </motion.div>
+    </div>
+
 
       {/* Upcoming Seminars Section */}
       <motion.div 
       id="seminar-list" 
-      className="max-w-6xl mx-auto py-12 px-6"
+      className="max-w-6xl mx-auto py-7 px-6"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={fadeIn}
       >
-        <h2 className="text-3xl font-bold text-center text-white  mb-8">
+        <h2 className="text-3xl font-bold text-center text-gray-800  mb-17">
           Upcoming Seminars
         </h2>
         {loading ? (
@@ -191,7 +308,7 @@ const LandingMain = () => {
           </div>
         )}
         <div className="text-center mt-8">
-          <Link to="/seminar-list" className="text-white font-bold text-lg">
+          <Link to="/seminar-list" className="text-gray-800 font-bold text-lg">
             View All Seminars →
           </Link>
         </div>
@@ -200,36 +317,42 @@ const LandingMain = () => {
       {/* About Us Section */}
       <section id="about-us" className="relative">
         <div
-          className="w-full h-[600px] flex items-center justify-end"
-          style={{
-            backgroundImage: `url(${banner_certicode_about_us})`,
-            backgroundSize: "100% 100%", 
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
+          className="w-full min-h-[600px] flex flex-col 
+          md:flex-row items-center justify-center md:justify-end 
+          px-6 md:px-0
+          bg-gradient-to-b from-[#5882ED] to-white 
+          about-us-bg
+          "
         >
-          <div className="w-1/2 p-10">
-            <h2 className="text-xl font-semibold text-white">About us</h2>
-            <h1 className="text-4xl font-bold text-white">
+          {/* Text Content */}
+          <div className="w-full md:w-1/2 p-6 md:p-10 text-center md:text-left">
+            <h2 className="text-lg font-semibold text-white">About us</h2>
+            <h1 className="text-3xl md:text-4xl font-bold text-white">
               Empowering Learners Through Knowledge
             </h1>
-            <p className="mt-4 text-lg text-white">
+            <p className="mt-4 text-base md:text-lg text-white">
               At Certicode, we provide expert-led seminars designed to help you gain
               valuable skills and certifications. Our platform allows you to learn at
               your own pace, anywhere and anytime.
             </p>
-            <p className="mt-4 text-lg text-white">
+            <p className="mt-4 text-base md:text-lg text-white">
               Whether you’re looking to upskill, switch careers, or just expand your
               knowledge, we are here to guide you with quality educational content and
               recognized certifications.
             </p>
           </div>
 
-          <div className="relative w-1/2 flex justify-end overflow-hidden pt-37 pr-25">
-            <img src={model_about_us} alt="About Us" className="h-[450px] object-contain scale-155" />
+          {/* Image Section */}
+          <div className="relative w-full md:w-1/2 flex justify-center md:justify-end mt-6 md:mt-0">
+            <img
+              src={model_about_us}
+              alt="About Us"
+              className="h-[300px] md:h-[450px] object-contain md:scale-100"
+            />
           </div>
         </div>
       </section>
+
 
 
       
@@ -238,49 +361,44 @@ const LandingMain = () => {
    
 
       {/* Call to Action */}
-      <div className="relative">
-        <div
-          className="w-full h-[400px] flex items-center"
-          style={{
-            backgroundImage: `url(${banner_certicode_cta})`,
-            backgroundSize: "100% 100%",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
-        >
-          <div className="grid grid-cols-2 w-full px-10">
-            {/* Left Side Content */}
-            <div className="pl-15 pb-15">
-              <h2 className="text-4xl font-bold text-white mb-5 pt-10">
-                Innovate, Learn, and Lead <br /> with Certicode
-              </h2>
-              <p className="text-white mb-8">
-                “Unlock endless career opportunities with our seminars.”
-              </p>
-              <div className="pt-4">
-                <Link
-                  to="/signup"
-                  className="bg-white text-[#5882ED] px-8 py-4 rounded-lg"
-                >
-                  Sign Up Now
-                </Link>
-              </div>
-            </div>
+      <div 
+      className="
+      relative w-full flex flex-col-reverse 
+      md:flex-row items-center 
+      bg-gradient-to-t from-[#5882ED] to-white
+      lg:bg-gradient-to-r lg:from-[#5882ED] lg:to-white 
+      sm:bg-gradient-to-t sm:from-[#5882ED] sm:to-white
+      md:bg-gradient-to-r md:from-[#5882ED] md:to-white "
+      >
+        {/* Content Section */}
+        <div className="flex flex-col items-center md:items-start text-center md:text-left p-6 md:p-10 w-full md:w-1/2 order-2 md:order-1">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Innovate, Learn, and Lead <br /> with Certicode
+          </h2>
+          <p className="text-white mb-6">
+            “Unlock endless career opportunities with our seminars.”
+          </p>
+          <Link to="/signup" className="bg-white text-[#5882ED] px-6 py-3 rounded-lg text-lg">
+            Sign Up Now
+          </Link>
+        </div>
 
-            {/* Right Side Image (Inside Blue Oval) */}
-            <div
-              className="absolute top-1/2 right-20 transform -translate-y-20 -translate-x-12 flex justify-center items-center w-63 h-63 rounded-full bg-white overflow-hidden"
-            >
-              <img
-                src={banner_certicode_profile_cta}
-                className="w-80 h-80 object-contain pt-10 pr-3"
-              />
-            </div>
-          </div>
+        {/* Background Image */}
+        <div className="w-full md:w-1/2 order-2 md:order-1 flex justify-center">
+          <img className="max-w-full h-[250px] md:h-[400px]" src={banner_certicode_cta} alt="Certicode Banner" />
         </div>
       </div>
 
+      
+
+
     </div>
+
+
+
+
+    </>
+   
   );
 };
 
