@@ -96,6 +96,7 @@ export default function SignUpForm() {
       );
 
       if (response.status === 200) {
+        localStorage.setItem('isVerifying', true);
         navigate("/verify-email");
       }
     } catch (error) {

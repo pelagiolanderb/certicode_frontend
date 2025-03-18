@@ -3,6 +3,7 @@ import {
   Routes,
   Route,
   Navigate,
+  useLocation,
 } from "react-router-dom";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
@@ -46,31 +47,31 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
-          <Route element={<ProtectedRoute component={AppLayout} />}>
+          <Route element={<ProtectedRoute component={AppLayout} onlyAdmin />}>
             <Route
               index
               path="/dashboard"
-              element={<ProtectedRoute component={Home} />}
+              element={<ProtectedRoute component={Home} onlyAdmin />}
             />
             <Route
               path="/seminar-management"
-              element={<ProtectedRoute component={SeminarManagement} />}
+              element={<ProtectedRoute component={SeminarManagement} onlyAdmin />}
             />
             <Route
               path="/participants"
-              element={<ProtectedRoute component={Participants} />}
+              element={<ProtectedRoute component={Participants} onlyAdmin />}
             />
             <Route
               path="/certificate-management"
-              element={<ProtectedRoute component={CertificateManagement} />}
+              element={<ProtectedRoute component={CertificateManagement} onlyAdmin />}
             />
             <Route
               path="/archived"
-              element={<ProtectedRoute component={Archived} />}
+              element={<ProtectedRoute component={Archived} onlyAdmin />}
             />
             <Route
               path="/seminar-management/:id"
-              element={<ProtectedRoute component={LandingSeminar} />}
+              element={<ProtectedRoute component={LandingSeminar} onlyAdmin />}
             />
             {/* <Route
               path="/user-management"
@@ -80,29 +81,29 @@ export default function App() {
 
           <Route
             path="/verify-email"
-            element={<ProtectedRoute component={VerifyEmail} />}
+            element={<ProtectedRoute component={VerifyEmail} onlyNonAdmin />}
           />
           <Route
             path="/verify-handler"
-            element={<ProtectedRoute component={VerificationHandler} />}
+            element={<ProtectedRoute component={VerificationHandler} onlyNonAdmin />}
           />
 
           <Route
             path="/user-profile"
-            element={<ProtectedRoute component={UserProfiles} />}
+            element={<ProtectedRoute component={UserProfiles} onlyNonAdmin />}
           />
 
           <Route
             path="/forgot-password"
-            element={<ProtectedRoute component={ForgotPassword} />}
+            element={<ProtectedRoute component={ForgotPassword} onlyNonAdmin />}
           />
 
           <Route
             path="/password-reset/:token"
-            element={<ProtectedRoute component={ResetPassword} />}
+            element={<ProtectedRoute component={ResetPassword} onlyNonAdmin />}
           />
 
-          <Route path="/social-auth-handler" element={<SocialAuthHandler />} />
+          <Route path="/social-auth-handler" element={<SocialAuthHandler />} onlyNonAdmin />
 
           {/* <Route
               path="/@dmin-signin"
@@ -117,11 +118,11 @@ export default function App() {
           {/* Auth Layout */}
           <Route
             path="/signin"
-            element={<ProtectedRoute component={SignIn} />}
+            element={<ProtectedRoute component={SignIn} publicRoute />}
           />
           <Route
             path="/signup"
-            element={<ProtectedRoute component={SignUp} />}
+            element={<ProtectedRoute component={SignUp} publicRoute />}
           />
 
           {/* Fallback Route */}
