@@ -31,6 +31,7 @@ export default function VerificationHandler() {
           console.log(response.data);
 
           if (response.status === 200) {
+            localStorage.removeItem('isVerifying');
             localStorage.setItem("auth_token", response.data.token);
             localStorage.setItem(
               "current_user",

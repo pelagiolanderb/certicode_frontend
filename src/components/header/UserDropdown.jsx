@@ -68,11 +68,9 @@ export default function UserDropdown() {
           }`}
         >
           {role === "user"
-            ? current_user.first_name || current_user.users?.name
-              ? current_user.first_name || current_user.users?.name
-              : "User"
-            : current_user?.first_name
-            ? current_user.first_name
+            ? current_user.first_name && current_user.last_name
+              ? `${current_user.first_name} ${current_user.last_name}`
+              : current_user.users?.name
             : "Admin"}
         </span>
         <svg
@@ -87,7 +85,7 @@ export default function UserDropdown() {
         >
           <path
             d="M4.3125 8.65625L9 13.3437L13.6875 8.65625"
-            stroke={role === "admin" && "currentColor"}
+            stroke={role === "admin" ? "currentColor" : undefined}
             strokeWidth="1.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -108,13 +106,9 @@ export default function UserDropdown() {
             <div>
               <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
                 {role === "user"
-                  ? (current_user.first_name && current_user.last_name) ||
-                    current_user.users?.name
-                    ? current_user.first_name && current_user.last_name ||
-                      current_user.users?.name
-                    : "User"
-                  : current_user.first_name && current_user.last_name
-                  ? `${current_user.first_name} ${current_user.last_name}`
+                  ? current_user.first_name && current_user.last_name
+                    ? `${current_user.first_name} ${current_user.last_name}`
+                    : current_user.users?.name
                   : "Admin"}
               </span>
               <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">

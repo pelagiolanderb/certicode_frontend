@@ -1,6 +1,8 @@
 import PageMeta from "../../components/common/PageMeta";
 import AuthLayout from "./AuthPageLayout";
 import SignInForm from "../../components/auth/SignInForm";
+import NotFound from "../OtherPage/NotFound";
+import { useLocation } from "react-router";
 
 export default function SignIn() {
   return (
