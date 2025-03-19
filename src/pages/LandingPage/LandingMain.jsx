@@ -208,7 +208,7 @@ const LandingMain = () => {
 
       {/* How it Works Section */}
       <section className="w-full py-16 md:py-24 bg-gradient-to-b from-white to-blue-50">
-      <div className="container px-4 md:px-6">
+      <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center text-center space-y-4 mb-12">
           <h2 className="text-sm font-medium tracking-wider text-[#063F78] uppercase">How It Works</h2>
           <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[#063F78]">
@@ -217,7 +217,7 @@ const LandingMain = () => {
           <div className="w-20 h-1 bg-[#063F78] rounded-full mx-auto mt-2"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 h-[280px]">
           {steps.map((step, index) => (
             <div key={index} className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-400 to-[#063F78] rounded-xl blur-md opacity-25 group-hover:opacity-75 transition duration-300"></div>
