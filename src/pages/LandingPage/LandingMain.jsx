@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import browse from "../../assets/images/browse.jpg";
-import register from "../../assets/images/register.jpg";
-import attend from "../../assets/images/attend.jpg";
 import { useNavigate } from "react-router-dom";
 
 import BeatLoader from "../../components/loading/loading";
@@ -69,18 +66,31 @@ const LandingMain = () => {
   return (
     <>
     <div 
-    className=" text-gray-300 bg-cover bg-fixed bg-center"
+    className="bg-cover bg-fixed bg-center"
     >
 
-      <section className="flex h-screen bg-white">
+      <section className="flex h-screen bg-white
+      lg:flex-row
+      md:flex-row
+      sm:flex-col 
+      ">
        
         <div 
-        className="relative flex-1/2 h-full w-full justify-center items-center
+        className="relative h-full w-full justify-center items-center
+        lg:flex-1/2 
+        md:flex-1/2
+        sm:flex-[3]
         xs:flex-col xs:min-h-screen
         ">
-         
+
+         {/* top-image */}
           <motion.img 
-          src={top_page} className="absolute top-0 right-0 w-155 h-75"
+          src={top_page} 
+          className="absolute top-0 right-0 
+          lg:w-155 lg:h-75
+          md:w-117 md:h-70
+          
+          "
           initial={{ y: -100, opacity:0}}  // No opacity change
           animate={{ y: 0, opacity:1 }}
           transition={{ duration: .5, delay:.5 }}
@@ -88,7 +98,11 @@ const LandingMain = () => {
 
           
           <motion.img 
-          src={background_page} className="absolute top-0 left-0 h-full w-auto]" 
+          src={background_page} 
+          className="absolute  h-full w-auto
+          lg:left-0 top-0
+          md:right-10
+          " 
           initial={{ x: -100, opacity:0 }}  // No opacity change
           animate={{ x: 0, opacity:1 }}
           transition={{ duration: .5, delay:.5 }}
@@ -111,54 +125,50 @@ const LandingMain = () => {
           />
         </div>
 
-       
-        <div className=" flex flex-col flex-1/3 justify-center">
-          <motion.span 
-          className="pb-10 text-6xl font-bold text-blue-900"
-          initial={{ x: 100, opacity:0 }}  // No opacity change
-          animate={{ x: 0, opacity:1 }}
-          transition={{ duration: .5, delay:.5 }}
+        
+        <div className="flex flex-col justify-center items-start
+        lg:flex-1/3 lg:items-start 
+        md:flex-1/3 md:items-start
+        sm:flex-[1] sm:items-center
+        ">
+          <motion.div 
+            className="pb-10 text-6xl font-bold text-blue-900"
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
           >
             CERTICODE
-          </motion.span>
-          <motion.span 
-          className="pb-4 text-2xl text-blue-900"
-          initial={{ x: 100, opacity:0 }}  // No opacity change
-          animate={{ x: 0, opacity:1 }}
-          transition={{ duration: .5, delay:.5 }}
+          </motion.div>
+          <motion.div 
+            className="pb-4 text-2xl text-blue-900"
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
           >
             Seamless Certificate Creation & Delivery!
-          </motion.span>
-          <motion.p 
-          className="pb-10 text-blue-900 leading-relaxed"
-          initial={{ x: 100, opacity:0 }}  // No opacity change
-          animate={{ x: 0, opacity:1}}
-          transition={{ duration: .5, delay:.5 }}
+          </motion.div>
+          <motion.div
+            className="pb-10 text-blue-900 leading-relaxed"
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
           >
-            Generate professional certificates in seconds,<br/> automate sending to attendees, and ensure a secure, reliable, and hassle-free experience.
-          </motion.p>
+            Generate professional certificates in seconds,<br/> 
+            automate sending to attendees, and ensure a secure,<br/> 
+            reliable, and hassle-free experience.
+          </motion.div>
           <motion.button
-          className="px-6 py-3 w-[30%] text-white bg-blue-900 rounded-4xl shadow-md hover:bg-blue-700 transition"
-          initial={{ x: 100,opacity:0 }}  // No opacity change
-          animate={{ x: 0,opacity:1 }}
-          transition={{ duration: .5, delay:.5 }} 
-          onClick={() => navigate("/signup")}
+            className="px-6 py-3 w-[30%] text-white bg-blue-900 rounded-4xl shadow-md hover:bg-blue-700 transition"
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.5 }} 
+            onClick={() => navigate("/signup")}
           >
             REGISTER NOW
           </motion.button>
-
         </div>
+
     </section> 
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -310,61 +320,57 @@ const LandingMain = () => {
         </motion.div>
       </motion.section> */}
 
-      <div className="max-w-6xl mx-auto py-16 px-7 grid grid-cols-1 md:grid-cols-2 gap-8">
+<div className="max-w-6xl mx-auto py-16 px-7 grid grid-cols-1 md:grid-cols-2 gap-8">
       {/* Seminars Card */}
       <motion.div
-        className="relative bg-gray-700 text-white rounded-lg shadow-lg flex flex-col text-left justify-between"
+        className="relative bg-gray-700 text-white rounded-lg shadow-lg flex flex-col text-left"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
         {/* Text Section */}
-        <div className="text-center mt-8">
+        <div className="text-center p-8">
           <h2 className="text-3xl font-bold mb-4">Seminars</h2>
-          <p className="text-lg mb-6">
-            Learn from industry experts and expand your knowledge.
-          </p>
-          <Link
-            to="/seminar-list"
-            className="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold"
-          >
+          <p className="text-lg mb-6">Learn from industry experts and expand your knowledge.</p>
+          <Link to="/seminar-list" className="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold inline-block">
             Learn More
           </Link>
         </div>
 
-        {/* Image positioned in the right-bottom corner */}
-        
-        <img className="h-auto max-w-full" src={seminar_model_image} alt="Seminar" />
-     
+        {/* Image container */}
+        <div className="mt-auto w-full">
+          <img
+            className="w-full h-auto object-contain rounded-b-lg"
+            src={seminar_model_image || "/placeholder.svg"}
+            alt="Seminar"
+          />
+        </div>
       </motion.div>
-
-
 
       {/* Training Programs Card */}
       <motion.div
-        className="relative bg-blue-300 text-white rounded-lg shadow-lg flex flex-col text-left justify-between"
+        className="relative bg-blue-300 text-white rounded-lg shadow-lg flex flex-col text-left"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
         {/* Text Section */}
-        <div className="text-center mt-8">
+        <div className="text-center p-8">
           <h2 className="text-3xl font-bold mb-4">Training Programs</h2>
-          <p className="text-lg mb-6">
-            Gain hands-on experience and practical skills.
-          </p>
-          <Link
-            to="/seminar-list"
-            className="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold"
-          >
+          <p className="text-lg mb-6">Gain hands-on experience and practical skills.</p>
+          <Link to="/seminar-list" className="bg-white text-blue-900 px-6 py-3 rounded-lg font-semibold inline-block">
             Learn More
           </Link>
         </div>
 
-        {/* Image positioned in the right-bottom corner */}
-        
-        <img className="h-auto max-w-full" src={training_model_image} alt="Seminar" />
-     
+        {/* Image container */}
+        <div className="mt-auto w-full">
+          <img
+            className="w-full h-auto object-contain rounded-b-lg"
+            src={training_model_image || "/placeholder.svg"}
+            alt="Training Program"
+          />
+        </div>
       </motion.div>
     </div>
 
