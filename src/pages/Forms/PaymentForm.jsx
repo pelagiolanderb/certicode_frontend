@@ -5,11 +5,26 @@ import GcashForm from './GcashFrom';
 import BpiForm from './BpiForm';
 
 const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price }) => {
+    const [seminar, setSeminar] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('');
     const [showPaymentDetails, setShowPaymentDetails] = useState(false);
     const [error, setError] = useState(null);
 
-    const { loading, post } = useApiService();
+    const { loading, post, get } = useApiService(); // Add get from useApiService
+
+    // Add fetch seminar effect
+    useEffect(() => {
+        const fetchSeminar = async () => {
+            try {
+                const response = await get(`/seminar/${seminarId}`);
+                setSeminar(response.seminar);
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+
+        fetchSeminar();
+    }, [seminarId]);
 
     // Add function to handle free seminars
     const handleFreeSeminar = async () => {
@@ -48,7 +63,7 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
                 payment_status: 'pending'
             };
 
-            await post('/process-payment', paymentData);
+            await post('/create-transaction', paymentData);
             onSuccess();
             setShowForm(false);
         } catch (error) {
@@ -70,7 +85,7 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
     return (
         <>
             {price > 0 ? (
-                <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black/50 z-50">
+                <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black/30 backdrop-blur-sm z-50">
                     <div className="p-4 w-full max-w-md bg-white rounded-lg shadow-sm">
                         <div className="flex items-center justify-between p-4 border-b border-gray-200">
                             <h3 className="text-lg font-semibold text-gray-900">
@@ -108,6 +123,7 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
                                         <GcashForm
                                             guestId={guestId}
                                             seminarId={seminarId}
+                                            seminarName={seminar?.name_of_seminar} // Add optional chaining
                                             onSuccess={onSuccess}
                                             onBack={() => setShowPaymentDetails(false)}
                                             />
@@ -117,6 +133,7 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
                                         <BpiForm
                                             guestId={guestId}
                                             seminarId={seminarId}
+                                            seminarName={seminar?.name_of_seminar} // Add optional chaining
                                             onSuccess={onSuccess}
                                             onBack={() => setShowPaymentDetails(false)}
                                         />

@@ -30,7 +30,7 @@ const SeminarPage = () => {
         setSeminar(
           {
           ...data.seminar,
-          price: 0 
+          price: 200000 
         }
         // data.seminar
       );
