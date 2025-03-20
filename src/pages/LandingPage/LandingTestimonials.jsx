@@ -9,23 +9,32 @@ const LandingTestimonials = () => {
         visible: { opacity: 1, y: 0, transition: { duration: 1 } },
     };
   return (
-    <motion.div 
+    <>
+
+
+        <motion.div 
     id="testimonials"
-    className="flex items-center justify-center w-full px-8 py-10 border-t border-gray-200 md:py-16 lg:py-24 xl:py-40 xl:px-0"
+    className="flex items-center justify-center w-full px-8 py-16 border-t border-gray-200 md:py-16 lg:py-24 xl:py-40 xl:px-0"
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true, amount: 0.2 }}
     variants={fadeIn}
     >
+
           <div className="max-w-6xl mx-auto">
               <div className="flex-col items-center ">
-                  <div className="flex flex-col items-center justify-center w-full h-full max-w-2xl pr-8 mx-auto text-center">
-                      <p className="my-5 text-base font-medium tracking-tight text-gray-800 uppercase">What our users say</p>
-                      <h2 className="text-4xl font-extrabold leading-10 tracking-tight text-gray-800 sm:text-5xl sm:leading-none md:text-6xl lg:text-5xl xl:text-6xl">
-                          Testimonials
-                        </h2>
-                      <p className="my-6 text-xl font-medium text-gray-800">See how our platform is making seminar participation easier and hassle-free for everyone.</p>
-                  </div>
+                <div className="flex flex-col items-center text-center space-y-4 mb-12">
+                    <h2 className="text-sm font-medium tracking-wider text-[#063F78] uppercase">What our users say</h2>
+                    <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[#063F78]">
+                        Testimonials
+                    </h3>
+                    <h2 className="text-sm font-medium tracking-wider text-[#063F78] uppercase">        
+                        See how our platform is making seminar participation easier and hassle-free for everyone.
+                    </h2>
+                   
+                    <div className="w-20 h-1 bg-[#063F78] rounded-full mx-auto mt-2"></div>
+                </div>
+          
                   <div className="flex flex-col items-center justify-center max-w-2xl py-8 mx-auto xl:flex-row xl:max-w-full">
                       <div className="w-full xl:w-1/2 xl:pr-8">
                           <blockquote className="flex flex-col-reverse items-center justify-between w-full col-span-1 p-6 text-center transition-all duration-200 bg-[#D6E4F0] rounded-lg md:flex-row md:text-left hover:bg-white hover:shadow ease">
@@ -82,7 +91,10 @@ const LandingTestimonials = () => {
                   </div>
               </div>
           </div>
-      </motion.div>
+        </motion.div>
+
+    </>
+
   );
 };
 
