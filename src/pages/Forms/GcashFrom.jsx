@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useApiService from '../../api/useApiService';
 import GcashConfirmationModal from './GcashConfirmation';
 
-const GcashForm = ({ guestId, seminarId, seminarName, onSuccess, onBack }) => {
+const GcashForm = ({ participantId, userId, guestId, seminarId, seminarName, onSuccess, onBack }) => {
   const [accountName, setAccountName] = useState('');
   const [accountNumber, setAccountNumber] = useState('');
   const [referenceNumber, setReferenceNumber] = useState('');
@@ -28,6 +28,8 @@ const GcashForm = ({ guestId, seminarId, seminarName, onSuccess, onBack }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setPaymentDetails({
+      seminarId,
+      participantId,
       accountName,
       accountNumber,
       referenceNumber,
@@ -40,28 +42,39 @@ const GcashForm = ({ guestId, seminarId, seminarName, onSuccess, onBack }) => {
   const handlePaymentSubmit = async () => {
     try {
       const formData = new FormData();
-      formData.append('guest_id', guestId);
       formData.append('seminar_id', seminarId);
-      formData.append('payment_method', 'gcash');
+      formData.append('payment_method', 'Gcash');
       formData.append('account_name', accountName);
       formData.append('account_number', accountNumber);
       formData.append('reference_number', referenceNumber);
       formData.append('screenshot', screenshot);
-      formData.append('payment_status', 'pending');
+      formData.append('payment_status', 'pending'); 
 
-      await post('/create-transaction', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+
+
+      const transactionResponse = await post('/create-transaction', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
       });
+      console.log("Transaction Full Response:", transactionResponse);
+      console.log("Transaction Response Data:", transactionResponse.data);
 
-      await post('/add-participant', {
+      const transactionId = transactionResponse.transaction.id;
+      console.log("Transaction ID:", transactionId);
+
+
+      const participantResponse = await post('/add-participant', {
         seminar_id: seminarId,
-        guest_id: guestId,
-        payment_status: 'pending',
-        payment_method: 'gcash'
+        guest_id: guestId || null,
+        user_id: userId || null,
+        transaction_id: transactionId,
       });
-      
+
+      if (!participantResponse.participant || !participantResponse.participant.id) {
+        setError("Failed to create participant.");
+        return;
+      }
+
+      console.log("Participant created:", participantResponse.participant);
       setShowConfirmation(false);
       onSuccess();
     } catch (error) {
@@ -69,16 +82,17 @@ const GcashForm = ({ guestId, seminarId, seminarName, onSuccess, onBack }) => {
     }
   };
 
+
   return (
     <>
       {/* Add max-w and mx-auto classes to control width */}
-      <div className="p-4 max-w-md mx-auto"> 
+      <div className="p-4 max-w-md mx-auto">
         <div className="mb-4"> {/* Reduced margin bottom */}
           <h3 className="text-lg font-semibold mb-2">GCash Payment Details</h3>
-          <img 
+          <img
             className='w-32 mx-auto' // Reduced image size
-            src="https://imgs.search.brave.com/k7zZ05FQh4FR0DqfZltimZm9EWHbOCYBjTpqM2KVc5w/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAzLzc3LzkwLzI4/LzM2MF9GXzM3Nzkw/Mjg2Ml9uZ0ZNMjZF/SWk5VTBGT1FRaFZG/V1FpYnlBVlJNNWxz/ai5qcGc" 
-            alt="GCash Logo" 
+            src="https://imgs.search.brave.com/k7zZ05FQh4FR0DqfZltimZm9EWHbOCYBjTpqM2KVc5w/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAzLzc3LzkwLzI4/LzM2MF9GXzM3Nzkw/Mjg2Ml9uZ0ZNMjZF/SWk5VTBGT1FRaFZG/V1FpYnlBVlJNNWxz/ai5qcGc"
+            alt="GCash Logo"
           />
           <p className="text-gray-600 text-sm text-center mt-2">
             Please send payment to: 09XX-XXX-XXXX

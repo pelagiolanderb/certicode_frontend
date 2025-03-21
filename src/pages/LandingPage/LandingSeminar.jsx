@@ -30,7 +30,7 @@ const SeminarPage = () => {
         setSeminar(
           {
           ...data.seminar,
-          price: 200000 
+          price: 0
         }
         // data.seminar
       );
@@ -46,20 +46,23 @@ const SeminarPage = () => {
     setIsJoin(true);
     let userExist = localStorage.getItem("auth_token");
     let user_id = localStorage.getItem("user_id");
-
+  
     try {
       if (userExist) {
-        // For logged in users
+        // For logged-in users
         if (seminar.price > 0) {
-          // Show payment form directly for paid seminars
           setShowPaymentForm(true);
         } else {
-          await post("/add-participant", { seminar_id: id, user_id, payment_status: 'completed' });
-          // For free seminars
+          // Free seminar - register directly
+          await post("/add-participant", { 
+            seminar_id: id, 
+            user_id, 
+            payment_status: "completed" 
+          });
           alert("Successfully joined the seminar!");
         }
       } else {
-        // For guests - show guest registration form first
+        // Guests - Show guest form first
         setShowForm(true);
       }
     } catch (error) {
@@ -69,6 +72,7 @@ const SeminarPage = () => {
       setIsJoin(false);
     }
   };
+  
 
   const handleFormClose = () => {
     setShowForm(false);

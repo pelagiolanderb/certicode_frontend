@@ -31,20 +31,17 @@ const GuestForm = ({ setShowForm, price }) => {
       const response = await post('/create-guest', newGuest);
       
       if (price > 0) {
-        // For paid seminars
-        await post("/add-participant", { 
-          seminar_id: id, 
-          guest_id: response.guest_id,
-          payment_status: 'pending'
-        });
+        // Save guestId first before proceeding to payment
         setGuestId(response.guest_id);
+
+        // Proceed to transaction
         setShowPaymentForm(true);
       } else {
-        // For free seminars
-        await post("/add-participant", { 
-          seminar_id: id, 
+        // For free seminars, register directly
+        await post("/add-participant", {
+          seminar_id: id,
           guest_id: response.guest_id,
-          payment_status: 'completed'
+          payment_status: "completed",
         });
         alert("Successfully registered for the seminar!");
         setShowForm(false);

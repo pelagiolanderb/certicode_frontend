@@ -9,7 +9,7 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
     const [paymentMethod, setPaymentMethod] = useState('');
     const [showPaymentDetails, setShowPaymentDetails] = useState(false);
     const [error, setError] = useState(null);
-
+    const [isProcessing, setIsProcessing] = useState(false);
     const { loading, post, get } = useApiService(); // Add get from useApiService
 
     // Add fetch seminar effect
@@ -63,25 +63,40 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
                 payment_status: 'pending'
             };
 
-            await post('/create-transaction', paymentData);
+           const transactionResponse = await post('/create-transaction', paymentData);
+           const transactionId = transactionResponse.transaction.id;
+
+            await post('/add-participant', {
+                seminar_id: seminarId,
+                guest_id: guestId || null,
+                user_id: userId || null,
+                transaction_id: transactionId,
+            });
             onSuccess();
             setShowForm(false);
         } catch (error) {
             setError(error.message);
         }
     };
+    
+
+
 
     const handlePaymentMethodSelect = (methodId) => {
+        if (isProcessing) return; // Prevent multiple requests
+    
         if (methodId === 'payLater') {
-            handlePayLater();
+            setIsProcessing(true);
+            handlePayLater().finally(() => setIsProcessing(false));
         } else {
             setPaymentMethod(methodId);
             setShowPaymentDetails(true);
         }
     };
+    
 
     if (error) return alert(error);
-    
+
     return (
         <>
             {price > 0 ? (
@@ -122,15 +137,17 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
                                     {paymentMethod === 'gcash' && (
                                         <GcashForm
                                             guestId={guestId}
+                                            userId={userId}
                                             seminarId={seminarId}
                                             seminarName={seminar?.name_of_seminar} // Add optional chaining
                                             onSuccess={onSuccess}
                                             onBack={() => setShowPaymentDetails(false)}
-                                            />
+                                        />
                                     )}
 
                                     {paymentMethod === 'bank' && (
                                         <BpiForm
+                                            userId={userId}
                                             guestId={guestId}
                                             seminarId={seminarId}
                                             seminarName={seminar?.name_of_seminar} // Add optional chaining

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import useApiService from '../../api/useApiService';
 import BpiConfirmationModal from './BpiConfirmation';
 
-const BpiForm = ({ guestId, seminarId, seminarName, onSuccess, onBack }) => {
+const BpiForm = ({participantId,userId, guestId, seminarId, seminarName, onSuccess, onBack }) => {
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [paymentDetails, setPaymentDetails] = useState(null);
     const [accountName, setAccountName] = useState('');
@@ -27,6 +27,8 @@ const BpiForm = ({ guestId, seminarId, seminarName, onSuccess, onBack }) => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         setPaymentDetails({
+            seminarId,
+            participantId,
             accountName,
             accountNumber,
             referenceNumber,
@@ -48,18 +50,21 @@ const BpiForm = ({ guestId, seminarId, seminarName, onSuccess, onBack }) => {
             formData.append('screenshot', screenshot);
             formData.append('payment_status', 'pending');
 
-            await post('/create-transaction', formData, {
+           const transactionResponse = await post('/create-transaction', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
+            const transactionId = transactionResponse.transaction.id;
+            
+
             await post('/add-participant', {
                 seminar_id: seminarId,
-                guest_id: guestId,
-                payment_status: 'pending',
-                payment_method: 'bpi'
-            });
+                guest_id: guestId || null,
+                user_id: userId || null,
+                transaction_id: transactionId,
+              });
 
             setShowConfirmation(false);
             onSuccess();
