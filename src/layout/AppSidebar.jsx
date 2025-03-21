@@ -17,6 +17,7 @@ import {
   GroupIcon,
   DocsIcon,
   FolderIcon,
+  DollarLineIcon
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
@@ -37,6 +38,11 @@ const navItems = [
     icon: <GroupIcon />,
     name: "Participants",
     path: "/participants",
+  },
+  {
+    icon: <DollarLineIcon />,
+    name: "Payment",
+    path: "/payment",
   },
   {
     icon: <DocsIcon />,

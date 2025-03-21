@@ -39,6 +39,7 @@ import ForgotPassword from "./pages/AuthPages/ForgotPassword";
 import ResetPassword from "./pages/AuthPages/ResetPassword";
 import AdminSignIn from "./pages/AuthPages/AdminSignIn";
 import UserManagement from "./pages/UserManagement/UserManagement";
+import Payment from "./pages/Payment/Payment";
 
 export default function App() {
   return (
@@ -55,15 +56,23 @@ export default function App() {
             />
             <Route
               path="/seminar-management"
-              element={<ProtectedRoute component={SeminarManagement} onlyAdmin />}
+              element={
+                <ProtectedRoute component={SeminarManagement} onlyAdmin />
+              }
             />
             <Route
               path="/participants"
               element={<ProtectedRoute component={Participants} onlyAdmin />}
             />
             <Route
+              path="/payment"
+              element={<ProtectedRoute component={Payment} onlyAdmin />}
+            />
+            <Route
               path="/certificate-management"
-              element={<ProtectedRoute component={CertificateManagement} onlyAdmin />}
+              element={
+                <ProtectedRoute component={CertificateManagement} onlyAdmin />
+              }
             />
             <Route
               path="/archived"
@@ -85,7 +94,9 @@ export default function App() {
           />
           <Route
             path="/verify-handler"
-            element={<ProtectedRoute component={VerificationHandler} onlyNonAdmin />}
+            element={
+              <ProtectedRoute component={VerificationHandler} onlyNonAdmin />
+            }
           />
 
           <Route
@@ -103,7 +114,11 @@ export default function App() {
             element={<ProtectedRoute component={ResetPassword} onlyNonAdmin />}
           />
 
-          <Route path="/social-auth-handler" element={<SocialAuthHandler />} onlyNonAdmin />
+          <Route
+            path="/social-auth-handler"
+            element={<SocialAuthHandler />}
+            onlyNonAdmin
+          />
 
           {/* <Route
               path="/@dmin-signin"

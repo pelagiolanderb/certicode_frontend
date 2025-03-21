@@ -6,6 +6,7 @@ export default function RadioButtons() {
   const [selectedValue, setSelectedValue] = useState("option2");
 
   const handleRadioChange = (value) => {
+    console.log(value);
     setSelectedValue(value);
   };
   return (
