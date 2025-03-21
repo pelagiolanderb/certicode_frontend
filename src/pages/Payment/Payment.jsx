@@ -16,14 +16,51 @@ import MultiSelect from "../../components/form/MultiSelect";
 import RadioButtons from "../../components/form/form-elements/RadioButtons";
 import ComponentCard from "../../components/common/ComponentCard";
 import RadioSm from "../../components/form/input/RadioSm";
+import useApiService from "../../api/useApiService";
+import api from "../../api/api";
 
 const Payment = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState("gcash");
+  const { post } = useApiService();
 
+  const [otherPaymentMethod, setOtherPaymentMethod] = useState("");
+  const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [qrCode, setQrCode] = useState(null);
   const handleRadioChange = (value) => {
     setSelectedValue(value.split(" ").join("").toLowerCase());
   };
+
+  const handleFileChange = (e) => {
+    setQrCode(e.target.files[0]);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("payment_method", selectedValue);
+    if (selectedValue === "other") {
+      formData.append("other_payment_method", otherPaymentMethod);
+    }
+    formData.append("account_name", accountName);
+    formData.append("account_number", accountNumber);
+    if (qrCode) {
+      formData.append("qr_code", qrCode);
+    }
+
+    try {
+      const response = await post("/add-payment-methods", formData);
+      console.log("Success:", response);
+      alert("Payment method added successfully!");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error("Error submitting payment method:", error);
+      alert("Error adding payment method. Please try again.");
+    }
+  };
+
   //   const [selectedValues, setSelectedValues] = useState([]);
 
   //   const options = [
@@ -225,85 +262,90 @@ const Payment = () => {
       </Table>
 
       <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        className="pt-15 pb-10 px-10 max-w-[50%]"
-      >
-        <Form className={"flex flex-col gap-3"}>
-          {/* <MultiSelect
-            label={"Payout Method"}
-            options={options}
-            defaultSelected={selectedValues}
-            onChange={setSelectedValues}
-          /> */}
-          <ComponentCard title={"Payout Method"}>
-            <div className="flex gap-4">
-              <RadioSm
-                id={"gcash"}
-                name={"gcash"}
-                value={"GCash"}
-                label={"GCash"}
-                onChange={handleRadioChange}
-                checked={selectedValue === "gcash"}
-              />
-              <RadioSm
-                id={"bpi"}
-                name={"bpi"}
-                value={"BPI"}
-                label={"BPI"}
-                onChange={handleRadioChange}
-                checked={selectedValue === "bpi"}
-              />
-              <RadioSm
-                id={"paymaya"}
-                name={"paymaya"}
-                value={"Pay Maya"}
-                label={"Pay Maya"}
-                onChange={handleRadioChange}
-                checked={selectedValue === "paymaya"}
-              />
-              <RadioSm
-                id={"other"}
-                name={"other"}
-                value={"Other"}
-                label={"Other"}
-                onChange={handleRadioChange}
-                checked={selectedValue === "other"}
-              />
-            </div>
-          </ComponentCard>
-          {selectedValue === "other" && (
-            <>
-              <Label htmlFor={"other_payout_method"}>Other Payout Method: </Label>
-              <Input
-                placeholder={"Payout Method"}
-                name={"other_payout_method"}
-                id={"other_payout_method"}
-              />
-            </>
-          )}
-          <Label htmlFor={"account_name"}>Account Name: </Label>
-          <Input
-            placeholder={"Account Number"}
-            name={"account_name"}
-            id={"account_name"}
-          />
-          <Label htmlFor={"account_number"}>Account Number: </Label>
-          <Input
-            placeholder={"Account Number"}
-            id={"account_number"}
-            name={"account_number"}
-          />
-          <Label htmlFor={"qr_code"}>Upload QR Code: </Label>
-          <FileInput id={"qr_code"} name={"qr_code"} />
-          <Input
-            type="submit"
-            value={"Upload"}
-            className="uppercase cursor-pointer"
-            success
-          />
-        </Form>
-      </Modal>
+      isOpen={isModalOpen}
+      onClose={() => setIsModalOpen(false)}
+      className="pt-15 pb-10 px-10 max-w-[50%]"
+    >
+      <Form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+        <ComponentCard title={"Payment Method"}>
+          <div className="flex gap-4">
+            <RadioSm
+              id="gcash"
+              name="payment_method"
+              value="GCash"
+              label="GCash"
+              onChange={handleRadioChange}
+              checked={selectedValue === "gcash"}
+            />
+            <RadioSm
+              id="bpi"
+              name="payment_method"
+              value="BPI"
+              label="BPI"
+              onChange={handleRadioChange}
+              checked={selectedValue === "bpi"}
+            />
+            <RadioSm
+              id="paymaya"
+              name="payment_method"
+              value="Pay Maya"
+              label="Pay Maya"
+              onChange={handleRadioChange}
+              checked={selectedValue === "paymaya"}
+            />
+            <RadioSm
+              id="other"
+              name="payment_method"
+              value="Other"
+              label="Other"
+              onChange={handleRadioChange}
+              checked={selectedValue === "other"}
+            />
+          </div>
+        </ComponentCard>
+
+        {selectedValue === "other" && (
+          <>
+            <Label htmlFor="other_payout_method">Other Payment Method:</Label>
+            <Input
+              placeholder="Payment Method"
+              name="other_payout_method"
+              id="other_payout_method"
+              value={otherPaymentMethod}
+              onChange={(e) => setOtherPaymentMethod(e.target.value)}
+            />
+          </>
+        )}
+
+        <Label htmlFor="account_name">Account Name:</Label>
+        <Input
+          placeholder="Account Name"
+          name="account_name"
+          id="account_name"
+          value={accountName}
+          onChange={(e) => setAccountName(e.target.value)}
+        />
+
+        <Label htmlFor="account_number">Account Number:</Label>
+        <Input
+          placeholder="Account Number"
+          id="account_number"
+          name="account_number"
+          value={accountNumber}
+          onChange={(e) => setAccountNumber(e.target.value)}
+        />
+
+        <Label htmlFor="qr_code">Upload QR Code:</Label>
+        <FileInput id="qr_code" accept="image/*" name="qr_code" onChange={handleFileChange} />
+
+        <Input
+          type="submit"
+          value="Upload"
+          className="uppercase cursor-pointer"
+          success
+        />
+      </Form>
+    </Modal>
     </>
   );
 };
