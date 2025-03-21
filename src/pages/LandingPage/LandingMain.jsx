@@ -8,7 +8,6 @@ import LandingTestimonials from "./LandingTestimonials"
 import { motion } from "framer-motion"
 import seminar_model_image from "../../assets/images/seminar_model_image.png"
 import training_model_image from "../../assets/images/training_model_image.png"
-import banner_certicode_cta from "../../assets/images/banner_certicode_cta.png"
 
 import bottom_page from "../../assets/images/bottom_page.png"
 import top_page from "../../assets/images/top_page.png"
@@ -16,7 +15,7 @@ import background_page from "../../assets/images/background_page.png"
 import banner_model from "../../assets/images/banner_model.png"
 import about_us_background_img from "../../assets/images/about_us_background_img.jpg"
 
-import { Laptop, ClipboardCheck, Medal } from "lucide-react"
+import { Laptop, ClipboardCheck, Medal, ChevronDown, ChevronUp  } from "lucide-react"
 
 const LandingMain = () => {
   const navigate = useNavigate()
@@ -59,6 +58,57 @@ const LandingMain = () => {
   const fadeIn = {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 1 } },
+  }
+
+  const partners = [
+    { id: 1, name: "Partner 1", logo: "/placeholder.svg" },
+    { id: 2, name: "Partner 2", logo: "/placeholder.svg" },
+    { id: 3, name: "Partner 3", logo: "/placeholder.svg" },
+    { id: 4, name: "Partner 4", logo: "/placeholder.svg" },
+    { id: 5, name: "Partner 5", logo: "/placeholder.svg" },
+  ]
+
+  const [openIndex, setOpenIndex] = useState(null)
+  const faqs = [
+    {
+      question: "How do I create an account on Certicode?",
+      answer:
+        'To create an account, click the "Sign Up" button at the top right corner of the homepage. After registering, please verify your email address through the link sent to your inbox. You can start using your account once your email is verified.',
+    },
+    {
+      question: "Can I join a seminar without creating an account?",
+      answer:
+        "Yes! You can join seminars as a guest without creating an account. However, creating an account allows you to track your seminars and access your certificates easily.",
+    },
+    {
+      question: "How do I receive my certificate after completing a seminar?",
+      answer:
+        "If you've completed a paid seminar, the certificate will be sent to your registered email by the admin. Please ensure your email is verified and accurate to avoid issues.",
+    },
+    {
+      question: "What happens if I haven't paid for a seminar yet?",
+      answer:
+        "Your certificate will be on hold until the payment is completed. Once verified, it will be sent to your registered email.",
+    },
+    {
+      question: "What payment methods are accepted by Certicode?",
+      answer:
+        "Currently, we accept BPI and GCash for seminar payments. Please ensure to use these methods to complete your payment.",
+    },
+    {
+      question: "Can I still join a seminar if I haven't paid yet?",
+      answer:
+        "Yes, you can join the seminar, but your certificate will only be released once your payment is verified.",
+    },
+    {
+      question: "How can I check my payment status?",
+      answer:
+        "Log in to your verified account and check the seminar details to see if your payment has been verified. If you encounter any issues, please contact our support team.",
+    },
+  ]
+
+  const toggleFAQ = (index) => {
+    setOpenIndex(openIndex === index ? null : index)
   }
 
   return (
@@ -172,7 +222,13 @@ const LandingMain = () => {
         </section>
 
         {/* How it Works Section */}
-        <section className="w-full py-16 bg-gradient-to-b from-white to-blue-50">
+        <motion.section 
+        className="w-full py-16 bg-gradient-to-b from-white to-blue-50"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeIn}
+        >
           <div className="container mx-auto px-4 md:px-6">
             <div className="flex flex-col items-center text-center space-y-4 mb-12">
               <h2 className="text-sm font-medium tracking-wider text-[#063F78] uppercase">How It Works</h2>
@@ -219,10 +275,16 @@ const LandingMain = () => {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* seminar and training cards */}
-        <div className="max-w-6xl mx-auto py-16 px-7 grid grid-cols-1 md:grid-cols-2 gap-8 relative z-0">
+        <motion.div 
+        className="max-w-6xl mx-auto py-16 px-7 grid grid-cols-1 md:grid-cols-2 gap-8 relative z-0"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeIn}
+        >
           {/* Seminars Card */}
           <motion.div
             className="relative bg-gray-700 text-white rounded-lg shadow-lg flex flex-col text-left"
@@ -280,7 +342,7 @@ const LandingMain = () => {
               />
             </div>
           </motion.div>
-        </div>
+        </motion.div>
 
         {/* Upcoming Seminars Section */}
         <motion.div
@@ -295,13 +357,19 @@ const LandingMain = () => {
             <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[#063F78]">
               Upcoming Seminars
             </h3>
-            <div className="w-20 h-1 bg-[#063F78] rounded-full mx-auto mt-2"></div>   
-            <div className="text-center mt-8 self-end">
-              <Link to="/seminar-list" className="text-[#063F78] font-bold text-sm transition-all duration-300 hover:text-blue-300 hover:scale-105">
-                View All Seminars →
-              </Link>
-          </div>      
+            <div className="w-20 h-1 bg-[#063F78] rounded-full mx-auto mt-2"></div>
           </div>
+
+          {/* View All Seminars Link */}
+          <div className="flex text-center mt-8 justify-end">
+            <Link 
+              to="/seminar-list" 
+              className="text-[#063F78] font-bold text-sm transition-all duration-300 hover:text-blue-300 hover:scale-105"
+            >
+              View All Seminars →
+            </Link>
+          </div>
+
           {loading ? (
             <BeatLoader />
           ) : (
@@ -317,7 +385,7 @@ const LandingMain = () => {
                     <div className="p-4">
                       <h3 className="text-lg font-bold text-[#37547C] pb-2">{seminar.name_of_seminar}</h3>
                       <p className="text-sm text-gray-600 pb-3">Organized by {seminar.organization_name}</p>
-                      <p className="text-md text-[#37547C] pb-1">Topic Corvered</p>
+                      <p className="text-md text-[#37547C] pb-1">Topic Covered</p> {/* Fixed Typo */}
                       <p className="text-sm bg-[#B0C4DE] text-[#37547C] px-1 inline rounded-lg">{seminar.topics}</p>
                       <p className="text-xs text-gray-500 pt-3 pb-3">
                         📅 {new Date(seminar.date).toLocaleDateString()}
@@ -333,7 +401,12 @@ const LandingMain = () => {
 
         {/* About Us Section */}
 
-        <section id="about-us" className="relative py-16">
+        <motion.section id="about-us" className="relative py-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeIn}
+        >
           <div className="flex flex-col items-center text-center space-y-4 mb-12">
               <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[#063F78]">
                 About Us
@@ -371,47 +444,89 @@ const LandingMain = () => {
               />
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Testimonials */}
         <LandingTestimonials />
 
-        {/* Call to Action */}
-        <div>
-          <div></div>
-
-          <div
-            className="
-        w-full flex flex-col-reverse 
-        md:flex-row items-center 
-        bg-gradient-to-t from-[#5882ED] to-white
-        lg:bg-gradient-to-r lg:from-[#5882ED] lg:to-white 
-        sm:bg-gradient-to-t sm:from-[#5882ED] sm:to-white
-        md:bg-gradient-to-r md:from-[#5882ED] md:to-white "
-          >
-            {/* Content Section */}
-            <div className="flex flex-col items-center md:items-start text-center md:text-left p-6 md:p-10 w-full md:w-1/2 order-2 md:order-1">
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                Innovate, Learn, and Lead <br /> with Certicode
-              </h2>
-              <p className="text-white mb-6">“Unlock endless career opportunities with our seminars.”</p>
-              <Link to="/signup" className="bg-white text-[#5882ED] px-6 py-3 rounded-lg text-lg">
-                Sign Up Now
-              </Link>
+        {/* FAQs section */}
+        <motion.section className="w-full py-16 bg-[#f8fafc]"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={fadeIn}
+        >
+          <div className="container mx-auto px-4 max-w-6xl">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-[#0a3977] mb-2">Frequently Asked Questions</h2>
+              <div className="w-24 h-1 bg-[#0a3977] mx-auto mt-4 mb-6"></div>
+              <p className="text-lg text-gray-700 max-w-3xl mx-auto">
+                Find answers to common questions about using Certicode for your seminar and certification needs.
+              </p>
             </div>
 
-            {/* Background Image */}
-            <div className="w-full md:w-1/2 order-2 md:order-1 flex justify-center">
-              <img
-                className="max-w-full h-[250px] md:h-[400px]"
-                src={banner_certicode_cta || "/placeholder.svg"}
-                alt="Certicode Banner"
-              />
+            <div className="max-w-3xl mx-auto">
+              {faqs.map((faq, index) => (
+                <div key={index} className="mb-4 border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                  <button
+                    className="w-full flex justify-between items-center p-5 text-left bg-white hover:bg-gray-50 transition-colors"
+                    onClick={() => toggleFAQ(index)}
+                    aria-expanded={openIndex === index}
+                  >
+                    <span className="font-medium text-[#0a3977]">{faq.question}</span>
+                    <span className="text-[#0a3977] ml-2">
+                      {openIndex === index ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    </span>
+                  </button>
+
+                  <div
+                    className={`overflow-hidden transition-all duration-300 ${
+                      openIndex === index ? "max-h-96 p-5 bg-white" : "max-h-0"
+                    }`}
+                  >
+                    <p className="text-gray-700">{faq.answer}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        </motion.section>
 
-        
+
+        {/* Trust Bages section */}
+        <motion.section
+          className="w-full py-16 bg-gradient-to-b from-white to-blue-50"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          variants={fadeIn}
+        >
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="flex flex-col items-center text-center space-y-4 mb-12">
+              <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-[#063F78]">
+                Our Trusted Partners
+              </h3>
+              <div className="w-20 h-1 bg-[#063F78] rounded-full mx-auto mt-2"></div>
+            </div>
+
+            <div className="flex flex-wrap justify-center items-center gap-10 md:gap-16 mt-12">
+              {partners.map((partner) => (
+                <motion.div
+                  key={partner.id}
+                  className="group"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  <div className="w-36 h-28 flex items-center justify-center bg-white rounded-xl shadow-sm p-4 transition-all duration-300">
+                    {/* Replace with your actual partner logos */}
+                    <img src={partner.logo || "/placeholder.svg"} alt={partner.name} className="max-h-16 max-w-full" />
+                  </div>
+                  <p className="text-center text-sm font-medium text-[#37547C] mt-3">{partner.name}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.section>
       </div>
     </>
   )
