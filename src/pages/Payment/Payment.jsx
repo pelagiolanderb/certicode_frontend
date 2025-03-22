@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -22,12 +22,15 @@ import ResponsiveImage from "../../components/ui/images/ResponsiveImage";
 import Button from "../../components/ui/button/Button";
 
 const Payment = () => {
+  const BASE_URL = "http://127.0.0.1:8000/storage/public";
+  const [updateTransaction, setUpdateTransaction] = useState(null);
+  const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isView, setIsView] = useState(false);
   const [loadingState, setLoadingState] = useState({});
   const [selectedTransaction, setSelectedTransaction] = useState({});
   const [selectedValue, setSelectedValue] = useState("gcash");
-  const { post } = useApiService();
+  const { post, get } = useApiService();
 
   const [otherPaymentMethod, setOtherPaymentMethod] = useState("");
   const [accountName, setAccountName] = useState("");
@@ -84,6 +87,7 @@ const Payment = () => {
     }
   };
 
+
   //   const [selectedValues, setSelectedValues] = useState([]);
 
   //   const options = [
@@ -92,63 +96,93 @@ const Payment = () => {
   //     { value: "Pay Maya", text: "Pay Maya" },
   //   ];
 
-  const transactions = [
-    {
-      id: 1,
-      transaction_date: "March 20, 2025",
-      role: "User (Non-Admin)",
-      name: "Lander Pelagio",
-      transaction_id: "A1001F2DOP600",
-      status: "Pending",
-      payment_method: "GCash",
-      account_name: "Lander Pelagio",
-      account_number: "09636775414",
-    },
-    {
-      id: 2,
-      transaction_date: "March 21, 2025",
-      role: "Guess",
-      name: "Jayson Delos Santos",
-      transaction_id: "A1001F2DOP601",
-      status: "Pending",
-      payment_method: "BPI",
-      account_name: "Jayson Delos Santos",
-      account_number: "0910562003228531",
-    },
-    {
-      id: 3,
-      transaction_date: "March 22, 2025",
-      role: "Guess",
-      name: "Xyrus Abucal",
-      transaction_id: "A1001F2DOP602",
-      status: "Pending",
-      payment_method: "GCash",
-      account_name: "Xyrus Abucal",
-      account_number: "09636775414",
-    },
-    {
-      id: 4,
-      transaction_date: "March 23, 2025",
-      role: "User (Non-Admin)",
-      name: "Tom Oliver Chua",
-      transaction_id: "A1001F2DOP603",
-      status: "Pay Later",
-      payment_method: "Pay Maya",
-      account_name: "Tom Chua",
-      account_number: "005523353911",
-    },
-    {
-      id: 5,
-      transaction_date: "March 24, 2025",
-      role: "User (Non-Admin)",
-      name: "Mark Angelo Hornido",
-      transaction_id: "A1001F2DOP604",
-      status: "Paid",
-      payment_method: "GCash",
-      account_name: "Mark Hornido",
-      account_number: "09636775414",
-    },
-  ];
+  // const transactions = [
+  //   {
+  //     id: 1,
+  //     transaction_date: "March 20, 2025",
+  //     role: "User (Non-Admin)",
+  //     name: "Lander Pelagio",
+  //     transaction_id: "A1001F2DOP600",
+  //     status: "Pending",
+  //     payment_method: "GCash",
+  //     account_name: "Lander Pelagio",
+  //     account_number: "09636775414",
+  //   },
+  //   {
+  //     id: 2,
+  //     transaction_date: "March 21, 2025",
+  //     role: "Guess",
+  //     name: "Jayson Delos Santos",
+  //     transaction_id: "A1001F2DOP601",
+  //     status: "Pending",
+  //     payment_method: "BPI",
+  //     account_name: "Jayson Delos Santos",
+  //     account_number: "0910562003228531",
+  //   },
+  //   {
+  //     id: 3,
+  //     transaction_date: "March 22, 2025",
+  //     role: "Guess",
+  //     name: "Xyrus Abucal",
+  //     transaction_id: "A1001F2DOP602",
+  //     status: "Pending",
+  //     payment_method: "GCash",
+  //     account_name: "Xyrus Abucal",
+  //     account_number: "09636775414",
+  //   },
+  //   {
+  //     id: 4,
+  //     transaction_date: "March 23, 2025",
+  //     role: "User (Non-Admin)",
+  //     name: "Tom Oliver Chua",
+  //     transaction_id: "A1001F2DOP603",
+  //     status: "Pay Later",
+  //     payment_method: "Pay Maya",
+  //     account_name: "Tom Chua",
+  //     account_number: "005523353911",
+  //   },
+  //   {
+  //     id: 5,
+  //     transaction_date: "March 24, 2025",
+  //     role: "User (Non-Admin)",
+  //     name: "Mark Angelo Hornido",
+  //     transaction_id: "A1001F2DOP604",
+  //     status: "Paid",
+  //     payment_method: "GCash",
+  //     account_name: "Mark Hornido",
+  //     account_number: "09636775414",
+  //   },
+  // ];
+
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const transactions = await get("/transactions"); // Ensure `get` function is defined
+        setTransactions(transactions);
+      } catch (error) {
+        console.error("Error fetching transactions:", error);
+      } finally {
+
+      }
+    };
+
+    fetchTransactions();
+  }, []);
+
+  const updateStatus = async (transaction) => {
+    try {
+      const updateTransaction = await post('/update-transaction', {
+        id: updateTransaction.transaction.id,
+        payment_status: updateTransaction.transaction.payment_status
+      });
+      setUpdateTransaction(updateTransaction.transaction);
+      console.log(updateTransaction.data);
+    }
+    catch (error) {
+      console.log(error.message);
+    }
+  }
+
 
   return (
     <>
@@ -243,32 +277,43 @@ const Payment = () => {
           </TableRow>
         </TableHeader>
         <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
+
           {transactions.map((transaction) => (
             <TableRow key={transaction.id}>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                {transaction.transaction_date}
+                {new Date(transaction.created_at).toLocaleDateString(
+                  "en-US",
+                  {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  }
+                )}
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                {transaction.role}
+                {transaction.participant?.guest
+                  ? "Guest"  // Show guest name if guest exists
+                  : "User"// Otherwise, show user name
+                }
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                {transaction.name}
+                {transaction.account_name}
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                {transaction.transaction_id}
+                {transaction.id}
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
                 <Badge
                   size="sm"
                   color={
-                    transaction.status === "Pending"
+                    transaction.payment_status === "pending"
                       ? "warning"
                       : transaction.status === "Pay Later"
-                      ? "primary"
-                      : "success"
+                        ? "primary"
+                        : "success"
                   }
                 >
-                  {transaction.status}
+                  {transaction.payment_status}
                 </Badge>
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
@@ -392,17 +437,25 @@ const Payment = () => {
               <span className="text-amber-700 dark:text-amber-500">
                 Transaction ID:
               </span>{" "}
-              {selectedTransaction.transaction_id}
+              {selectedTransaction.id}
             </h3>
             <h3 className="grid grid-cols-2 text-gray-900 dark:text-gray-200">
               <span className="text-amber-700 dark:text-amber-500">
                 Transaction Date:
               </span>{" "}
-              {selectedTransaction.transaction_date}
+              {new Date(selectedTransaction.created_at).toLocaleDateString(
+                "en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              }
+              )}
             </h3>
             <h3 className="grid grid-cols-2 text-gray-900 dark:text-gray-200">
               <span className="text-amber-700 dark:text-amber-500">Role:</span>{" "}
-              {selectedTransaction.role}
+              {selectedTransaction.participant?.guest
+                ? "Guest"
+                : "User"}
             </h3>
             <h3 className="grid grid-cols-2 text-gray-900 dark:text-gray-200">
               <span className="text-amber-700 dark:text-amber-500">
@@ -411,14 +464,14 @@ const Payment = () => {
               <Badge
                 size="sm"
                 color={
-                  selectedTransaction.status === "Pending"
+                  selectedTransaction.payment_status === "pending"
                     ? "warning"
                     : selectedTransaction.status === "Pay Later"
-                    ? "primary"
-                    : "success"
+                      ? "primary"
+                      : "success"
                 }
               >
-                {selectedTransaction.status}
+                {selectedTransaction.payment_status}
               </Badge>
             </h3>
             <span className="w-full h-0.5 rounded-full bg-amber-500"></span>
@@ -447,10 +500,24 @@ const Payment = () => {
             <h3 className="text-blue-700 dark:text-blue-400">
               Proof of Payment
             </h3>
-            <ResponsiveImage path={"/images/user/sample_qr_code.png"} />
+            <ResponsiveImage path={`${BASE_URL}/${selectedTransaction.screenshot}`} />
           </div>
         </div>
-        <Button size="sm">Approve</Button>
+        <Button
+          className="p-3"
+          onClick={() => updateStatus({ id: updateTransaction.transaction.id, payment_status: 'completed' })}
+          size="sm"
+        >
+          Approve
+        </Button>
+
+        <Button
+          className="p-3"
+          onClick={() => updateStatus({ id: updateTransaction.transaction.id, payment_status: 'rejected' })}
+          size="sm"
+        >
+          Reject
+        </Button>
       </Modal>
     </>
   );
