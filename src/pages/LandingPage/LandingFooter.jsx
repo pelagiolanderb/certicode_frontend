@@ -20,7 +20,7 @@ const LandingFooter = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white text-opacity-40 font-semibold uppercase text-xs tracking-widest bg-opacity-80 px-12">
+    <div className="bg-gray-800 text-white text-opacity-40 font-semibold uppercase text-xs tracking-widest bg-opacity-80 px-12">
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-4 gap-12 text-center lg:text-left py-10">
         {/* Brand Name */}
         <div>
@@ -64,28 +64,31 @@ const LandingFooter = () => {
           <div className="font-display text-white uppercase text-sm tracking-widest mb-6">
             Stay Connected
           </div>
-          <a href="https://facebook.com" className="block mb-4 text-xs">
+          <a href="https://www.facebook.com/CertiCode" className="block mb-4 text-xs" target="_blank">
             Facebook
           </a>
-          <a href="https://twitter.com" className="block mb-4 text-xs">
-            Twitter
+          <a href="https://x.com/CertiCode?s=09" className="block mb-4 text-xs" target="_blank">
+            X
           </a>
-          <a href="https://linkedin.com" className="block mb-4 text-xs">
+          <a href="https://www.linkedin.com/in/certi-code-501785355/?originalSubdomain=ph" className="block mb-4 text-xs" target="_blank">
             LinkedIn
+          </a>
+          <a href="https://www.instagram.com/certi_code/" className="block mb-4 text-xs" target="_blank">
+            Instagrram
           </a>
         </div>
 
         <div>
-          <h2 className="font-display text-white uppercase text-sm tracking-widest mb-6">
+          <h2 className="font-display text-white uppercase text-sm tracking-widest mb-6" >
             Contact Us
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 text-left">
+          <div className="grid md:grid-cols-2 gap-8 text-center lg:text-left md: ">
             <div>
               <p className="block mb-4 text-xs">
                 📍 <span>Your Address Here</span>
               </p>
               <p className="block mb-4 text-xs">
-                📧 <span>your@email.com</span>
+                📧 <span>codecerti@gmail.com</span>
               </p>
               <p className="block mb-4 text-xs">
                 📞 <span>(123) 456-7890</span>

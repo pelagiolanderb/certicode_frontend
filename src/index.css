@@ -5,6 +5,19 @@ layer(base);
 
 @custom-variant dark (&:is(.dark *));
 
+.about-us-bg {
+  background-image: url("/images/banner_certicode_about_us.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+@media (max-width: 767px) { 
+  .about-us-bg {
+    background-image: linear-gradient(to bottom, #5882ED, white) !important; 
+  }
+}
+
 @theme {
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;

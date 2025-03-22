@@ -41,6 +41,8 @@ import AdminSignIn from "./pages/AuthPages/AdminSignIn";
 import UserManagement from "./pages/UserManagement/UserManagement";
 import Payment from "./pages/Payment/Payment";
 
+import LandingPageMark from "./pages/Landing/LandingPage";
+
 export default function App() {
   return (
     <>
@@ -126,6 +128,9 @@ export default function App() {
                 token ? <Navigate to="/dashboard" replace /> : <AdminSignIn />
               }
             /> */}
+
+          <Route path="/mark" element={<LandingPageMark />} />
+
 
           <Route path="/" element={<LandingPage />} />
           <Route path="/seminar-list" element={<LandingSeminarList />} />
