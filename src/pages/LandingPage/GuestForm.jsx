@@ -89,7 +89,7 @@ const GuestForm = ({ setShowForm, price }) => {
         ) : (
           <form onSubmit={handleSubmit} className="p-6 space-y-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="flex text-sm font-semibold text-gray-700 mb-1 p-1 ">
                 Name
               </label>
               <input
@@ -102,7 +102,7 @@ const GuestForm = ({ setShowForm, price }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="flex p-1 text-sm font-semibold text-gray-700 mb-1">
                 Address
               </label>
               <input
@@ -115,7 +115,7 @@ const GuestForm = ({ setShowForm, price }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="flex p-1 text-sm font-semibold text-gray-700 mb-1">
                 Phone Number
               </label>
               <input
@@ -128,7 +128,7 @@ const GuestForm = ({ setShowForm, price }) => {
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">
+              <label className="flex p-1 text-sm font-semibold text-gray-700 mb-1">
                 Email Address
               </label>
               <input

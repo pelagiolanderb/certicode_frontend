@@ -3,6 +3,7 @@ import useApiService from "../../api/useApiService";
 import PaymentOptions from './PaymentOptions';
 import GcashForm from './GcashFrom';
 import BpiForm from './BpiForm';
+import SuccessToast from './SuccessToast';
 
 const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price }) => {
     const [seminar, setSeminar] = useState(null);
@@ -10,7 +11,14 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
     const [showPaymentDetails, setShowPaymentDetails] = useState(false);
     const [error, setError] = useState(null);
     const [isProcessing, setIsProcessing] = useState(false);
-    const { loading, post, get } = useApiService(); // Add get from useApiService
+    const { loading, post, get, patch } = useApiService(); // Add get from useApiService
+    const [showSuccess, setShowSuccess] = useState(false);
+
+    const handleSuccess = () => {
+        if (showSuccess) return; 
+    
+        setShowSuccess(true);
+    };
 
     // Add fetch seminar effect
     useEffect(() => {
@@ -37,7 +45,6 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
             };
 
             await post('/add-participant', registrationData);
-            onSuccess();
             setShowForm(false);
 
         } catch (error) {
@@ -59,32 +66,49 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
                 guest_id: guestId,
                 user_id: userId,
                 seminar_id: seminarId,
+                account_name: null,
+                account_number: null,
+                reference_number: null,
+                screenshot: null,
                 payment_method: 'pay_later',
                 payment_status: 'pending'
             };
 
-           const transactionResponse = await post('/create-transaction', paymentData);
-           const transactionId = transactionResponse.transaction.id;
+            // Create transaction
+            const transactionResponse = await post('/create-transaction', paymentData);
+            if (!transactionResponse.transaction || !transactionResponse.transaction.id) {
+                setError("Transaction creation failed.");
+                return;
+            }
 
-            await post('/add-participant', {
+            const transactionId = transactionResponse.transaction.id;
+
+            // Register participant
+            const participantResponse = await post('/add-participant', {
                 seminar_id: seminarId,
                 guest_id: guestId || null,
                 user_id: userId || null,
                 transaction_id: transactionId,
             });
-            onSuccess();
-            setShowForm(false);
+
+            if (!participantResponse.participant || !participantResponse.participant.id) {
+                setError("Participant creation failed.");
+                return;
+            }
+
+            handleSuccess();
         } catch (error) {
             setError(error.message);
         }
     };
-    
+
+
 
 
 
     const handlePaymentMethodSelect = (methodId) => {
         if (isProcessing) return; // Prevent multiple requests
-    
+
         if (methodId === 'payLater') {
             setIsProcessing(true);
             handlePayLater().finally(() => setIsProcessing(false));
@@ -93,12 +117,13 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
             setShowPaymentDetails(true);
         }
     };
-    
+
 
     if (error) return alert(error);
 
     return (
         <>
+            {showSuccess && <SuccessToast message="Successfully joined the seminar!" duration={3000} />}
             {price > 0 ? (
                 <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-black/30 backdrop-blur-sm z-50">
                     <div className="p-4 w-full max-w-md bg-white rounded-lg shadow-sm">
@@ -127,41 +152,33 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
                                 </svg>
                             </button>
                         </div>
-
+    
                         <div className="p-4">
                             {!showPaymentDetails ? (
                                 <PaymentOptions onSelect={handlePaymentMethodSelect} />
                             ) : (
                                 <div>
-                                    {/* Render different payment forms based on selected method */}
                                     {paymentMethod === 'gcash' && (
                                         <GcashForm
                                             guestId={guestId}
                                             userId={userId}
                                             seminarId={seminarId}
-                                            seminarName={seminar?.name_of_seminar} // Add optional chaining
-                                            onSuccess={onSuccess}
+                                            seminarName={seminar?.name_of_seminar}
+                                            onSuccess={handleSuccess}
                                             onBack={() => setShowPaymentDetails(false)}
                                         />
                                     )}
-
+    
                                     {paymentMethod === 'bank' && (
                                         <BpiForm
                                             userId={userId}
                                             guestId={guestId}
                                             seminarId={seminarId}
-                                            seminarName={seminar?.name_of_seminar} // Add optional chaining
-                                            onSuccess={onSuccess}
+                                            seminarName={seminar?.name_of_seminar}
+                                            onSuccess={handleSuccess}
                                             onBack={() => setShowPaymentDetails(false)}
                                         />
                                     )}
-
-                                    <button
-                                        onClick={() => setShowPaymentDetails(false)}
-                                        className="mt-4 text-blue-600 hover:underline"
-                                    >
-                                        ← Choose different payment method
-                                    </button>
                                 </div>
                             )}
                         </div>
@@ -170,6 +187,7 @@ const PaymentForm = ({ setShowForm, guestId, userId, seminarId, onSuccess, price
             ) : null}
         </>
     );
+    
 };
 
 export default PaymentForm;
