@@ -17,7 +17,6 @@ const SeminarPage = () => {
   const [isJoin, setIsJoin] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
-  
 
   let isAuth = localStorage.getItem("auth_token");
   let role = localStorage.getItem("role");
@@ -29,11 +28,10 @@ const SeminarPage = () => {
         // Add test price to seminar data
         setSeminar(
           {
-          ...data.seminar,
-          price: 0
-        }
-        // data.seminar
-      );
+            ...data.seminar,
+          }
+          // data.seminar
+        );
       } catch (error) {
         console.log("Error fetching data", error);
       }
@@ -46,7 +44,7 @@ const SeminarPage = () => {
     setIsJoin(true);
     let userExist = localStorage.getItem("auth_token");
     let user_id = localStorage.getItem("user_id");
-  
+
     try {
       if (userExist) {
         // For logged-in users
@@ -54,10 +52,10 @@ const SeminarPage = () => {
           setShowPaymentForm(true);
         } else {
           // Free seminar - register directly
-          await post("/add-participant", { 
-            seminar_id: id, 
-            user_id, 
-            payment_status: "completed" 
+          await post("/add-participant", {
+            seminar_id: id,
+            user_id,
+            payment_status: "completed",
           });
           alert("Successfully joined the seminar!");
         }
@@ -72,7 +70,6 @@ const SeminarPage = () => {
       setIsJoin(false);
     }
   };
-  
 
   const handleFormClose = () => {
     setShowForm(false);
@@ -84,8 +81,8 @@ const SeminarPage = () => {
 
   return (
     <>
-      <div className={isAuth && role === 'admin' ? "" : "p-4"}>
-        {isAuth && role === 'admin' ? (
+      <div className={isAuth && role === "admin" ? "" : "p-4"}>
+        {isAuth && role === "admin" ? (
           <>
             <div className="w-full flex justify-between">
               <Link
@@ -185,12 +182,16 @@ const SeminarPage = () => {
                 className="mt-4 bg-blue-600 text-white font-medium px-6 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
                 onClick={handleJoin}
               >
-                {loading ? "Joining..." : seminar.price > 0 ? "Register Now" : "Join now for free"}
+                {loading
+                  ? "Joining..."
+                  : seminar.price > 0
+                  ? "Register Now"
+                  : "Join now for free"}
               </button>
 
               {showForm && (
-                <GuestForm 
-                  isFormOpen={showForm} 
+                <GuestForm
+                  isFormOpen={showForm}
                   setShowForm={setShowForm}
                   price={seminar.price}
                 />
