@@ -1,68 +1,62 @@
-import { useState } from 'react';
-import useApiService from '../../api/useApiService';
-import GcashConfirmationModal from './GcashConfirmation';
+import { useState } from "react";
+import useApiService from "../../api/useApiService";
+
 
 const GcashForm = ({ participantId, userId, guestId, seminarId, seminarName, onSuccess, onBack }) => {
-  const [accountName, setAccountName] = useState('');
-  const [accountNumber, setAccountNumber] = useState('');
-  const [referenceNumber, setReferenceNumber] = useState('');
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [paymentDetails, setPaymentDetails] = useState(null);
-
+  const [step, setStep] = useState(1);
+  const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [referenceNumber, setReferenceNumber] = useState("");
   const [screenshot, setScreenshot] = useState(null);
+  const [screenshotPreview, setScreenshotPreview] = useState(null);
   const [error, setError] = useState(null);
-
+  const [showSuccess, setShowSuccess] = useState(false); // Success message state
   const { loading, post } = useApiService();
 
   const handleScreenshotChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        setError('File size must be less than 5MB');
+      if (file.size > 5 * 1024 * 1024) {
+        setError("File size must be less than 5MB");
         return;
       }
       setScreenshot(file);
+      setScreenshotPreview(URL.createObjectURL(file));
     }
   };
 
-  const handleFormSubmit = async (e) => {
+  const handleNext = (e) => {
     e.preventDefault();
-    setPaymentDetails({
-      seminarId,
-      participantId,
-      accountName,
-      accountNumber,
-      referenceNumber,
-      screenshot,
-      status: 'Pending Review'
-    });
-    setShowConfirmation(true);
+    if (!accountName || !accountNumber || !referenceNumber || !screenshot) {
+      setError("All fields are required.");
+      return;
+    }
+    setError(null);
+    setStep(2);
+  };
+
+  const handleBack = () => {
+    setStep(1);
   };
 
   const handlePaymentSubmit = async () => {
     try {
       const formData = new FormData();
-      formData.append('seminar_id', seminarId);
-      formData.append('payment_method', 'Gcash');
-      formData.append('account_name', accountName);
-      formData.append('account_number', accountNumber);
-      formData.append('reference_number', referenceNumber);
-      formData.append('screenshot', screenshot);
-      formData.append('payment_status', 'pending'); 
+      formData.append("seminar_id", seminarId);
+      formData.append("payment_method", "Gcash");
+      formData.append("account_name", accountName);
+      formData.append("account_number", accountNumber);
+      formData.append("reference_number", referenceNumber);
+      formData.append("screenshot", screenshot);
+      formData.append("payment_status", "pending");
 
-
-
-      const transactionResponse = await post('/create-transaction', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const transactionResponse = await post("/create-transaction", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log("Transaction Full Response:", transactionResponse);
-      console.log("Transaction Response Data:", transactionResponse.data);
 
       const transactionId = transactionResponse.transaction.id;
-      console.log("Transaction ID:", transactionId);
 
-
-      const participantResponse = await post('/add-participant', {
+      const participantResponse = await post("/add-participant", {
         seminar_id: seminarId,
         guest_id: guestId || null,
         user_id: userId || null,
@@ -73,119 +67,111 @@ const GcashForm = ({ participantId, userId, guestId, seminarId, seminarName, onS
         setError("Failed to create participant.");
         return;
       }
-
-      console.log("Participant created:", participantResponse.participant);
-      setShowConfirmation(false);
+      
       onSuccess();
     } catch (error) {
       setError(error.message);
     }
   };
 
-
   return (
-    <>
-      {/* Add max-w and mx-auto classes to control width */}
-      <div className="p-4 max-w-md mx-auto">
-        <div className="mb-4"> {/* Reduced margin bottom */}
-          <h3 className="text-lg font-semibold mb-2">GCash Payment Details</h3>
+    <div className="p-4">
+
+      {step === 1 && (
+        <>
+          <h3 className="text-lg font-semibold mb-4">GCash Payment Details</h3>
           <img
-            className='w-32 mx-auto' // Reduced image size
+            className="w-32 mx-auto"
             src="https://imgs.search.brave.com/k7zZ05FQh4FR0DqfZltimZm9EWHbOCYBjTpqM2KVc5w/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90My5m/dGNkbi5uZXQvanBn/LzAzLzc3LzkwLzI4/LzM2MF9GXzM3Nzkw/Mjg2Ml9uZ0ZNMjZF/SWk5VTBGT1FRaFZG/V1FpYnlBVlJNNWxz/ai5qcGc"
             alt="GCash Logo"
           />
-          <p className="text-gray-600 text-sm text-center mt-2">
-            Please send payment to: 09XX-XXX-XXXX
-          </p>
-        </div>
+          <p className="text-gray-600 text-sm text-center">Please send payment to: 09XX-XXX-XXXX</p>
 
-        <form onSubmit={handleFormSubmit}>
-          <div className="space-y-3"> {/* Reduced spacing between elements */}
-            {/* Input fields with smaller padding and text */}
+          <form onSubmit={handleNext} className="space-y-4 mt-4">
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">
-                Account Name
-              </label>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Account Name</label>
               <input
                 type="text"
+                className="w-full p-2 border rounded"
+                placeholder="Enter account name"
                 value={accountName}
                 onChange={(e) => setAccountName(e.target.value)}
-                className="w-full p-1.5 text-sm border rounded bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500"
-                placeholder="Enter GCash account name"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">
-                Account Number
-              </label>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Account Number</label>
               <input
                 type="text"
+                className="w-full p-2 border rounded"
+                placeholder="Enter account number"
                 value={accountNumber}
                 onChange={(e) => setAccountNumber(e.target.value)}
-                className="w-full p-1.5 text-sm border rounded bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500"
-                placeholder="Enter GCash number"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">
-                Reference Number
-              </label>
+              <label className="block text-sm font-bold text-gray-700 mb-1">Reference Number</label>
               <input
                 type="text"
+                className="w-full p-2 border rounded"
+                placeholder="Enter reference number"
                 value={referenceNumber}
                 onChange={(e) => setReferenceNumber(e.target.value)}
-                className="w-full p-1.5 text-sm border rounded bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500"
-                placeholder="Enter GCash reference number"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-gray-700 mb-1">
-                Payment Screenshot
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleScreenshotChange}
-                className="w-full p-1.5 text-sm border rounded bg-gray-50 focus:bg-white focus:outline-none focus:border-blue-500"
-                required
-              />
+              <label className="block text-sm font-bold text-gray-700 mb-1">Payment Screenshot</label>
+              <input type="file" accept="image/*" onChange={handleScreenshotChange} className="w-full p-2 border rounded" required />
             </div>
 
-            {error && (
-              <div className="text-red-500 text-sm mt-2">
-                {error}
-              </div>
-            )}
+            {error && <p className="text-red-500 text-sm">{error}</p>}
 
-            <div className="flex space-x-4 mt-4"> {/* Reduced top margin */}
-              <button
-                type="submit"
-                className="flex-1 px-3 py-1.5 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-50"
-                disabled={loading || !screenshot}
-              >
-                {loading ? 'Processing...' : 'Submit Payment'}
+            <div className="flex justify-between mt-4">
+              <button type="button" onClick={onBack} className="px-4 py-2 bg-gray-300 text-gray-700 rounded">
+                Back
+              </button>
+              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+                Next
               </button>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </>
+      )}
 
-      <GcashConfirmationModal
-        isOpen={showConfirmation}
-        onClose={() => setShowConfirmation(false)}
-        paymentDetails={paymentDetails}
-        seminarName={seminarName} // Make sure this prop is being passed
-        onSubmit={handlePaymentSubmit}
-      />
-    </>
+      {step === 2 && (
+        <>
+          <h3 className="text-lg font-semibold mb-4">Confirm Payment</h3>
+          <p>
+            <strong>Account Name:</strong> {accountName}
+          </p>
+          <p>
+            <strong>Account Number:</strong> {accountNumber}
+          </p>
+          <p>
+            <strong>Reference Number:</strong> {referenceNumber}
+          </p>
+          {screenshotPreview && <img src={screenshotPreview} alt="Screenshot Preview" className="mt-2 w-48 rounded border mx-auto" />}
+          <p>
+            <strong>Status:</strong> Pending Review
+          </p>
+
+          <div className="flex justify-between mt-4">
+            <button onClick={handleBack} className="px-4 py-2 bg-gray-300 text-gray-700 rounded">
+              Back
+            </button>
+            <button onClick={handlePaymentSubmit} className="px-4 py-2 bg-green-600 text-white rounded">
+              {loading ? "Processing..." : "Confirm Payment"}
+            </button>
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
 export default GcashForm;
-
