@@ -386,8 +386,8 @@ const LandingMain = () => {
           variants={fadeIn}
         >
           <div className="flex flex-col items-center text-center space-y-4 mb-8 md:mb-12">
-            <h3 className="text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight text-[#063F78]">About Us</h3>
-            <div className="w-20 h-1 bg-[#063F78] rounded-full mx-auto mt-2"></div>
+            <h3 className="text-2xl md:text-3xl lg:text-5xl font-bold tracking-tight text-[#063F78] z-30">About Us</h3>
+            <div className="w-20 h-1 bg-[#063F78] rounded-full mx-auto mt-2 z-30"></div>
           </div>
 
           {/* Mobile layout - stacked */}
