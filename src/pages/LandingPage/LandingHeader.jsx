@@ -31,75 +31,54 @@ const LandingHeader = () => {
 
   return (
     <nav className={`fixed top-0 left-0 w-full z-50 ${navColor} transition-all duration-1000`}>
-    <div 
-    className="flex justify-between items-center w-full
-    lg:px-6 lg:py-4 
-    md:pr-10 pt-5 pl-4
-    ">
-      {/* Burger Button for Mobile */}
-      <button onClick={() => setMenuOpen(!menuOpen)} 
-      className="lg:hidden
-      md:pl-4 md:hidden
-      "  
-      >
-        <svg
-          className="w-8 h-8 
-        lg:text-white 
-          md:text-[#063F78]
-          "
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
+ <div className="flex justify-between items-center w-full lg:px-6 lg:py-4 md:pr-10 pt-5 pl-4 pr-4 pb-4">
+        {/* Logo */}
+        <Link to="/" className="flex items-center h-10 w-32 lg:mr-auto md:mr-auto">
+          <img
+            src={white_logo || "/placeholder.svg"}
+            alt="Certicode White Logo"
+            className={`h-10 w-auto object-contain transition-opacity duration-500 ${
+              isHomePage && !isScrolled ? "opacity-0" : "opacity-100"
+            }`}
+          />
+          <img
+            src={black_logo || "/placeholder.svg"}
+            alt="Certicode Black Logo"
+            className={`h-10 w-auto object-contain transition-opacity duration-500 absolute ${
+              isHomePage && !isScrolled ? "opacity-100" : "opacity-0"
+            }`}
+          />
+        </Link>
 
-      {/* Logo */}
-      <Link to="/" 
-      className="relative flex items-center h-10 w-32
-   
-      ">
-        <img
-          src={white_logo || "/placeholder.svg"}
-          alt="Certicode White Logo"
-          className={`h-10 w-auto object-contain transition-opacity duration-500 absolute left-0  ${
-            isHomePage && !isScrolled ? "opacity-0" : "opacity-100"
-          }
-      
-          `}
-        />
-        <img
-          src={black_logo || "/placeholder.svg"}
-          alt="Certicode Black Logo"
-          className={`h-10 w-auto object-contain transition-opacity duration-500 absolute left-0 ${
-            isHomePage && !isScrolled ? "opacity-100" : "opacity-0"
-          }`}
-        />
-      </Link>
+        {/* Burger Button for Mobile */}
+        <button onClick={() => setMenuOpen(!menuOpen)} className="lg:hidden md:pl-4 md:hidden">
+          <svg
+            className="w-8 h-8 lg:text-white md:text-[#063F78]"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
 
-      {/* Desktop Navigation */}
-      <div className="hidden space-x-6 items-center
-      lg:flex 
-      md:flex
-      ">
-        <Link to="/" className={`hover:text-gray-300 ${navTextColor}`}>Home</Link>
-        <Link to="/seminar-list" className={`${navTextColor} hover:text-gray-300`}>Seminars</Link>
-        {token && role === "admin" ? (
-          <div className="space-x-4">
+        {/* Desktop Navigation */}
+        <div className="hidden space-x-6 items-center lg:flex md:flex">
+          <Link to="/" className={`hover:text-gray-300 ${navTextColor}`}>Home</Link>
+          <Link to="/seminar-list" className={`${navTextColor} hover:text-gray-300`}>Seminars</Link>
+          {token && role === "admin" ? (
             <Link to="/dashboard" className={`${navTextColor} hover:text-gray-300`}>Back to Dashboard</Link>
-          </div>
-        ) : token && role === "user" ? (
-          <UserDropdown />
-        ) : (
-          <div className="space-x-4">
-            <Link to="/signin" className={`${navTextColor} hover:text-gray-300`}>Sign In</Link>
-            <Link to="/signup" className={`${navTextColor} hover:text-gray-300`}>Sign Up</Link>
-          </div>
-        )}
+          ) : token && role === "user" ? (
+            <UserDropdown />
+          ) : (
+            <>
+              <Link to="/signin" className={`${navTextColor} hover:text-gray-300`}>Sign In</Link>
+              <Link to="/signup" className={`${navTextColor} hover:text-gray-300`}>Sign Up</Link>
+            </>
+          )}
+        </div>
       </div>
-    </div>
 
     {/* Mobile Menu */}
     <div

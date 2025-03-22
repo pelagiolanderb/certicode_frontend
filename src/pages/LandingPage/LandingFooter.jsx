@@ -82,7 +82,7 @@ const LandingFooter = () => {
           <h2 className="font-display text-white uppercase text-sm tracking-widest mb-6" >
             Contact Us
           </h2>
-          <div className="grid md:grid-cols-2 gap-8 text-left">
+          <div className="grid md:grid-cols-2 gap-8 text-center lg:text-left md: ">
             <div>
               <p className="block mb-4 text-xs">
                 📍 <span>Your Address Here</span>
