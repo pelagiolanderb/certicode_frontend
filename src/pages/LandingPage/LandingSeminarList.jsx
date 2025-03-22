@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 // import { fetchSeminars } from "../../api/seminarAPI";
 import BeatLoader from "../../components/loading/loading";
 import LandingHeader from "./LandingHeader";
-import seminarListBg from "../../assets/images/seminar_list_bg.png";
+import seminarlist_model from "../../assets/images/seminarlist_model.png";
 // import apiService from "../../api/apiService";
 import useApiService from "../../api/useApiService";
 
@@ -79,7 +79,7 @@ const SeminarListPage = () => {
             </h2>
           </div>
           <div className="overflow-x-auto">
-            <img src={seminarListBg} alt="" className="h-90 px-3" />
+            <img src={seminarlist_model} alt="" className="h-90 px-3 pr-10" />
           </div>
         </div>
 
