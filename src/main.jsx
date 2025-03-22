@@ -10,7 +10,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
-      <AppWrapper>
+      <AppWrapper> 
         <App />
       </AppWrapper>
     </ThemeProvider>
