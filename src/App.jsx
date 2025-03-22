@@ -40,6 +40,8 @@ import AdminSignIn from "./pages/AuthPages/AdminSignIn";
 import UserProtectedRoute from "./route/UserProtectedRoute";
 import UserManagement from "./pages/UserManagement/UserManagement";
 
+import LandingPageMark from "./pages/Landing/LandingPage";
+
 export default function App() {
   const token = localStorage.getItem("auth_token");
   const role = localStorage.getItem("role");
@@ -117,13 +119,16 @@ export default function App() {
             path="/social-auth-handler"
             element={<SocialAuthHandler />}
           />
-
+ 
           <Route
             path="/@dmin-signin"
             element={
               token ? <Navigate to="/dashboard" replace /> : <AdminSignIn />
             }
           />
+
+          <Route path="/mark" element={<LandingPageMark />} />
+
 
           <Route path="/" element={<LandingPage />} />
           <Route path="/seminar-list" element={<LandingSeminarList />} />
