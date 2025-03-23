@@ -74,7 +74,7 @@ const LandingFooter = () => {
             LinkedIn
           </a>
           <a href="https://www.instagram.com/certi_code/" className="block mb-4 text-xs" target="_blank">
-            Instagrram
+            Instagram
           </a>
         </div>
 

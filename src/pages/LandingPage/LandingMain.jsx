@@ -110,6 +110,8 @@ const LandingMain = () => {
     setOpenIndex(openIndex === index ? null : index)
   }
 
+  
+
   return (
     <>
       <div className="flex flex-col bg-cover bg-fixed bg-center">
