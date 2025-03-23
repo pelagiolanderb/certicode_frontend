@@ -22,7 +22,7 @@ import ResponsiveImage from "../../components/ui/images/ResponsiveImage";
 import Button from "../../components/ui/button/Button";
 
 const Payment = (transactionId) => {
-  const BASE_URL = "http://127.0.0.1:8000/storage/public";
+  const BASE_URL = "http://127.0.0.1:8000/public/storage/screenshots";
   const [updateTransaction, setUpdateTransaction] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -71,6 +71,7 @@ const Payment = (transactionId) => {
 
   const handleView = (transaction) => {
     try {
+      console.log(transaction);
       setSelectedTransaction(transaction);
       setIsView(true);
       setLoadingState((prev) => ({
@@ -158,6 +159,7 @@ const Payment = (transactionId) => {
       try {
         const transactions = await get("/transactions"); // Ensure `get` function is defined
         setTransactions(transactions);
+        console.log(transactions);
       } catch (error) {
         console.error("Error fetching transactions:", error);
       } finally {
@@ -310,10 +312,10 @@ const Payment = (transactionId) => {
                 <Badge
                   size="sm"
                   color={
-                    transaction.payment_status === "pending"
+                    transaction.payment_status === "rejected"
+                      ? "error"
+                      : transaction.payment_status === "pending"
                       ? "warning"
-                      : transaction.status === "Pay Later"
-                      ? "primary"
                       : "success"
                   }
                 >
@@ -467,10 +469,10 @@ const Payment = (transactionId) => {
               <Badge
                 size="sm"
                 color={
-                  selectedTransaction.payment_status === "pending"
+                  selectedTransaction.payment_status === "rejected"
+                    ? "error"
+                    : selectedTransaction.payment_status === "pending"
                     ? "warning"
-                    : selectedTransaction.status === "Pay Later"
-                    ? "primary"
                     : "success"
                 }
               >
@@ -504,7 +506,9 @@ const Payment = (transactionId) => {
               Proof of Payment
             </h3>
             <ResponsiveImage
-              path={`${BASE_URL}/${selectedTransaction.screenshot}`}
+              path={console.log(`${BASE_URL}/{selectedTransaction.screenshot}`)
+
+            }
             />
           </div>
         </div>
