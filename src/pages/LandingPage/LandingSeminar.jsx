@@ -8,6 +8,7 @@ import { ChevronLeftIcon } from "../../icons";
 import useApiService from "../../api/useApiService";
 import PageBreadcrumb from "../../components/common/PageBreadCrumb";
 import PaymentForm from "../Forms/PaymentForm";
+import SuccessToast from "../Forms/SuccessToast";
 
 const SeminarPage = () => {
   const { id } = useParams();
@@ -16,6 +17,7 @@ const SeminarPage = () => {
   const { loading, error, get, post } = useApiService();
   const [isJoin, setIsJoin] = useState(false);
   const [showPaymentForm, setShowPaymentForm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
   const BACKEND_URL = import.meta.env.VITE_APP_BACKEND_URL;
 
   let isAuth = localStorage.getItem("auth_token");
@@ -39,12 +41,21 @@ const SeminarPage = () => {
 
     fetchSeminar();
   }, []);
-
+  const handleSuccess = () => {
+    if (showSuccess) return;
+    setShowSuccess(true);
+  
+    // Hide the success toast after 3 seconds (or the duration you want)
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 3000); // Adjust the duration as needed
+  };
+  
   const handleJoin = async () => {
     setIsJoin(true);
     let userExist = localStorage.getItem("auth_token");
     let user_id = localStorage.getItem("user_id");
-
+  
     try {
       if (userExist) {
         // For logged-in users
@@ -57,7 +68,7 @@ const SeminarPage = () => {
             user_id,
             payment_status: "completed",
           });
-          alert("Successfully joined the seminar!");
+          handleSuccess(); // Trigger success toast after successful join
         }
       } else {
         // Guests - Show guest form first
@@ -70,6 +81,7 @@ const SeminarPage = () => {
       setIsJoin(false);
     }
   };
+  
 
   const handleFormClose = () => {
     setShowForm(false);
@@ -78,6 +90,8 @@ const SeminarPage = () => {
   if (loading && !isJoin) {
     return <BeatLoader />;
   }
+
+ 
 
   return (
     <>
@@ -123,6 +137,7 @@ const SeminarPage = () => {
         </div>
 
         <div className="flex flex-row gap-6 mx-7">
+        {showSuccess && <SuccessToast message="Successfully joined the seminar!" duration={3000} />}
           <div className="w-2/3 p-6">
             <h1 className="text-5xl font-bold text-gray-800 dark:text-gray-100">
               {seminar.name_of_seminar}

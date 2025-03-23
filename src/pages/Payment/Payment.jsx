@@ -22,7 +22,7 @@ import ResponsiveImage from "../../components/ui/images/ResponsiveImage";
 import Button from "../../components/ui/button/Button";
 
 const Payment = (transactionId) => {
-  const BASE_URL = "http://127.0.0.1:8000/public/storage/screenshots";
+  const BASE_URL = "http://127.0.0.1:8000/storage/";
   const [updateTransaction, setUpdateTransaction] = useState(null);
   const [transactions, setTransactions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -88,71 +88,6 @@ const Payment = (transactionId) => {
     }
   };
 
-  //   const [selectedValues, setSelectedValues] = useState([]);
-
-  //   const options = [
-  //     { value: "GCash", text: "GCash" },
-  //     { value: "BPI", text: "BPI" },
-  //     { value: "Pay Maya", text: "Pay Maya" },
-  //   ];
-
-  // const transactions = [
-  //   {
-  //     id: 1,
-  //     transaction_date: "March 20, 2025",
-  //     role: "User (Non-Admin)",
-  //     name: "Lander Pelagio",
-  //     transaction_id: "A1001F2DOP600",
-  //     status: "Pending",
-  //     payment_method: "GCash",
-  //     account_name: "Lander Pelagio",
-  //     account_number: "09636775414",
-  //   },
-  //   {
-  //     id: 2,
-  //     transaction_date: "March 21, 2025",
-  //     role: "Guess",
-  //     name: "Jayson Delos Santos",
-  //     transaction_id: "A1001F2DOP601",
-  //     status: "Pending",
-  //     payment_method: "BPI",
-  //     account_name: "Jayson Delos Santos",
-  //     account_number: "0910562003228531",
-  //   },
-  //   {
-  //     id: 3,
-  //     transaction_date: "March 22, 2025",
-  //     role: "Guess",
-  //     name: "Xyrus Abucal",
-  //     transaction_id: "A1001F2DOP602",
-  //     status: "Pending",
-  //     payment_method: "GCash",
-  //     account_name: "Xyrus Abucal",
-  //     account_number: "09636775414",
-  //   },
-  //   {
-  //     id: 4,
-  //     transaction_date: "March 23, 2025",
-  //     role: "User (Non-Admin)",
-  //     name: "Tom Oliver Chua",
-  //     transaction_id: "A1001F2DOP603",
-  //     status: "Pay Later",
-  //     payment_method: "Pay Maya",
-  //     account_name: "Tom Chua",
-  //     account_number: "005523353911",
-  //   },
-  //   {
-  //     id: 5,
-  //     transaction_date: "March 24, 2025",
-  //     role: "User (Non-Admin)",
-  //     name: "Mark Angelo Hornido",
-  //     transaction_id: "A1001F2DOP604",
-  //     status: "Paid",
-  //     payment_method: "GCash",
-  //     account_name: "Mark Hornido",
-  //     account_number: "09636775414",
-  //   },
-  // ];
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -182,8 +117,8 @@ const Payment = (transactionId) => {
       const response = await put(`/transactions/${transactionId}/update`, {
         payment_status: status,
       });
-
-      if (response.status === 200) {
+      console.log(response.payment_status);
+      if (response.payment_status === 'completed' || response.payment_status === 'rejected') {
         alert(`Payment status updated to ${status}`);
         // You might want to refresh the transaction list or update state
       }
@@ -192,6 +127,8 @@ const Payment = (transactionId) => {
       alert("Failed to update payment status");
     }
   };
+
+
 
   return (
     <>
@@ -303,7 +240,9 @@ const Payment = (transactionId) => {
                 }
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                {transaction.account_name}
+                {transaction.participant?.guest
+                  ? transaction.participant.guest.name
+                  : transaction.participant.user.name}
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
                 {transaction.id}
@@ -315,8 +254,8 @@ const Payment = (transactionId) => {
                     transaction.payment_status === "rejected"
                       ? "error"
                       : transaction.payment_status === "pending"
-                      ? "warning"
-                      : "success"
+                        ? "warning"
+                        : "success"
                   }
                 >
                   {transaction.payment_status}
@@ -472,8 +411,8 @@ const Payment = (transactionId) => {
                   selectedTransaction.payment_status === "rejected"
                     ? "error"
                     : selectedTransaction.payment_status === "pending"
-                    ? "warning"
-                    : "success"
+                      ? "warning"
+                      : "success"
                 }
               >
                 {selectedTransaction.payment_status}
@@ -500,38 +439,45 @@ const Payment = (transactionId) => {
               {selectedTransaction.account_number}
             </h3>
             <span className="lg:hidden w-full h-0.5 rounded-full bg-amber-500 sm:block"></span>
+              
+              {/* buttons */}
+            <div className="flex space-x-4 my-5">
+              <Button
+                onClick={() =>
+                  updatePaymentStatus(selectedTransaction.id, "completed")
+
+                }
+                size="sm"
+              >
+                Approve
+              </Button>
+
+              <Button
+                onClick={() =>
+                  updatePaymentStatus(selectedTransaction.id, "rejected")
+                }
+                size="sm"
+                className="bg-red-500 text-white hover:bg-red-600"
+              >
+                Reject
+              </Button>
+            </div>
+
+
           </div>
           <div className="flex flex-col gap-2">
             <h3 className="text-blue-700 dark:text-blue-400">
               Proof of Payment
             </h3>
             <ResponsiveImage
-              path={console.log(`${BASE_URL}/{selectedTransaction.screenshot}`)
+              path={`${BASE_URL}/${selectedTransaction.screenshot}`
 
-            }
+              }
             />
+
           </div>
         </div>
-        <Button
-          className="p-3"
-          onClick={() =>
-            updatePaymentStatus(selectedTransaction.id, "completed")
-          }
-          size="sm"
-        >
-          Approve
-        </Button>
 
-        <Button
-          className="p-3"
-          onClick={() =>
-            updatePaymentStatus(selectedTransaction.id, "rejected")
-          }
-          size="sm"
-          color="danger"
-        >
-          Reject
-        </Button>
       </Modal>
     </>
   );
