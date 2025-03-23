@@ -21,7 +21,7 @@ import api from "../../api/api";
 import ResponsiveImage from "../../components/ui/images/ResponsiveImage";
 import Button from "../../components/ui/button/Button";
 
-const Payment = () => {
+const Payment = (transactionId) => {
   const BASE_URL = "http://127.0.0.1:8000/storage/public";
   const [updateTransaction, setUpdateTransaction] = useState(null);
   const [transactions, setTransactions] = useState([]);
@@ -30,7 +30,7 @@ const Payment = () => {
   const [loadingState, setLoadingState] = useState({});
   const [selectedTransaction, setSelectedTransaction] = useState({});
   const [selectedValue, setSelectedValue] = useState("gcash");
-  const { post, get } = useApiService();
+  const { post, get, put } = useApiService();
 
   const [otherPaymentMethod, setOtherPaymentMethod] = useState("");
   const [accountName, setAccountName] = useState("");
@@ -86,7 +86,6 @@ const Payment = () => {
       }));
     }
   };
-
 
   //   const [selectedValues, setSelectedValues] = useState([]);
 
@@ -162,27 +161,35 @@ const Payment = () => {
       } catch (error) {
         console.error("Error fetching transactions:", error);
       } finally {
-
       }
     };
 
     fetchTransactions();
   }, []);
 
-  const updateStatus = async (transaction) => {
-    try {
-      const updateTransaction = await post('/update-transaction', {
-        id: updateTransaction.transaction.id,
-        payment_status: updateTransaction.transaction.payment_status
-      });
-      setUpdateTransaction(updateTransaction.transaction);
-      console.log(updateTransaction.data);
+  const updatePaymentStatus = async (transactionId, status) => {
+    if (!transactionId || typeof transactionId !== "number") {
+      console.error("Invalid transactionId:", transactionId);
+      alert("Invalid transaction ID");
+      return;
     }
-    catch (error) {
-      console.log(error.message);
-    }
-  }
 
+    try {
+      console.log(`Updating transaction ${transactionId} to ${status}`);
+
+      const response = await put(`/transactions/${transactionId}/update`, {
+        payment_status: status,
+      });
+
+      if (response.status === 200) {
+        alert(`Payment status updated to ${status}`);
+        // You might want to refresh the transaction list or update state
+      }
+    } catch (error) {
+      console.error("Error updating payment status:", error);
+      alert("Failed to update payment status");
+    }
+  };
 
   return (
     <>
@@ -277,23 +284,20 @@ const Payment = () => {
           </TableRow>
         </TableHeader>
         <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
-
           {transactions.map((transaction) => (
             <TableRow key={transaction.id}>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                {new Date(transaction.created_at).toLocaleDateString(
-                  "en-US",
-                  {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
-                  }
-                )}
+                {new Date(transaction.created_at).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
-                {transaction.participant?.guest
-                  ? "Guest"  // Show guest name if guest exists
-                  : "User"// Otherwise, show user name
+                {
+                  transaction.participant?.guest
+                    ? "Guest" // Show guest name if guest exists
+                    : "User" // Otherwise, show user name
                 }
               </TableCell>
               <TableCell className="py-3 text-gray-500 dark:text-gray-400">
@@ -309,8 +313,8 @@ const Payment = () => {
                     transaction.payment_status === "pending"
                       ? "warning"
                       : transaction.status === "Pay Later"
-                        ? "primary"
-                        : "success"
+                      ? "primary"
+                      : "success"
                   }
                 >
                   {transaction.payment_status}
@@ -444,18 +448,17 @@ const Payment = () => {
                 Transaction Date:
               </span>{" "}
               {new Date(selectedTransaction.created_at).toLocaleDateString(
-                "en-US", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              }
+                "en-US",
+                {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                }
               )}
             </h3>
             <h3 className="grid grid-cols-2 text-gray-900 dark:text-gray-200">
               <span className="text-amber-700 dark:text-amber-500">Role:</span>{" "}
-              {selectedTransaction.participant?.guest
-                ? "Guest"
-                : "User"}
+              {selectedTransaction.participant?.guest ? "Guest" : "User"}
             </h3>
             <h3 className="grid grid-cols-2 text-gray-900 dark:text-gray-200">
               <span className="text-amber-700 dark:text-amber-500">
@@ -467,8 +470,8 @@ const Payment = () => {
                   selectedTransaction.payment_status === "pending"
                     ? "warning"
                     : selectedTransaction.status === "Pay Later"
-                      ? "primary"
-                      : "success"
+                    ? "primary"
+                    : "success"
                 }
               >
                 {selectedTransaction.payment_status}
@@ -500,12 +503,16 @@ const Payment = () => {
             <h3 className="text-blue-700 dark:text-blue-400">
               Proof of Payment
             </h3>
-            <ResponsiveImage path={`${BASE_URL}/${selectedTransaction.screenshot}`} />
+            <ResponsiveImage
+              path={`${BASE_URL}/${selectedTransaction.screenshot}`}
+            />
           </div>
         </div>
         <Button
           className="p-3"
-          onClick={() => updateStatus({ id: updateTransaction.transaction.id, payment_status: 'completed' })}
+          onClick={() =>
+            updatePaymentStatus(selectedTransaction.id, "completed")
+          }
           size="sm"
         >
           Approve
@@ -513,8 +520,11 @@ const Payment = () => {
 
         <Button
           className="p-3"
-          onClick={() => updateStatus({ id: updateTransaction.transaction.id, payment_status: 'rejected' })}
+          onClick={() =>
+            updatePaymentStatus(selectedTransaction.id, "rejected")
+          }
           size="sm"
+          color="danger"
         >
           Reject
         </Button>
